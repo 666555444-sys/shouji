@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>传送文件</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #ffffff;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 375px;
+            margin: 0 auto;
+            background: white;
+            min-height: 100vh;
+            position: relative;
+            padding-bottom: 60px;
+        }
+
+        .status-bar {
+            background: white;
+            color: #333;
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            font-size: 14px;
+            font-weight: 500;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .header {
+            background: white;
+            padding: 20px;
+            text-align: center;
+            position: relative;
+            border-bottom: 1px solid #e9ecef;
+        }
+
+        .back-btn {
+            position: absolute;
+            left: 20px;
+            top: 20px;
+            background: none;
+            border: none;
+            color: #333;
+            font-size: 18px;
+            cursor: pointer;
+            padding: 10px;
+        }
+
+        .refresh-btn {
+            position: absolute;
+            right: 20px;
+            top: 20px;
+            background: none;
+            border: none;
+            color: #333;
+            font-size: 18px;
+            cursor: pointer;
+            padding: 10px;
+        }
+
+        .header-title {
+            font-size: 20px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .transfer-content {
+            padding: 80px 40px 60px;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            min-height: 50vh;
+        }
+
+        .transfer-options {
+            background: white;
+            border-radius: 20px;
+            padding: 20px;
+            margin: 40px;
+            box-shadow: 0 2px 20px rgba(0,0,0,0.08);
+            border: 4px solid #ff4444;
+        }
+
+        .transfer-option {
+            padding: 25px 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            border-radius: 12px;
+            margin-bottom: 15px;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .transfer-option:last-child {
+            margin-bottom: 0;
+            border-bottom: none;
+        }
+
+        .transfer-option:hover {
+            background: #f8f9fa;
+        }
+
+        .transfer-option .option-arrow {
+            position: absolute;
+            right: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .transfer-option.send .option-arrow {
+            color: #2ed573;
+        }
+
+        .transfer-option.receive .option-arrow {
+            color: #4facfe;
+        }
+
+        .option-icon {
+            display: none;
+        }
+
+        .option-title {
+            font-size: 20px;
+            font-weight: bold;
+            margin-bottom: 8px;
+            color: #333;
+            text-align: left;
+        }
+
+        .option-subtitle {
+            font-size: 14px;
+            color: #999;
+            text-align: left;
+        }
+
+
+
+
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+        }
+
+        .modal-content {
+            background-color: #fefefe;
+            margin: 15% auto;
+            padding: 20px;
+            border-radius: 15px;
+            width: 80%;
+            max-width: 300px;
+            text-align: center;
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .close:hover {
+            color: black;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 25px;
+            font-size: 14px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 15px;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- 状态栏 -->
+        <div class="status-bar">
+            <div>
+                <span>HD</span>
+                <span>4G</span>
+                <span>📶</span>
+            </div>
+            <div>
+                <span>🕐</span>
+                <span>🔋</span>
+                <span>12:31</span>
+            </div>
+        </div>
+
+        <!-- 头部 -->
+        <div class="header">
+            <button class="back-btn" onclick="goBack()">←</button>
+            <div class="header-title">传送文件</div>
+            <button class="refresh-btn" onclick="refreshPage()">⟳</button>
+        </div>
+
+        <!-- 传送选项 -->
+        <div class="transfer-content">
+            <div class="transfer-options">
+                <div class="transfer-option send" onclick="showSendOptions()">
+                    <div class="option-title">我要发送</div>
+                    <div class="option-subtitle">发送文件到其他设备</div>
+                    <div class="option-arrow">▶</div>
+                </div>
+
+                <div class="transfer-option receive" onclick="showReceiveOptions()">
+                    <div class="option-title">我要接收</div>
+                    <div class="option-subtitle">从其他设备接收文件</div>
+                    <div class="option-arrow">◀</div>
+                </div>
+            </div>
+        </div>
+
+
+
+        <!-- 底部系统导航 -->
+        <div style="background: black; height: 60px; display: flex; align-items: center; justify-content: center; gap: 60px; position: fixed; bottom: 0; left: 50%; transform: translateX(-50%); width: 100%; max-width: 375px;">
+            <div style="color: white; font-size: 24px; cursor: pointer;" onclick="goBack()">◀</div>
+            <div style="color: white; font-size: 20px; cursor: pointer;" onclick="goHome()">○</div>
+            <div style="color: white; font-size: 16px; cursor: pointer;" onclick="showTasks()">▢</div>
+        </div>
+    </div>
+
+    <!-- 发送选项模态框 -->
+    <div id="sendModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <h3>选择发送方式</h3>
+            <p>请选择您要发送的文件类型</p>
+            <button class="btn" onclick="goToFileSend()">选择文件</button>
+        </div>
+    </div>
+
+    <!-- 接收选项模态框 -->
+    <div id="receiveModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <h3>准备接收文件</h3>
+            <p>设备正在准备接收来自其他设备的文件...</p>
+            <button class="btn" onclick="startReceiving()">开始接收</button>
+        </div>
+    </div>
+
+    <!-- 功能说明模态框 -->
+    <div id="infoModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <h3 id="infoTitle">功能说明</h3>
+            <p id="infoContent">此功能正在开发中，敬请期待...</p>
+            <button class="btn" onclick="closeModal()">知道了</button>
+        </div>
+    </div>
+
+    <script>
+        function goBack() {
+            window.history.back();
+        }
+
+        function refreshPage() {
+            window.location.reload();
+        }
+
+        function showSendOptions() {
+            // 直接跳转到文件选择页面
+            window.location.href = 'file-send.html';
+        }
+
+        function showReceiveOptions() {
+            document.getElementById('receiveModal').style.display = 'block';
+        }
+
+        function showModal(type) {
+            const modal = document.getElementById('infoModal');
+            const title = document.getElementById('infoTitle');
+            const content = document.getElementById('infoContent');
+            
+            title.textContent = '功能说明';
+            content.textContent = '此功能正在开发中，敬请期待...';
+            
+            modal.style.display = 'block';
+        }
+
+        function closeModal() {
+            document.querySelectorAll('.modal').forEach(modal => {
+                modal.style.display = 'none';
+            });
+        }
+
+        function goToFileSend() {
+            window.location.href = 'file-send.html';
+        }
+
+        function startReceiving() {
+            alert('设备已准备好接收文件...');
+            closeModal();
+        }
+
+        function goHome() {
+            window.location.href = 'index.html';
+        }
+
+        function showTasks() {
+            alert('任务管理功能');
+        }
+
+        // 点击模态框外部关闭
+        window.onclick = function(event) {
+            if (event.target.classList.contains('modal')) {
+                event.target.style.display = 'none';
+            }
+        }
+    </script>
+</body>
+</html> 

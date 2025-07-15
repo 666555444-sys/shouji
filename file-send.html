@@ -1,0 +1,719 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>选择文件</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #ffffff;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 375px;
+            margin: 0 auto;
+            background: white;
+            min-height: 100vh;
+            position: relative;
+        }
+
+        .status-bar {
+            background: #4facfe;
+            color: white;
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .header {
+            background: white;
+            padding: 15px 20px;
+            border-bottom: 1px solid #e9ecef;
+            display: flex;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .back-btn {
+            background: none;
+            border: none;
+            font-size: 18px;
+            cursor: pointer;
+            margin-right: 15px;
+            color: #333;
+        }
+
+        .search-btn {
+            background: none;
+            border: none;
+            font-size: 18px;
+            cursor: pointer;
+            margin-left: auto;
+            color: #333;
+        }
+
+        .refresh-btn {
+            background: none;
+            border: none;
+            font-size: 18px;
+            cursor: pointer;
+            margin-left: 10px;
+            color: #333;
+        }
+
+        .header-title {
+            font-size: 18px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .warning-banner {
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            color: #856404;
+            padding: 12px 20px;
+            font-size: 14px;
+            text-align: center;
+            margin-bottom: 10px;
+        }
+
+        .category-tabs {
+            display: flex;
+            background: white;
+            border-bottom: 1px solid #e9ecef;
+            position: sticky;
+            top: 67px;
+            z-index: 99;
+        }
+
+        .category-tab {
+            flex: 1;
+            padding: 15px 10px;
+            text-align: center;
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 14px;
+            color: #666;
+            transition: all 0.3s ease;
+            border-bottom: 2px solid transparent;
+        }
+
+        .category-tab.active {
+            color: #4facfe;
+            border-bottom-color: #4facfe;
+            font-weight: bold;
+        }
+
+        .category-content {
+            padding: 20px;
+            background: white;
+        }
+
+        .category-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .category-icon {
+            font-size: 24px;
+            margin-right: 10px;
+        }
+
+        .category-title {
+            font-size: 16px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .category-count {
+            color: #666;
+            font-size: 14px;
+            margin-left: auto;
+        }
+
+        .select-all-btn {
+            color: #4facfe;
+            font-size: 14px;
+            cursor: pointer;
+            padding: 5px 10px;
+            border: 1px solid #4facfe;
+            border-radius: 15px;
+            background: none;
+            transition: all 0.3s ease;
+        }
+
+        .select-all-btn:hover {
+            background: #4facfe;
+            color: white;
+        }
+
+        .apps-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .app-item {
+            text-align: center;
+            cursor: pointer;
+            padding: 10px;
+            border-radius: 12px;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .app-item:hover {
+            background: #f8f9fa;
+            transform: translateY(-2px);
+        }
+
+        .app-item.selected {
+            background: #e8f2ff;
+            border: 2px solid #4facfe;
+        }
+
+        .app-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            margin: 0 auto 8px;
+            color: white;
+        }
+
+        .app-icon.blue {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+        }
+
+        .app-icon.green {
+            background: linear-gradient(135deg, #2ed573 0%, #17c0eb 100%);
+        }
+
+        .app-icon.orange {
+            background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%);
+        }
+
+        .app-icon.red {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        }
+
+        .app-icon.yellow {
+            background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+        }
+
+        .app-name {
+            font-size: 12px;
+            color: #333;
+            font-weight: 500;
+        }
+
+        .app-size {
+            font-size: 10px;
+            color: #999;
+            margin-top: 2px;
+        }
+
+        .selection-indicator {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            width: 16px;
+            height: 16px;
+            border-radius: 8px;
+            background: #4facfe;
+            color: white;
+            font-size: 10px;
+            display: none;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .app-item.selected .selection-indicator {
+            display: flex;
+        }
+
+        .bottom-device-info {
+            background: white;
+            padding: 15px 20px;
+            border-top: 1px solid #e9ecef;
+            margin-top: 20px;
+        }
+
+        .device-info {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .device-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 24px;
+            margin-right: 15px;
+        }
+
+        .device-details {
+            flex: 1;
+        }
+
+        .device-name {
+            font-size: 14px;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 2px;
+        }
+
+        .device-model {
+            font-size: 12px;
+            color: #666;
+        }
+
+        .qr-tip {
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 10px;
+            text-align: center;
+            border: 1px dashed #ddd;
+            margin-bottom: 15px;
+        }
+
+        .qr-tip-text {
+            font-size: 12px;
+            color: #666;
+        }
+
+        .bottom-actions {
+            position: fixed;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100%;
+            max-width: 375px;
+            background: white;
+            border-top: 1px solid #e9ecef;
+            padding: 15px 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            z-index: 1000;
+        }
+
+        .selection-info {
+            flex: 1;
+            font-size: 14px;
+            color: #666;
+        }
+
+        .send-btn {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 25px;
+            font-size: 14px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .send-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .send-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+        }
+
+        .modal-content {
+            background-color: #fefefe;
+            margin: 15% auto;
+            padding: 20px;
+            border-radius: 15px;
+            width: 80%;
+            max-width: 300px;
+            text-align: center;
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .close:hover {
+            color: black;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 25px;
+            font-size: 14px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 15px;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .alphabet-sidebar {
+            position: fixed;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+            z-index: 100;
+        }
+
+        .alphabet-item {
+            width: 20px;
+            height: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+            color: #666;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .alphabet-item:hover {
+            background: #4facfe;
+            color: white;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- 状态栏 -->
+        <div class="status-bar">
+            <span>12:33</span>
+            <div>
+                <span>🔋</span>
+                <span>📶</span>
+                <span>📶</span>
+                <span>📶</span>
+                <span>📶</span>
+                <span>📶</span>
+            </div>
+        </div>
+
+        <!-- 头部 -->
+        <div class="header">
+            <button class="back-btn" onclick="goBack()">←</button>
+            <span class="header-title">选择文件</span>
+            <button class="search-btn">🔍</button>
+            <button class="refresh-btn">⟳</button>
+        </div>
+
+        <!-- 警告横幅 -->
+        <div class="warning-banner">
+            ⚠️ 数据网络开启可能会消耗流量，请手动关闭。
+        </div>
+
+        <!-- 分类标签 -->
+        <div class="category-tabs">
+            <button class="category-tab active" onclick="switchCategory('apps')">应用</button>
+            <button class="category-tab" onclick="switchCategory('images')">图片</button>
+            <button class="category-tab" onclick="switchCategory('media')">媒体</button>
+            <button class="category-tab" onclick="switchCategory('files')">文件</button>
+            <button class="category-tab" onclick="switchCategory('contacts')">联系人</button>
+        </div>
+
+        <!-- 应用内容 -->
+        <div class="category-content" id="appsContent">
+            <div class="category-header">
+                <span class="category-icon">📱</span>
+                <span class="category-title">应用（46）</span>
+                <button class="select-all-btn" onclick="selectAll()">全选</button>
+            </div>
+
+            <!-- B 分组 -->
+            <div class="section-header">
+                <h3 style="font-size: 14px; color: #666; margin: 20px 0 10px;">B (5)</h3>
+            </div>
+
+            <div class="apps-grid">
+                <div class="app-item" onclick="toggleApp(this)">
+                    <div class="app-icon blue">📊</div>
+                    <div class="app-name">百词斩</div>
+                    <div class="app-size">283.73 MB</div>
+                    <div class="selection-indicator">✓</div>
+                </div>
+                <div class="app-item" onclick="toggleApp(this)">
+                    <div class="app-icon green">🐾</div>
+                    <div class="app-name">百度</div>
+                    <div class="app-size">163.31 MB</div>
+                    <div class="selection-indicator">✓</div>
+                </div>
+                <div class="app-item" onclick="toggleApp(this)">
+                    <div class="app-icon orange">🗺️</div>
+                    <div class="app-name">百度地图</div>
+                    <div class="app-size">211.11 MB</div>
+                    <div class="selection-indicator">✓</div>
+                </div>
+                <div class="app-item" onclick="toggleApp(this)">
+                    <div class="app-icon yellow">👨‍🏫</div>
+                    <div class="app-name">班级优化大师</div>
+                    <div class="app-size">78.17 MB</div>
+                    <div class="selection-indicator">✓</div>
+                </div>
+                <div class="app-item" onclick="toggleApp(this)">
+                    <div class="app-icon red">💼</div>
+                    <div class="app-name">BOSS直聘</div>
+                    <div class="app-size">143.62 MB</div>
+                    <div class="selection-indicator">✓</div>
+                </div>
+            </div>
+
+            <!-- D 分组 -->
+            <div class="section-header">
+                <h3 style="font-size: 14px; color: #666; margin: 20px 0 10px;">D (3)</h3>
+            </div>
+
+            <div class="apps-grid">
+                <div class="app-item" onclick="toggleApp(this)">
+                    <div class="app-icon blue">📧</div>
+                    <div class="app-name">邮箱</div>
+                    <div class="app-size">45.23 MB</div>
+                    <div class="selection-indicator">✓</div>
+                </div>
+                <div class="app-item" onclick="toggleApp(this)">
+                    <div class="app-icon green">📱</div>
+                    <div class="app-name">电话</div>
+                    <div class="app-size">12.45 MB</div>
+                    <div class="selection-indicator">✓</div>
+                </div>
+                <div class="app-item" onclick="toggleApp(this)">
+                    <div class="app-icon orange">🎵</div>
+                    <div class="app-name">音乐</div>
+                    <div class="app-size">89.67 MB</div>
+                    <div class="selection-indicator">✓</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 设备信息 -->
+        <div class="bottom-device-info">
+            <div class="device-info">
+                <div class="device-icon">📱</div>
+                <div class="device-details">
+                    <div class="device-name">我的设备</div>
+                    <div class="device-model">华为畅享20 SE</div>
+                </div>
+            </div>
+            <div class="qr-tip">
+                <div class="qr-tip-text">点击头像扫码连接 ✕</div>
+            </div>
+        </div>
+
+        <!-- 底部操作栏 -->
+        <div class="bottom-actions">
+            <div class="selection-info">未选择任何文件</div>
+            <button class="send-btn" id="sendBtn" disabled>
+                ✈️ 发送
+            </button>
+        </div>
+    </div>
+
+    <!-- 字母索引 -->
+    <div class="alphabet-sidebar">
+        <div class="alphabet-item">#</div>
+        <div class="alphabet-item">A</div>
+        <div class="alphabet-item">B</div>
+        <div class="alphabet-item">D</div>
+        <div class="alphabet-item">G</div>
+        <div class="alphabet-item">J</div>
+        <div class="alphabet-item">M</div>
+        <div class="alphabet-item">P</div>
+        <div class="alphabet-item">S</div>
+        <div class="alphabet-item">V</div>
+        <div class="alphabet-item">Z</div>
+    </div>
+
+    <!-- 发送确认模态框 -->
+    <div id="sendModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <h3>确认发送</h3>
+            <p id="sendInfo">您确定要发送选中的文件吗？</p>
+            <button class="btn" onclick="confirmSend()">确认发送</button>
+        </div>
+    </div>
+
+    <script>
+        let selectedApps = [];
+        let currentCategory = 'apps';
+
+        function goBack() {
+            window.history.back();
+        }
+
+        function switchCategory(category) {
+            // 移除所有激活状态
+            document.querySelectorAll('.category-tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            // 激活当前选项
+            event.target.classList.add('active');
+            
+            currentCategory = category;
+            
+            // 这里可以加载不同类型的内容
+            if (category !== 'apps') {
+                alert(`${category} 分类功能开发中...`);
+            }
+        }
+
+        function toggleApp(element) {
+            const appName = element.querySelector('.app-name').textContent;
+            
+            if (element.classList.contains('selected')) {
+                element.classList.remove('selected');
+                selectedApps = selectedApps.filter(app => app !== appName);
+            } else {
+                element.classList.add('selected');
+                selectedApps.push(appName);
+            }
+            
+            updateSelectionInfo();
+        }
+
+        function selectAll() {
+            const allApps = document.querySelectorAll('.app-item');
+            const allSelected = Array.from(allApps).every(app => app.classList.contains('selected'));
+            
+            if (allSelected) {
+                // 全部取消选择
+                allApps.forEach(app => {
+                    app.classList.remove('selected');
+                });
+                selectedApps = [];
+            } else {
+                // 全部选择
+                allApps.forEach(app => {
+                    app.classList.add('selected');
+                    const appName = app.querySelector('.app-name').textContent;
+                    if (!selectedApps.includes(appName)) {
+                        selectedApps.push(appName);
+                    }
+                });
+            }
+            
+            updateSelectionInfo();
+        }
+
+        function updateSelectionInfo() {
+            const selectionInfo = document.querySelector('.selection-info');
+            const sendBtn = document.getElementById('sendBtn');
+            
+            if (selectedApps.length === 0) {
+                selectionInfo.textContent = '未选择任何文件';
+                sendBtn.disabled = true;
+            } else {
+                selectionInfo.textContent = `已选择 ${selectedApps.length} 个文件`;
+                sendBtn.disabled = false;
+            }
+        }
+
+        function showSendModal() {
+            if (selectedApps.length === 0) {
+                alert('请先选择要发送的文件');
+                return;
+            }
+            
+            document.getElementById('sendInfo').textContent = `您选择了 ${selectedApps.length} 个文件，确定发送吗？`;
+            document.getElementById('sendModal').style.display = 'block';
+        }
+
+        function closeModal() {
+            document.getElementById('sendModal').style.display = 'none';
+        }
+
+        function confirmSend() {
+            alert('文件发送中...');
+            // 这里可以添加实际的发送逻辑
+            closeModal();
+            selectedApps = [];
+            document.querySelectorAll('.app-item').forEach(app => {
+                app.classList.remove('selected');
+            });
+            updateSelectionInfo();
+        }
+
+        // 发送按钮点击事件
+        document.getElementById('sendBtn').addEventListener('click', showSendModal);
+
+        // 点击模态框外部关闭
+        window.onclick = function(event) {
+            const modal = document.getElementById('sendModal');
+            if (event.target === modal) {
+                modal.style.display = 'none';
+            }
+        }
+
+        // 字母索引点击事件
+        document.querySelectorAll('.alphabet-item').forEach(item => {
+            item.addEventListener('click', function() {
+                const letter = this.textContent;
+                // 这里可以添加滚动到对应字母分组的逻辑
+                console.log('点击了字母:', letter);
+            });
+        });
+    </script>
+</body>
+</html> 

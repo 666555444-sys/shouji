@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>手机数据帮手</title>
+    <!-- Add Font Awesome for realistic icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #ffffff;
+            min-height: 100vh;
+            padding: 20px 0;
+        }
+
+        .container {
+            max-width: 375px;
+            margin: 0 auto;
+            background: #f8f9fa;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+
+        .status-bar {
+            background: #4facfe;
+            color: white;
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            padding: 20px;
+            text-align: center;
+            color: white;
+            position: relative;
+        }
+
+        .header h1 {
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+
+        .header .subtitle {
+            font-size: 16px;
+            opacity: 0.9;
+            margin-bottom: 15px;
+        }
+
+        .header .slogan {
+            font-size: 18px;
+            font-weight: bold;
+            color: #fff;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .banner {
+            background: linear-gradient(135deg, #ff9500 0%, #ffa726 100%);
+            margin: 20px;
+            border-radius: 15px;
+            padding: 25px;
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .banner::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+            animation: rotate 20s linear infinite;
+        }
+
+        @keyframes rotate {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .banner h2 {
+            font-size: 20px;
+            margin-bottom: 8px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .banner p {
+            font-size: 14px;
+            opacity: 0.9;
+            position: relative;
+            z-index: 1;
+        }
+
+        .features {
+            padding: 20px;
+        }
+
+        .features-title {
+            font-size: 18px;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 15px;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+        
+        /* Remove the span 2 for the fifth item since we're adding more items */
+        /* .features-grid .feature-card:nth-child(5) {
+            grid-column: span 2;
+        } */
+
+        .feature-card {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+        }
+
+        .feature-card.premium {
+            background: linear-gradient(135deg, #ff9500 0%, #ffa726 100%);
+            color: white;
+        }
+
+        .feature-card.free {
+            background: linear-gradient(135deg, #ff6b6b 0%, #ff8a80 100%);
+            color: white;
+        }
+
+        .feature-icon {
+            font-size: 24px;
+            margin-bottom: 10px;
+            display: block;
+        }
+
+        .feature-title {
+            font-size: 14px;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        .feature-desc {
+            font-size: 12px;
+            color: #666;
+            line-height: 1.4;
+        }
+
+        .feature-card.premium .feature-title,
+        .feature-card.premium .feature-desc {
+            color: white;
+        }
+
+        .feature-card.free .feature-title,
+        .feature-card.free .feature-desc {
+            color: white;
+        }
+
+        .premium-badge {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            background: #ff6b6b;
+            color: white;
+            font-size: 10px;
+            padding: 2px 6px;
+            border-radius: 8px;
+        }
+
+        .free-badge {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            background: #4facfe;
+            color: white;
+            font-size: 10px;
+            padding: 2px 6px;
+            border-radius: 8px;
+        }
+
+        .other-services {
+            padding: 0 20px 20px;
+        }
+
+        .other-services-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+        }
+
+        .service-card {
+            background: white;
+            border-radius: 12px;
+            padding: 15px;
+            text-align: center;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .service-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+        }
+
+        .service-icon {
+            font-size: 24px;
+            margin-bottom: 8px;
+            display: block;
+        }
+
+        .service-title {
+            font-size: 12px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .bottom-nav {
+            background: white;
+            border-top: 1px solid #e9ecef;
+            padding: 15px 0;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+        }
+
+        .nav-item {
+            text-align: center;
+            cursor: pointer;
+            padding: 5px;
+            transition: all 0.3s ease;
+        }
+
+        .nav-item:hover {
+            transform: scale(1.1);
+        }
+
+        .nav-item.active {
+            color: #4facfe;
+        }
+
+        .nav-icon {
+            font-size: 24px;
+            margin-bottom: 5px;
+            display: block;
+        }
+
+        .nav-text {
+            font-size: 12px;
+            color: #666;
+        }
+
+        .nav-item.active .nav-text {
+            color: #4facfe;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+        }
+
+        .modal-content {
+            background-color: #fefefe;
+            margin: 15% auto;
+            padding: 20px;
+            border-radius: 15px;
+            width: 80%;
+            max-width: 300px;
+            text-align: center;
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .close:hover {
+            color: black;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 25px;
+            font-size: 14px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .notification {
+            background: #fff3e0;
+            border: 1px solid #ff9500;
+            color: #f57c00;
+            padding: 10px;
+            margin: 10px 20px;
+            border-radius: 8px;
+            font-size: 12px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- 状态栏 -->
+        <div class="status-bar">
+            <span>20:27</span>
+            <div>
+                <span>🔋</span>
+                <span>📶</span>
+                <span>📶</span>
+                <span>📶</span>
+                <span>📶</span>
+                <span>📶</span>
+                <span>184 KB/s</span>
+            </div>
+        </div>
+
+        <!-- 头部 -->
+        <div class="header">
+            <h1>数据修复</h1>
+            <p class="subtitle">安全高效 | 隐私无忧</p>
+            <p class="slogan">越早修复，几率越高！！！</p>
+        </div>
+
+        <!-- 通知 -->
+        <div class="notification">
+            <i class="fas fa-mobile-alt"></i> 193****347 购买了微信消息修复
+        </div>
+
+        <!-- Banner -->
+        <div class="banner">
+            <h2>越早修复，几率越高！！</h2>
+            <p>安全高效 | 隐私无忧</p>
+        </div>
+
+        <!-- 热门功能 -->
+        <div class="features">
+            <h3 class="features-title">热门功能</h3>
+            <div class="features-grid">
+                <div class="feature-card premium" onclick="showModal('premium')">
+                    <div class="premium-badge">试用</div>
+                    <span class="feature-icon"><i class="fas fa-comment-dots"></i></span>
+                    <div class="feature-title">微信消息修复</div>
+                    <div class="feature-desc">微信聊天记录修复</div>
+                </div>
+                <div class="feature-card premium" onclick="showModal('premium')">
+                    <div class="premium-badge">试用</div>
+                    <span class="feature-icon"><i class="fas fa-users"></i></span>
+                    <div class="feature-title">微信好友修复</div>
+                    <div class="feature-desc">微信好友误删修复</div>
+                </div>
+                <div class="feature-card premium" onclick="showModal('premium')">
+                    <div class="premium-badge">试用</div>
+                    <span class="feature-icon"><i class="fas fa-image"></i></span>
+                    <div class="feature-title">图片修复</div>
+                    <div class="feature-desc">手机丢失图片修复</div>
+                </div>
+                <div class="feature-card free" onclick="showImageTools()">
+                    <div class="free-badge">免费</div>
+                    <span class="feature-icon"><i class="fas fa-tools"></i></span>
+                    <div class="feature-title">图片工具</div>
+                    <div class="feature-desc">缩放、剪切工具</div>
+                </div>
+                <div class="feature-card free" onclick="showPage('transfer')">
+                    <div class="free-badge">免费</div>
+                    <span class="feature-icon"><i class="fas fa-share"></i></span>
+                    <div class="feature-title">文件传输</div>
+                    <div class="feature-desc">设备间文件传输</div>
+                </div>
+                <div class="feature-card premium" onclick="showModal('premium')">
+                    <div class="premium-badge">试用</div>
+                    <span class="feature-icon"><i class="fas fa-address-book"></i></span>
+                    <div class="feature-title">通讯录修复</div>
+                    <div class="feature-desc">手机联系人修复</div>
+                </div>
+                <div class="feature-card premium" onclick="showModal('premium')">
+                    <div class="premium-badge">试用</div>
+                    <span class="feature-icon"><i class="fas fa-phone"></i></span>
+                    <div class="feature-title">通话记录修复</div>
+                    <div class="feature-desc">手机通话记录修复</div>
+                </div>
+                <div class="feature-card premium" onclick="showModal('premium')">
+                    <div class="premium-badge">试用</div>
+                    <span class="feature-icon"><i class="fas fa-sms"></i></span>
+                    <div class="feature-title">短信修复</div>
+                    <div class="feature-desc">手机短信记录修复</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 其他服务 -->
+        <div class="other-services">
+            <h3 class="features-title">其他服务</h3>
+            <div class="other-services-grid">
+                <div class="service-card" onclick="showModal('premium')">
+                    <span class="service-icon"><i class="fas fa-file"></i></span>
+                    <div class="service-title">文件修复</div>
+                </div>
+                <div class="service-card" onclick="showModal('premium')">
+                    <span class="service-icon"><i class="fas fa-video"></i></span>
+                    <div class="service-title">视频修复</div>
+                </div>
+                <div class="service-card" onclick="showModal('premium')">
+                    <span class="service-icon"><i class="fas fa-music"></i></span>
+                    <div class="service-title">音频修复</div>
+                </div>
+                <div class="service-card" onclick="showModal('premium')">
+                    <span class="service-icon"><i class="fas fa-trash"></i></span>
+                    <div class="service-title">图片清除</div>
+                </div>
+                <div class="service-card" onclick="showModal('premium')">
+                    <span class="service-icon"><i class="fab fa-qq"></i></span>
+                    <div class="service-title">QQ数据修复</div>
+                </div>
+                <div class="service-card" onclick="showModal('premium')">
+                    <span class="service-icon"><i class="fas fa-mobile-alt"></i></span>
+                    <div class="service-title">图片清除</div>
+                </div>
+                <div class="service-card" onclick="showModal('premium')">
+                    <span class="service-icon"><i class="fas fa-receipt"></i></span>
+                    <div class="service-title">微信账单修复</div>
+                </div>
+                <div class="service-card" onclick="showModal('premium')">
+                    <span class="service-icon"><i class="fab fa-tiktok"></i></span>
+                    <div class="service-title">抖音数据修复</div>
+                </div>
+                <div class="service-card" onclick="showModal('premium')">
+                    <span class="service-icon"><i class="fas fa-wrench"></i></span>
+                    <div class="service-title">工程师远程协助</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 底部导航 -->
+        <div class="bottom-nav">
+            <div class="nav-item active">
+                <span class="nav-icon"><i class="fas fa-home"></i></span>
+                <div class="nav-text">首页</div>
+            </div>
+            <div class="nav-item" onclick="showPage('cases')">
+                <span class="nav-icon"><i class="fas fa-clipboard-list"></i></span>
+                <div class="nav-text">案例</div>
+            </div>
+            <div class="nav-item" onclick="showPage('order')">
+                <span class="nav-icon"><i class="fas fa-file-alt"></i></span>
+                <div class="nav-text">订单</div>
+            </div>
+            <div class="nav-item" onclick="showPage('profile')">
+                <span class="nav-icon"><i class="fas fa-user"></i></span>
+                <div class="nav-text">我的</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 模态框 -->
+    <div id="premiumModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <h3>开启会员功能</h3>
+            <p>此功能需要开通会员才能使用</p>
+            <button class="btn" onclick="showPage('payment')">立即开通</button>
+        </div>
+    </div>
+
+    <script>
+        function showModal(type) {
+            if (type === 'premium') {
+                document.getElementById('premiumModal').style.display = 'block';
+            }
+        }
+
+        function closeModal() {
+            document.getElementById('premiumModal').style.display = 'none';
+        }
+
+        function showPage(page) {
+            switch(page) {
+                case 'payment':
+                    window.location.href = 'payment.html';
+                    break;
+                case 'profile':
+                    window.location.href = 'profile.html';
+                    break;
+                case 'scan':
+                    window.location.href = 'scan.html';
+                    break;
+                case 'transfer':
+                    window.location.href = 'transfer.html';
+                    break;
+                case 'cases':
+                    window.location.href = 'cases.html';
+                    break;
+                case 'order':
+                    window.location.href = 'order.html';
+                    break;
+                default:
+                    alert('页面开发中...');
+            }
+        }
+
+        function showImageTools() {
+            alert('图片工具功能免费使用！');
+        }
+
+        // 点击模态框外部关闭
+        window.onclick = function(event) {
+            const modal = document.getElementById('premiumModal');
+            if (event.target === modal) {
+                modal.style.display = 'none';
+            }
+        }
+    </script>
+</body>
+</html> 

@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>扫描进度</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #ffffff;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 375px;
+            margin: 0 auto;
+            background: white;
+            min-height: 100vh;
+        }
+
+        .status-bar {
+            background: #4facfe;
+            color: white;
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .header {
+            background: #f8f9fa;
+            padding: 15px 20px;
+            border-bottom: 1px solid #e9ecef;
+            display: flex;
+            align-items: center;
+        }
+
+        .back-btn {
+            background: none;
+            border: none;
+            font-size: 18px;
+            cursor: pointer;
+            margin-right: 15px;
+        }
+
+        .header-title {
+            font-size: 18px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .filter-tabs {
+            display: flex;
+            background: #f8f9fa;
+            border-bottom: 1px solid #e9ecef;
+        }
+
+        .filter-tab {
+            flex: 1;
+            padding: 15px;
+            text-align: center;
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+
+        .filter-tab.active {
+            background: #4facfe;
+            color: white;
+        }
+
+        .scan-progress {
+            background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+            margin: 20px;
+            padding: 20px;
+            border-radius: 15px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .progress-circle {
+            width: 100px;
+            height: 100px;
+            margin: 0 auto 15px;
+            position: relative;
+        }
+
+        .progress-ring {
+            transform: rotate(-90deg);
+        }
+
+        .progress-ring-circle {
+            stroke: #e6f3ff;
+            stroke-width: 8;
+            fill: transparent;
+            r: 40;
+            cx: 50;
+            cy: 50;
+        }
+
+        .progress-ring-progress {
+            stroke: #2ed573;
+            stroke-width: 8;
+            fill: transparent;
+            r: 40;
+            cx: 50;
+            cy: 50;
+            stroke-dasharray: 251.2;
+            stroke-dashoffset: 218.5;
+            transition: stroke-dashoffset 0.5s ease;
+        }
+
+        .progress-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 18px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .scan-info {
+            color: #666;
+            font-size: 14px;
+            margin-bottom: 10px;
+        }
+
+        .scan-tip {
+            color: #ff6b6b;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .btn {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-cancel {
+            background: #f1f3f4;
+            color: #666;
+        }
+
+        .btn-recover {
+            background: #4facfe;
+            color: white;
+        }
+
+        .btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+
+        .scan-results {
+            padding: 20px;
+        }
+
+        .results-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .results-title {
+            font-size: 16px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .results-count {
+            color: #666;
+            font-size: 14px;
+        }
+
+        .image-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .image-item {
+            aspect-ratio: 1;
+            background: #f8f9fa;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .image-item:hover {
+            transform: scale(1.05);
+        }
+
+        .image-placeholder {
+            color: #666;
+            font-size: 12px;
+            text-align: center;
+        }
+
+        .image-size {
+            position: absolute;
+            bottom: 5px;
+            right: 5px;
+            background: rgba(0,0,0,0.7);
+            color: white;
+            font-size: 10px;
+            padding: 2px 4px;
+            border-radius: 4px;
+        }
+
+        .unlock-prompt {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            margin: 20px;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .unlock-prompt h3 {
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .unlock-prompt p {
+            color: #666;
+            font-size: 14px;
+            line-height: 1.5;
+            margin-bottom: 20px;
+        }
+
+        .unlock-btn {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 25px;
+            font-size: 14px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .unlock-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+        }
+
+        .modal-content {
+            background-color: #fefefe;
+            margin: 15% auto;
+            padding: 20px;
+            border-radius: 15px;
+            width: 80%;
+            max-width: 300px;
+            text-align: center;
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .close:hover {
+            color: black;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- 状态栏 -->
+        <div class="status-bar">
+            <span>20:24</span>
+            <div>
+                <span>🔋</span>
+                <span>📶</span>
+                <span>📶</span>
+                <span>📶</span>
+                <span>📶</span>
+                <span>📶</span>
+                <span>185 KB/s</span>
+            </div>
+        </div>
+
+        <!-- 头部导航 -->
+        <div class="header">
+            <button class="back-btn" onclick="goBack()">←</button>
+            <span class="header-title">全部图片</span>
+        </div>
+
+        <!-- 过滤标签 -->
+        <div class="filter-tabs">
+            <button class="filter-tab active">相册</button>
+            <button class="filter-tab">微信</button>
+            <button class="filter-tab">QQ</button>
+            <button class="filter-tab">其他</button>
+        </div>
+
+        <!-- 扫描进度 -->
+        <div class="scan-progress">
+            <div class="progress-circle">
+                <svg class="progress-ring" width="100" height="100">
+                    <circle class="progress-ring-circle" />
+                    <circle class="progress-ring-progress" id="progressCircle" />
+                </svg>
+                <div class="progress-text" id="progressText">13%</div>
+            </div>
+            <div class="scan-info">已扫描13%</div>
+            <div class="scan-tip">目前只扫描到13%，您如需要开放「深层扫描」查看全部数据，请点击去「去恢复」按钮。</div>
+            <div class="action-buttons">
+                <button class="btn btn-cancel" onclick="cancelScan()">取消</button>
+                <button class="btn btn-recover" onclick="goToRecover()">去恢复</button>
+            </div>
+        </div>
+
+        <!-- 扫描结果 -->
+        <div class="scan-results">
+            <div class="results-header">
+                <div class="results-title">相册（250张）</div>
+                <div class="results-count">免费</div>
+            </div>
+
+            <div class="image-grid">
+                <div class="image-item">
+                    <div class="image-placeholder">📷<br>JPG 630 kB</div>
+                    <div class="image-size">JPG 630 kB</div>
+                </div>
+                <div class="image-item">
+                    <div class="image-placeholder">📷<br>JPG 493 kB</div>
+                    <div class="image-size">JPG 493 kB</div>
+                </div>
+                <div class="image-item">
+                    <div class="image-placeholder">📷<br>JPG 352 kB</div>
+                    <div class="image-size">JPG 352 kB</div>
+                </div>
+                <div class="image-item">
+                    <div class="image-placeholder">📷<br>JPG 245 kB</div>
+                    <div class="image-size">JPG 245 kB</div>
+                </div>
+                <div class="image-item">
+                    <div class="image-placeholder">📷<br>JPG 189 kB</div>
+                    <div class="image-size">JPG 189 kB</div>
+                </div>
+                <div class="image-item">
+                    <div class="image-placeholder">📷<br>JPG 156 kB</div>
+                    <div class="image-size">JPG 156 kB</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 解锁提示 -->
+        <div class="unlock-prompt">
+            <h3>已扫描13%</h3>
+            <p>目前只扫描到13%，您如需要开放「深层扫描」查看全部数据，请点击去「去恢复」按钮。</p>
+            <button class="unlock-btn" onclick="showUnlockModal()">去恢复</button>
+        </div>
+    </div>
+
+    <!-- 解锁模态框 -->
+    <div id="unlockModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <h3>开放深层扫描查找全部数据</h3>
+            <p>深层扫描可以找到更多已删除的数据</p>
+            <button class="unlock-btn" onclick="goToPayment()">立即恢复</button>
+        </div>
+    </div>
+
+    <script>
+        let currentProgress = 13;
+        
+        function updateProgress() {
+            const circle = document.getElementById('progressCircle');
+            const text = document.getElementById('progressText');
+            const radius = 40;
+            const circumference = 2 * Math.PI * radius;
+            const offset = circumference - (currentProgress / 100) * circumference;
+            
+            circle.style.strokeDashoffset = offset;
+            text.textContent = currentProgress + '%';
+        }
+
+        function goBack() {
+            window.history.back();
+        }
+
+        function cancelScan() {
+            if (confirm('确定要取消扫描吗？')) {
+                window.location.href = 'index.html';
+            }
+        }
+
+        function goToRecover() {
+            showUnlockModal();
+        }
+
+        function showUnlockModal() {
+            document.getElementById('unlockModal').style.display = 'block';
+        }
+
+        function closeModal() {
+            document.getElementById('unlockModal').style.display = 'none';
+        }
+
+        function goToPayment() {
+            window.location.href = 'payment.html';
+        }
+
+        // 模拟扫描进度
+        function simulateScan() {
+            const interval = setInterval(() => {
+                if (currentProgress < 100) {
+                    currentProgress += Math.random() * 5;
+                    if (currentProgress > 100) currentProgress = 100;
+                    updateProgress();
+                } else {
+                    clearInterval(interval);
+                }
+            }, 1000);
+        }
+
+        // 初始化
+        updateProgress();
+        // simulateScan(); // 取消注释来启动自动扫描
+
+        // 点击模态框外部关闭
+        window.onclick = function(event) {
+            const modal = document.getElementById('unlockModal');
+            if (event.target === modal) {
+                modal.style.display = 'none';
+            }
+        }
+    </script>
+</body>
+</html> 

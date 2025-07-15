@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>我的订单</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #ffffff;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 375px;
+            margin: 0 auto;
+            background: white;
+            min-height: 100vh;
+            position: relative;
+            padding-bottom: 80px;
+        }
+
+        .status-bar {
+            background: #f8f9fa;
+            color: #333;
+            padding: 8px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 14px;
+            border-bottom: 1px solid #e9ecef;
+        }
+
+        .status-left {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .status-right {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .header {
+            background: white;
+            padding: 20px;
+            border-bottom: 1px solid #e9ecef;
+        }
+
+        .header-title {
+            font-size: 20px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .order-status {
+            background: white;
+            padding: 20px;
+            border-bottom: 1px solid #e9ecef;
+        }
+
+        .status-title {
+            font-size: 16px;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        .order-card {
+            background: white;
+            border-radius: 12px;
+            padding: 25px;
+            margin: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .order-info {
+            margin-bottom: 25px;
+        }
+
+        .order-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .order-label {
+            font-size: 14px;
+            color: #666;
+            flex: 1;
+        }
+
+        .order-value {
+            font-size: 14px;
+            color: #333;
+            flex: 2;
+            text-align: right;
+        }
+
+        .order-id {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .copy-btn {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            color: #666;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            cursor: pointer;
+        }
+
+        .copy-btn:hover {
+            background: #e9ecef;
+        }
+
+        .price-section {
+            text-align: right;
+            margin: 25px 0;
+        }
+
+        .price {
+            font-size: 26px;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 25px;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border-radius: 25px;
+            font-size: 14px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: none;
+            min-width: 100px;
+        }
+
+        .btn-cancel {
+            background: #f8f9fa;
+            color: #666;
+            border: 1px solid #dee2e6;
+        }
+
+        .btn-cancel:hover {
+            background: #e9ecef;
+        }
+
+        .btn-pay {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+        }
+
+        .btn-pay:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(79, 172, 254, 0.3);
+        }
+
+        .order-footer {
+            text-align: center;
+            margin: 40px 0;
+            color: #999;
+            font-size: 14px;
+        }
+
+        .bottom-nav {
+            background: white;
+            border-top: 1px solid #e9ecef;
+            padding: 15px 0;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            position: fixed;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100%;
+            max-width: 375px;
+        }
+
+        .nav-item {
+            text-align: center;
+            cursor: pointer;
+            padding: 5px;
+            transition: all 0.3s ease;
+        }
+
+        .nav-item:hover {
+            transform: scale(1.1);
+        }
+
+        .nav-item.active {
+            color: #4facfe;
+        }
+
+        .nav-icon {
+            font-size: 24px;
+            margin-bottom: 5px;
+            display: block;
+        }
+
+        .nav-text {
+            font-size: 12px;
+            color: #666;
+        }
+
+        .nav-item.active .nav-text {
+            color: #4facfe;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- 状态栏 -->
+        <div class="status-bar">
+            <div class="status-left">
+                <span>HD</span>
+                <span>📶</span>
+                <span>📶</span>
+                <span>📶</span>
+                <span>📶</span>
+                <span>📶</span>
+                <span>📶</span>
+                <span>📶</span>
+            </div>
+            <div class="status-right">
+                <span>⏰</span>
+                <span>🔵</span>
+                <span>📱</span>
+                <span>9:15</span>
+            </div>
+        </div>
+
+        <!-- 头部 -->
+        <div class="header">
+            <h1 class="header-title">我的订单</h1>
+        </div>
+
+        <!-- 订单状态 -->
+        <div class="order-status">
+            <h2 class="status-title">订单待支付</h2>
+        </div>
+
+        <!-- 订单详情卡片 -->
+        <div class="order-card">
+            <div class="order-info">
+                <div class="order-row">
+                    <span class="order-label">购买服务</span>
+                    <span class="order-value">超级修复</span>
+                </div>
+                <div class="order-row">
+                    <span class="order-label">订单号</span>
+                    <div class="order-value">
+                        <div class="order-id">
+                            <span>DISPLAYED24112210...</span>
+                            <button class="copy-btn" onclick="copyOrderId()">复制</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="order-row">
+                    <span class="order-label">购买时间</span>
+                    <span class="order-value">2024-11-22 18:18:52</span>
+                </div>
+            </div>
+
+            <div class="price-section">
+                <div class="price">¥98.0</div>
+                <div class="action-buttons">
+                    <button class="btn btn-cancel" onclick="cancelOrder()">取消订单</button>
+                    <button class="btn btn-pay" onclick="goToPay()">去支付</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 订单底部 -->
+        <div class="order-footer">
+            — 已展示全部订单 —
+        </div>
+
+        <!-- 底部导航 -->
+        <div class="bottom-nav">
+            <div class="nav-item" onclick="showPage('index')">
+                <span class="nav-icon">🏠</span>
+                <div class="nav-text">首页</div>
+            </div>
+            <div class="nav-item" onclick="showPage('cases')">
+                <span class="nav-icon">📋</span>
+                <div class="nav-text">案例</div>
+            </div>
+            <div class="nav-item active">
+                <span class="nav-icon">📄</span>
+                <div class="nav-text">订单</div>
+            </div>
+            <div class="nav-item" onclick="showPage('profile')">
+                <span class="nav-icon">👤</span>
+                <div class="nav-text">我的</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function copyOrderId() {
+            const orderId = "DISPLAYED24112210";
+            navigator.clipboard.writeText(orderId).then(() => {
+                alert('订单号已复制到剪贴板');
+            }).catch(err => {
+                // 备用方案
+                const textArea = document.createElement('textarea');
+                textArea.value = orderId;
+                document.body.appendChild(textArea);
+                textArea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textArea);
+                alert('订单号已复制到剪贴板');
+            });
+        }
+
+        function cancelOrder() {
+            if (confirm('确定要取消此订单吗？')) {
+                alert('订单已取消');
+            }
+        }
+
+        function goToPay() {
+            window.location.href = 'payment.html';
+        }
+
+        function showPage(page) {
+            switch(page) {
+                case 'index':
+                    window.location.href = 'index.html';
+                    break;
+                case 'cases':
+                    window.location.href = 'cases.html';
+                    break;
+                case 'profile':
+                    window.location.href = 'profile.html';
+                    break;
+                default:
+                    alert('页面开发中...');
+            }
+        }
+    </script>
+</body>
+</html>

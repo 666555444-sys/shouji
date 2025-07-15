@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>精选案例</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #ffffff;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 375px;
+            margin: 0 auto;
+            background: white;
+            min-height: 100vh;
+            position: relative;
+            padding-bottom: 60px;
+        }
+
+        .status-bar {
+            background: white;
+            color: #333;
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            font-size: 14px;
+            font-weight: 500;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .status-left {
+            font-weight: 600;
+        }
+
+        .status-right {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .battery {
+            background: #4CAF50;
+            color: white;
+            padding: 1px 4px;
+            border-radius: 2px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .header {
+            background: white;
+            padding: 20px;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .header-title {
+            font-size: 24px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .cases-list {
+            background: white;
+            padding: 0 20px;
+        }
+
+        .case-item {
+            display: flex;
+            align-items: flex-start;
+            padding: 20px 0;
+            border-bottom: 1px solid #f0f0f0;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .case-item:hover {
+            background: #f9f9f9;
+        }
+
+        .case-item:last-child {
+            border-bottom: none;
+        }
+
+        .case-content {
+            flex: 1;
+            margin-right: 15px;
+        }
+
+        .case-title {
+            font-size: 16px;
+            color: #333;
+            line-height: 1.5;
+            margin-bottom: 8px;
+            font-weight: 400;
+        }
+
+        .case-date {
+            font-size: 12px;
+            color: #999;
+        }
+
+        .case-image {
+            width: 80px;
+            height: 80px;
+            border-radius: 8px;
+            object-fit: cover;
+            flex-shrink: 0;
+        }
+
+        .bottom-nav {
+            background: white;
+            border-top: 1px solid #e9ecef;
+            padding: 10px 0;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            position: fixed;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100%;
+            max-width: 375px;
+            z-index: 1000;
+        }
+
+        .nav-item {
+            text-align: center;
+            cursor: pointer;
+            padding: 8px;
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .nav-item:hover {
+            transform: scale(1.05);
+        }
+
+        .nav-item.active {
+            color: #4facfe;
+        }
+
+        .nav-icon {
+            font-size: 24px;
+            margin-bottom: 5px;
+            display: block;
+        }
+
+        .nav-text {
+            font-size: 12px;
+            color: #666;
+        }
+
+        .nav-item.active .nav-text {
+            color: #4facfe;
+        }
+
+        /* 底部系统导航栏 */
+        .system-nav {
+            background: black;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 60px;
+            position: fixed;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100%;
+            max-width: 375px;
+            z-index: 1001;
+        }
+
+        .system-nav-item {
+            color: white;
+            font-size: 18px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- 状态栏 -->
+        <div class="status-bar">
+            <div class="status-left">12:01</div>
+            <div class="status-right">
+                <span>0.61</span>
+                <span>KB/s</span>
+                <span>📶</span>
+                <span>📶</span>
+                <span>📶</span>
+                <span>📶</span>
+                <span>📶</span>
+                <span>📶</span>
+                <span>🔋</span>
+                <span class="battery">78</span>
+                <span>🔋</span>
+            </div>
+        </div>
+
+        <!-- 头部 -->
+        <div class="header">
+            <div class="header-title">精选案例</div>
+        </div>
+
+        <!-- 案例列表 -->
+        <div class="cases-list">
+            <div class="case-item" onclick="goToCaseDetail('case1')">
+                <div class="case-content">
+                    <div class="case-title">在手机相册中浏览照片时，不小心滑动屏幕导致一些重要的照片被误删除。</div>
+                    <div class="case-date">2023-12-29 13:15:26</div>
+                </div>
+                <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iODAiIGhlaWdodD0iODAiIHZpZXdCb3g9IjAgMCA4MCA4MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjgwIiBoZWlnaHQ9IjgwIiByeD0iOCIgZmlsbD0iI0U3RjNGRiIvPgo8cGF0aCBkPSJNMjQgMzJIMTZWMjRIMjRWMzJaTTU2IDI0VjU2SDI0VjQ4SDQ4VjMySDQwVjI0SDU2WiIgZmlsbD0iIzY2N0VFQSIvPgo8cGF0aCBkPSJNMzIgNDBDMzQuMjA5MSA0MCAzNiAzOC4yMDkxIDM2IDM2QzM2IDMzLjc5MDkgMzQuMjA5MSAzMiAzMiAzMkMyOS43OTA5IDMyIDI4IDMzLjc5MDkgMjggMzZDMjggMzguMjA5MSAyOS43OTA5IDQwIDMyIDQwWiIgZmlsbD0iIzY2N0VFQSIvPgo8L3N2Zz4K" alt="案例图片" class="case-image">
+            </div>
+
+            <div class="case-item" onclick="goToCaseDetail('case2')">
+                <div class="case-content">
+                    <div class="case-title">在手机上使用存储卡来存储大量的照片和视频，不小心，格式化了存储卡，导致里面的所有文件都丢失了。</div>
+                    <div class="case-date">2023-12-24 15:15:32</div>
+                </div>
+                <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iODAiIGhlaWdodD0iODAiIHZpZXdCb3g9IjAgMCA4MCA4MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjgwIiBoZWlnaHQ9IjgwIiByeD0iOCIgZmlsbD0iI0Y5RjlGOSIvPgo8cGF0aCBkPSJNMjQgMjRINTZWNTZIMjRWMjRaTTI4IDI4VjUySDUyVjI4SDI4WiIgZmlsbD0iI0ZGNjB4NiIvPgo8cGF0aCBkPSJNMzIgNDBIMzZWNDRIMzJWNDBaTTM2IDMySDQwVjM2SDM2VjMyWk00MCA0MEg0NFY0NEg0MFY0MFoiIGZpbGw9IiNGRjYwNTYiLz4KPC9zdmc+Cg==" alt="案例图片" class="case-image">
+            </div>
+
+            <div class="case-item" onclick="goToCaseDetail('case3')">
+                <div class="case-content">
+                    <div class="case-title">不小心将微信聊天记录删除，非常着急想要找回。</div>
+                    <div class="case-date">2023-12-15 09:23:10</div>
+                </div>
+                <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iODAiIGhlaWdodD0iODAiIHZpZXdCb3g9IjAgMCA4MCA4MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjgwIiBoZWlnaHQ9IjgwIiByeD0iOCIgZmlsbD0iI0YwRjhGRiIvPgo8cGF0aCBkPSJNMjQgMzJIMTZWMjhIMjRWMzJaTTU2IDI4VjUySDI0VjQ4SDUyVjMySDI4VjI4SDU2WiIgZmlsbD0iIzAwN0FGRiIvPgo8cGF0aCBkPSJNMzIgNDBIMzZWNDRIMzJWNDBaTTQwIDQwSDQ0VjQ0SDQwVjQwWiIgZmlsbD0iIzAwN0FGRiIvPgo8L3N2Zz4K" alt="案例图片" class="case-image">
+            </div>
+
+            <div class="case-item" onclick="goToCaseDetail('case4')">
+                <div class="case-content">
+                    <div class="case-title">误删重要的音频文件，手机找不到该音频文件。</div>
+                    <div class="case-date">2023-12-03 19:08:43</div>
+                </div>
+                <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iODAiIGhlaWdodD0iODAiIHZpZXdCb3g9IjAgMCA4MCA4MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjgwIiBoZWlnaHQ9IjgwIiByeD0iOCIgZmlsbD0iI0Y1RjVGNSIvPgo8cGF0aCBkPSJNMjggMjRIMzJWNTZIMjhWMjRaTTM2IDMySDQwVjQ4SDM2VjMyWk00NCAyOEg0OFY1Mkg0NFYyOFoiIGZpbGw9IiM5RTlFOUUiLz4KPC9zdmc+Cg==" alt="案例图片" class="case-image">
+            </div>
+        </div>
+
+        <!-- 底部导航 -->
+        <div class="bottom-nav">
+            <div class="nav-item" onclick="goToPage('home')">
+                <div class="nav-icon">🏠</div>
+                <div class="nav-text">首页</div>
+            </div>
+            <div class="nav-item active">
+                <div class="nav-icon">📋</div>
+                <div class="nav-text">案例</div>
+            </div>
+            <div class="nav-item" onclick="goToPage('order')">
+                <div class="nav-icon">📄</div>
+                <div class="nav-text">订单</div>
+            </div>
+            <div class="nav-item" onclick="goToPage('profile')">
+                <div class="nav-icon">👤</div>
+                <div class="nav-text">我的</div>
+            </div>
+        </div>
+
+        <!-- 底部系统导航 -->
+        <div class="system-nav">
+            <div class="system-nav-item" onclick="goBack()">◀</div>
+            <div class="system-nav-item" onclick="goHome()">○</div>
+            <div class="system-nav-item" onclick="showTasks()">▢</div>
+        </div>
+    </div>
+
+    <script>
+        function goToCaseDetail(caseId) {
+            window.location.href = `case-detail.html?id=${caseId}`;
+        }
+
+        function goToPage(page) {
+            switch(page) {
+                case 'home':
+                    window.location.href = 'index.html';
+                    break;
+                case 'order':
+                    window.location.href = 'order.html';
+                    break;
+                case 'profile':
+                    window.location.href = 'profile.html';
+                    break;
+                default:
+                    alert('页面开发中...');
+            }
+        }
+
+        function goBack() {
+            window.history.back();
+        }
+
+        function goHome() {
+            window.location.href = 'index.html';
+        }
+
+        function showTasks() {
+            alert('任务管理功能');
+        }
+    </script>
+</body>
+</html> 
