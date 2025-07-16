@@ -129,25 +129,11 @@
 
         /* 底部系统导航栏 */
         .system-nav {
-            background: black;
-            height: 30px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 60px;
-            position: fixed;
-            bottom: 0;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 100%;
-            max-width: 375px;
-            z-index: 1001;
+            display: none; /* 隐藏系统导航栏 */
         }
 
         .system-nav-item {
-            color: white;
-            font-size: 18px;
-            cursor: pointer;
+            display: none; /* 隐藏系统导航栏项目 */
         }
     </style>
 </head>
@@ -198,11 +184,8 @@
         </div>
 
         <!-- 底部系统导航 -->
-        <div class="system-nav">
-            <div class="system-nav-item" onclick="goBack()">◀</div>
-            <div class="system-nav-item" onclick="goHome()">○</div>
-            <div class="system-nav-item" onclick="showTasks()">▢</div>
-        </div>
+        <!-- 移除底部系统导航栏 -->
+
     </div>
 
     <script>

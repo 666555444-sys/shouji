@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>我的订单</title>
+    <!-- Add Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * {
             margin: 0;
@@ -82,6 +84,12 @@
             box-shadow: 0 2px 10px rgba(0,0,0,0.1);
         }
 
+        .order-status-header {
+            margin-bottom: 20px;
+            border-bottom: 1px solid #e9ecef;
+            padding-bottom: 15px;
+        }
+        
         .order-info {
             margin-bottom: 25px;
         }
@@ -257,15 +265,18 @@
 
         <!-- 订单状态 -->
         <div class="order-status">
-            <h2 class="status-title">订单待支付</h2>
+            <h2 class="status-title"></h2>
         </div>
 
         <!-- 订单详情卡片 -->
         <div class="order-card">
+            <div class="order-status-header">
+                <h2 class="status-title">订单待支付</h2>
+            </div>
             <div class="order-info">
                 <div class="order-row">
                     <span class="order-label">购买服务</span>
-                    <span class="order-value">超级修复</span>
+                    <span class="order-value">图片清除(永久)</span>
                 </div>
                 <div class="order-row">
                     <span class="order-label">订单号</span>
@@ -283,7 +294,7 @@
             </div>
 
             <div class="price-section">
-                <div class="price">¥98.0</div>
+                <div class="price">¥158.0</div>
                 <div class="action-buttons">
                     <button class="btn btn-cancel" onclick="cancelOrder()">取消订单</button>
                     <button class="btn btn-pay" onclick="goToPay()">去支付</button>
@@ -299,25 +310,61 @@
         <!-- 底部导航 -->
         <div class="bottom-nav">
             <div class="nav-item" onclick="showPage('index')">
-                <span class="nav-icon">🏠</span>
+                <span class="nav-icon"><i class="fas fa-home"></i></span>
                 <div class="nav-text">首页</div>
             </div>
             <div class="nav-item" onclick="showPage('cases')">
-                <span class="nav-icon">📋</span>
+                <span class="nav-icon"><i class="fas fa-clipboard-list"></i></span>
                 <div class="nav-text">案例</div>
             </div>
             <div class="nav-item active">
-                <span class="nav-icon">📄</span>
+                <span class="nav-icon"><i class="fas fa-file-alt"></i></span>
                 <div class="nav-text">订单</div>
             </div>
             <div class="nav-item" onclick="showPage('profile')">
-                <span class="nav-icon">👤</span>
+                <span class="nav-icon"><i class="fas fa-user"></i></span>
                 <div class="nav-text">我的</div>
             </div>
         </div>
     </div>
 
     <script>
+        // Check if payment was successful when the page loads
+        window.onload = function() {
+            // Check if there's a payment success flag in the URL
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('paymentSuccess') === 'true') {
+                showPaymentSuccess();
+            }
+        };
+        
+        function showPaymentSuccess() {
+            // Update the status title in the order card
+            document.querySelector('.order-status-header .status-title').textContent = '订单支付成功';
+            document.querySelector('.order-status-header .status-title').style.color = '#2ed573';
+            
+            // Replace the action buttons with a success message
+            const actionButtons = document.querySelector('.action-buttons');
+            actionButtons.innerHTML = '<div class="payment-success-badge">支付成功</div>';
+            
+            // Add success badge styles
+            const style = document.createElement('style');
+            style.textContent = `
+                .payment-success-badge {
+                    background: linear-gradient(135deg, #2ed573 0%, #17c0eb 100%);
+                    color: white;
+                    padding: 12px 24px;
+                    border-radius: 25px;
+                    font-size: 16px;
+                    font-weight: bold;
+                    text-align: center;
+                    margin: 10px auto;
+                    width: fit-content;
+                }
+            `;
+            document.head.appendChild(style);
+        }
+
         function copyOrderId() {
             const orderId = "DISPLAYED24112210";
             navigator.clipboard.writeText(orderId).then(() => {
@@ -336,7 +383,23 @@
 
         function cancelOrder() {
             if (confirm('确定要取消此订单吗？')) {
-                alert('订单已取消');
+                // Remove the order card
+                document.querySelector('.order-card').remove();
+                
+                // Update the status title
+                document.querySelector('.status-title').textContent = '暂无订单';
+                
+                // Update the footer text
+                document.querySelector('.order-footer').textContent = '— 暂无订单记录 —';
+                
+                // Show a message that the order was canceled
+                const orderStatus = document.querySelector('.order-status');
+                const message = document.createElement('div');
+                message.style.padding = '15px';
+                message.style.color = '#666';
+                message.style.textAlign = 'center';
+                message.textContent = '订单已取消';
+                orderStatus.appendChild(message);
             }
         }
 

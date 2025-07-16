@@ -27,82 +27,219 @@
             border-radius: 20px;
             overflow: hidden;
             box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            position: relative;
+        }
+
+        /* 添加新的蓝色背景区域 */
+        .blue-background {
+            background: #4facfe; /* 改为更清淡的蓝色 */
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 280px; /* 增加高度 */
+            z-index: 0;
+            border-radius: 0 0 30px 30px; /* 添加底部圆弧 */
         }
 
         .status-bar {
-            background: #4facfe;
-            color: white;
-            padding: 10px 20px;
+            background: transparent; /* 改为透明背景 */
+            color: black; /* 改为黑色 */
+            padding: 6px 15px; /* 减少内边距 */
             display: flex;
-            justify-content: space-between;
-            font-size: 14px;
+            justify-content: flex-end; /* 改为右对齐 */
+            font-size: 16px; /* 调整状态栏字体大小 */
             font-weight: 500;
+            position: relative;
+            z-index: 3;
+        }
+
+        /* 新增状态栏图标样式 */
+        .status-bar .icons {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .status-bar .battery-icon {
+            position: relative;
+            width: 22px;
+            height: 12px;
+            border: 1px solid #000;
+            border-radius: 2px;
+            margin-right: 5px;
+        }
+        
+        .status-bar .battery-icon::after {
+            content: "";
+            position: absolute;
+            top: 3px;
+            right: -3px;
+            width: 2px;
+            height: 6px;
+            background: #000;
+            border-radius: 0 2px 2px 0;
+        }
+        
+        .status-bar .battery-level {
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            bottom: 2px;
+            width: 70%;
+            background: #000;
+            border-radius: 1px;
+        }
+        
+        .status-bar .clock-icon {
+            margin-right: 5px;
         }
 
         .header {
-            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
-            padding: 20px;
-            text-align: center;
-            color: white;
+            background: none; /* 保持透明背景 */
+            padding: 20px 20px 10px; /* 减少左右内边距 */
+            text-align: left;
+            color: black; /* 改为黑色文字 */
             position: relative;
+            border-radius: 0;
+            margin-bottom: 0;
+            z-index: 3;
         }
 
         .header h1 {
-            font-size: 24px;
-            margin-bottom: 10px;
+            font-size: 32px; /* 增大标题字体 */
+            margin-bottom: 0;
+            text-align: left;
+            font-weight: bold; /* 加粗字体 */
         }
 
         .header .subtitle {
-            font-size: 16px;
-            opacity: 0.9;
-            margin-bottom: 15px;
+            display: none; /* 隐藏原来的subtitle */
         }
 
         .header .slogan {
-            font-size: 18px;
-            font-weight: bold;
-            color: #fff;
-            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+            display: none; /* 隐藏原来的slogan */
         }
-
-        .banner {
-            background: linear-gradient(135deg, #ff9500 0%, #ffa726 100%);
-            margin: 20px;
+        
+        /* 安全高效的新边框 - 第一个框架 */
+        .recovery-box {
+            background: #1e6ce3; /* 保持蓝色背景 */
+            border: 2px solid rgba(255,255,255,0.2); /* 添加微妙的白色边框 */
             border-radius: 15px;
-            padding: 25px;
-            color: white;
+            padding: 12px 20px; /* 减小内边距 */
+            margin: 0 15px 15px; /* 外边距 */
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: space-between;
             position: relative;
             overflow: hidden;
+            z-index: 3;
+            color: white;
+        }
+        
+        /* 删除第二个框架的样式 */
+        
+        /* 左侧内容容器 */
+        .recovery-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            width: 100%; /* 确保容器占据所有可用空间 */
+        }
+        
+        .early-fix-tip {
+            display: block; /* 显示元素 */
+            color: white; /* 白色文字 */
+            font-weight: bold;
+            width: 100%;
+            margin-bottom: 8px; /* 添加底部间距 */
+        }
+        
+        .early-fix {
+            font-size: 26px; /* 将字体大小调整为26px */
+            line-height: 1.2; /* 保持行高 */
+            text-shadow: 0 2px 4px rgba(0,0,0,0.2); /* 添加文字阴影增强效果 */
+            display: block; /* 确保完整显示 */
+            text-align: left; /* 改为左对齐 */
+            width: 100%; /* 占满宽度 */
+            padding: 0; /* 移除内边距 */
+            font-weight: bold; /* 调整字重 */
+            letter-spacing: normal; /* 恢复正常字母间距 */
+        }
+        
+        .early-fix-line1,
+        .early-fix-line2 {
+            display: block;
+        }
+        
+        .early-fix-line1 {
+            margin-bottom: 2px; /* 添加行间距 */
+        }
+        
+        /* 安全高效和隐私无忧的容器 */
+        .safety-features {
+            display: flex;
+            align-items: center;
+            justify-content: flex-start; /* 左对齐 */
+            width: 100%;
+            margin-top: 5px; /* 增加顶部间距 */
+        }
+        
+        .safety-features span {
+            color: white; /* 白色文字 */
+            font-size: 12px; /* 减小字体大小 */
+            opacity: 0.9; /* 稍微降低不透明度 */
+        }
+        
+        .safety-features .separator {
+            margin: 0 8px; /* 调整间距 */
+            color: white;
+            opacity: 0.8; /* 降低不透明度 */
+        }
+        
+        /* 右侧文件图片样式 */
+        .file-image {
+            width: 130px; /* 宽度 */
+            height: 130px; /* 高度 */
+            margin-right: -15px; /* 增加右侧超出边框的距离 */
+            margin-top: -5px; /* 稍微向上偏移 */
+            margin-bottom: -5px; /* 稍微向下延伸 */
+            transform: rotate(10deg); /* 保持倾斜角度 */
+            filter: drop-shadow(0 4px 6px rgba(0,0,0,0.25)); /* 增强阴影效果 */
         }
 
-        .banner::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            right: -50%;
-            width: 200%;
-            height: 200%;
-            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
-            animation: rotate 20s linear infinite;
+        /* 删除原来的banner */
+        .banner {
+            display: none;
         }
 
-        @keyframes rotate {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        .banner h2 {
-            font-size: 20px;
-            margin-bottom: 8px;
-            position: relative;
-            z-index: 1;
-        }
-
-        .banner p {
+        /* 通知样式优化 - 增加z-index确保在蓝色背景上方 */
+        .notification {
+            background: #fff;
+            border-left: 4px solid #1e6ce3;
+            color: #333;
+            padding: 10px 15px; /* 减少内边距 */
+            margin: 20px 20px 15px; /* 调整外边距 */
+            border-radius: 8px;
             font-size: 14px;
-            opacity: 0.9;
+            display: flex;
+            align-items: center;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
             position: relative;
-            z-index: 1;
+            z-index: 3; /* 增加z-index */
+        }
+        
+        .notification .notice-tag {
+            background: #1e6ce3;
+            color: white;
+            padding: 2px 6px; /* 减少内边距 */
+            border-radius: 4px;
+            margin-right: 8px; /* 减少右边距 */
+            font-size: 12px;
+            font-weight: bold;
         }
 
         .features {
@@ -146,12 +283,12 @@
         }
 
         .feature-card.premium {
-            background: linear-gradient(135deg, #ff9500 0%, #ffa726 100%);
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
             color: white;
         }
 
         .feature-card.free {
-            background: linear-gradient(135deg, #ff6b6b 0%, #ff8a80 100%);
+            background: linear-gradient(135deg, #ffdb6b 0%, #ffef80 100%);
             color: white;
         }
 
@@ -181,14 +318,14 @@
 
         .feature-card.free .feature-title,
         .feature-card.free .feature-desc {
-            color: white;
+            color: #333;
         }
 
         .premium-badge {
             position: absolute;
             top: 5px;
             right: 5px;
-            background: #ff6b6b;
+            background: #007bff;
             color: white;
             font-size: 10px;
             padding: 2px 6px;
@@ -199,8 +336,8 @@
             position: absolute;
             top: 5px;
             right: 5px;
-            background: #4facfe;
-            color: white;
+            background: #ffc107;
+            color: #333;
             font-size: 10px;
             padding: 2px 6px;
             border-radius: 8px;
@@ -347,36 +484,64 @@
 </head>
 <body>
     <div class="container">
+        <!-- 添加新的蓝色背景 -->
+        <div class="blue-background"></div>
+        
         <!-- 状态栏 -->
         <div class="status-bar">
-            <span>20:27</span>
-            <div>
-                <span>🔋</span>
+            <div class="left-items">
                 <span>📶</span>
-                <span>📶</span>
-                <span>📶</span>
-                <span>📶</span>
-                <span>📶</span>
-                <span>184 KB/s</span>
             </div>
         </div>
 
         <!-- 头部 -->
         <div class="header">
             <h1>数据修复</h1>
-            <p class="subtitle">安全高效 | 隐私无忧</p>
-            <p class="slogan">越早修复，几率越高！！！</p>
         </div>
+
+        <!-- 安全高效 拆分为两个框架 -->
+        <!-- 框架1: 越早恢复 -->
+        <div class="recovery-box">
+            <div class="recovery-content">
+                <!-- 重新添加early-fix-tip区域 -->
+                <div class="early-fix-tip">
+                    <span class="early-fix">
+                        <span class="early-fix-line1">越早恢复</span>
+                        <span class="early-fix-line2">几率越高！！！</span>
+                    </span>
+                </div>
+                <!-- 添加安全高效到越早恢复框架内 -->
+                <div class="safety-features">
+                    <span>安全高效</span>
+                    <span class="separator">|</span>
+                    <span>隐私无忧</span>
+                </div>
+            </div>
+            <!-- 写实风格的倾斜文件图片 -->
+            <svg class="file-image" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                <!-- 文件底层阴影 -->
+                <path d="M20 85 L20 15 L60 15 L80 35 L80 85 Z" fill="#e0e0e0" transform="translate(3,3)" />
+                <!-- 文件主体 -->
+                <path d="M20 85 L20 15 L60 15 L80 35 L80 85 Z" fill="#ffffff" stroke="#cccccc" stroke-width="1" />
+                <!-- 文件折角 -->
+                <path d="M60 15 L60 35 L80 35 Z" fill="#f5f5f5" stroke="#cccccc" stroke-width="1" />
+                <!-- 文件内容线条 -->
+                <line x1="30" y1="45" x2="70" y2="45" stroke="#4facfe" stroke-width="2" />
+                <line x1="30" y1="55" x2="70" y2="55" stroke="#bbbbbb" stroke-width="2" />
+                <line x1="30" y1="65" x2="60" y2="65" stroke="#bbbbbb" stroke-width="2" />
+                <!-- 文件图标 -->
+                <circle cx="40" cy="25" r="5" fill="#4facfe" />
+                <!-- 添加星星装饰 -->
+                <polygon points="85,15 88,22 95,23 90,28 91,35 85,32 79,35 80,28 75,23 82,22" fill="#ffeb3b" stroke="#ffd600" stroke-width="0.5" />
+                <polygon points="35,75 37,79 42,80 38,83 39,88 35,86 31,88 32,83 28,80 33,79" fill="#ffeb3b" stroke="#ffd600" stroke-width="0.5" />
+            </svg>
+        </div>
+        
+        <!-- 删除第二个框架 -->
 
         <!-- 通知 -->
         <div class="notification">
-            <i class="fas fa-mobile-alt"></i> 193****347 购买了微信消息修复
-        </div>
-
-        <!-- Banner -->
-        <div class="banner">
-            <h2>越早修复，几率越高！！</h2>
-            <p>安全高效 | 隐私无忧</p>
+            <span class="notice-tag">资讯</span> 193****347 购买了微信消息恢复
         </div>
 
         <!-- 热门功能 -->
@@ -401,23 +566,23 @@
                     <div class="feature-title">图片修复</div>
                     <div class="feature-desc">手机丢失图片修复</div>
                 </div>
-                <div class="feature-card free" onclick="showImageTools()">
+                <div class="feature-card free" onclick="showImageTools('scale')">
                     <div class="free-badge">免费</div>
-                    <span class="feature-icon"><i class="fas fa-tools"></i></span>
-                    <div class="feature-title">图片工具</div>
-                    <div class="feature-desc">缩放、剪切工具</div>
+                    <span class="feature-icon"><i class="fas fa-search"></i></span>
+                    <div class="feature-title">图片缩放</div>
+                    <div class="feature-desc">图片放大缩小工具</div>
                 </div>
-                <div class="feature-card free" onclick="showPage('transfer')">
+                <div class="feature-card free" onclick="showImageTools('crop')">
                     <div class="free-badge">免费</div>
+                    <span class="feature-icon"><i class="fas fa-crop"></i></span>
+                    <div class="feature-title">图片裁剪</div>
+                    <div class="feature-desc">图片剪裁编辑工具</div>
+                </div>
+                <div class="feature-card premium" onclick="showModal('premium')">
+                    <div class="premium-badge">付费</div>
                     <span class="feature-icon"><i class="fas fa-share"></i></span>
                     <div class="feature-title">文件传输</div>
                     <div class="feature-desc">设备间文件传输</div>
-                </div>
-                <div class="feature-card premium" onclick="showModal('premium')">
-                    <div class="premium-badge">试用</div>
-                    <span class="feature-icon"><i class="fas fa-address-book"></i></span>
-                    <div class="feature-title">通讯录修复</div>
-                    <div class="feature-desc">手机联系人修复</div>
                 </div>
                 <div class="feature-card premium" onclick="showModal('premium')">
                     <div class="premium-badge">试用</div>
@@ -504,7 +669,7 @@
             <span class="close" onclick="closeModal()">&times;</span>
             <h3>开启会员功能</h3>
             <p>此功能需要开通会员才能使用</p>
-            <button class="btn" onclick="showPage('payment')">立即开通</button>
+            <button class="btn" onclick="window.location.href='payment.html'">立即开通</button>
         </div>
     </div>
 
@@ -522,7 +687,7 @@
         function showPage(page) {
             switch(page) {
                 case 'payment':
-                    window.location.href = 'payment.html';
+                    window.location.href = 'unlock-template.html';
                     break;
                 case 'profile':
                     window.location.href = 'profile.html';
@@ -544,8 +709,14 @@
             }
         }
 
-        function showImageTools() {
-            alert('图片工具功能免费使用！');
+        function showImageTools(type) {
+            if (type === 'scale') {
+                window.location.href = 'image-scale.html';
+            } else if (type === 'crop') {
+                window.location.href = 'image-crop.html';
+            } else {
+                alert('图片工具功能免费使用！');
+            }
         }
 
         // 点击模态框外部关闭

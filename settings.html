@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>设置</title>
+    <!-- Add Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #f8f9fa;
+            min-height: 100vh;
+            color: #333;
+        }
+
+        .container {
+            max-width: 375px;
+            margin: 0 auto;
+            background: white;
+            min-height: 100vh;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+        }
+
+        .header {
+            background: #5367e4;
+            color: white;
+            padding: 15px;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .back-btn {
+            position: absolute;
+            left: 15px;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+        }
+
+        .header-title {
+            font-size: 20px;
+            font-weight: 500;
+            text-align: center;
+        }
+
+        .settings-section {
+            margin-bottom: 15px;
+            background: white;
+        }
+
+        .section-title {
+            font-size: 14px;
+            color: #888;
+            padding: 15px 20px 10px;
+            background: #f8f9fa;
+        }
+
+        .setting-item {
+            display: flex;
+            align-items: center;
+            padding: 16px 20px;
+            border-bottom: 1px solid #f0f0f0;
+            background: white;
+        }
+
+        .setting-item:last-child {
+            border-bottom: none;
+        }
+
+        .setting-icon {
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            color: #5367e4;
+            font-size: 16px;
+        }
+
+        .setting-content {
+            flex: 1;
+        }
+
+        .setting-title {
+            font-size: 16px;
+            color: #333;
+        }
+
+        .setting-desc {
+            font-size: 12px;
+            color: #999;
+            margin-top: 4px;
+        }
+
+        .setting-action {
+            display: flex;
+            align-items: center;
+        }
+
+        .arrow {
+            color: #ccc;
+            font-size: 16px;
+            margin-left: 10px;
+        }
+
+        /* 开关按钮样式 */
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 50px;
+            height: 24px;
+        }
+
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+            border-radius: 24px;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 20px;
+            width: 20px;
+            left: 2px;
+            bottom: 2px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+
+        input:checked + .slider {
+            background-color: #5367e4;
+        }
+
+        input:checked + .slider:before {
+            transform: translateX(26px);
+        }
+
+        .value-text {
+            font-size: 14px;
+            color: #999;
+            margin-right: 5px;
+        }
+
+        .version-text {
+            font-size: 14px;
+            color: #999;
+        }
+
+        .logout-btn {
+            margin: 20px;
+            background: #fff;
+            color: #ff3b30;
+            border: 1px solid #ff3b30;
+            padding: 12px;
+            border-radius: 8px;
+            width: calc(100% - 40px);
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+
+        .logout-btn:hover {
+            background: #fff1f0;
+        }
+
+        .clear-cache-btn {
+            margin: 0 20px 20px;
+            background: #f8f9fa;
+            color: #5367e4;
+            border: none;
+            padding: 12px;
+            border-radius: 8px;
+            width: calc(100% - 40px);
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+
+        .clear-cache-btn:hover {
+            background: #eef1f9;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+        }
+
+        .modal-content {
+            background-color: #fefefe;
+            margin: 20% auto;
+            padding: 20px;
+            border-radius: 15px;
+            width: 80%;
+            max-width: 300px;
+            text-align: center;
+        }
+
+        .modal-title {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+
+        .modal-text {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 20px;
+            line-height: 1.5;
+        }
+
+        .modal-buttons {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .modal-btn {
+            flex: 1;
+            padding: 10px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+        }
+
+        .cancel-btn {
+            background: #f8f9fa;
+            color: #666;
+            margin-right: 10px;
+            border: none;
+        }
+
+        .confirm-btn {
+            background: #5367e4;
+            color: white;
+            border: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- 头部 -->
+        <div class="header">
+            <button class="back-btn" onclick="goBack()">←</button>
+            <div class="header-title">设置</div>
+        </div>
+
+        <!-- 通用设置 -->
+        <div class="settings-section">
+            <div class="section-title">通用设置</div>
+            
+            <div class="setting-item">
+                <div class="setting-icon">
+                    <i class="fas fa-bell"></i>
+                </div>
+                <div class="setting-content">
+                    <div class="setting-title">通知提醒</div>
+                    <div class="setting-desc">接收重要通知和消息提醒</div>
+                </div>
+                <div class="setting-action">
+                    <label class="switch">
+                        <input type="checkbox" checked>
+                        <span class="slider"></span>
+                    </label>
+                </div>
+            </div>
+            
+            <div class="setting-item">
+                <div class="setting-icon">
+                    <i class="fas fa-moon"></i>
+                </div>
+                <div class="setting-content">
+                    <div class="setting-title">深色模式</div>
+                    <div class="setting-desc">切换应用界面显示模式</div>
+                </div>
+                <div class="setting-action">
+                    <label class="switch">
+                        <input type="checkbox">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+            </div>
+            
+            <div class="setting-item" onclick="showLanguageOptions()">
+                <div class="setting-icon">
+                    <i class="fas fa-language"></i>
+                </div>
+                <div class="setting-content">
+                    <div class="setting-title">语言</div>
+                    <div class="setting-desc">选择应用显示语言</div>
+                </div>
+                <div class="setting-action">
+                    <div class="value-text">简体中文</div>
+                    <div class="arrow">›</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 账户与安全 -->
+        <div class="settings-section">
+            <div class="section-title">账户与安全</div>
+            
+            <div class="setting-item" onclick="goToAccountSecurity()">
+                <div class="setting-icon">
+                    <i class="fas fa-user-shield"></i>
+                </div>
+                <div class="setting-content">
+                    <div class="setting-title">账户安全</div>
+                    <div class="setting-desc">修改密码、绑定手机</div>
+                </div>
+                <div class="setting-action">
+                    <div class="arrow">›</div>
+                </div>
+            </div>
+            
+            <div class="setting-item" onclick="goToPrivacy()">
+                <div class="setting-icon">
+                    <i class="fas fa-lock"></i>
+                </div>
+                <div class="setting-content">
+                    <div class="setting-title">隐私设置</div>
+                    <div class="setting-desc">隐私保护和数据安全</div>
+                </div>
+                <div class="setting-action">
+                    <div class="arrow">›</div>
+                </div>
+            </div>
+            
+            <div class="setting-item">
+                <div class="setting-icon">
+                    <i class="fas fa-fingerprint"></i>
+                </div>
+                <div class="setting-content">
+                    <div class="setting-title">指纹解锁</div>
+                    <div class="setting-desc">使用指纹快速登录应用</div>
+                </div>
+                <div class="setting-action">
+                    <label class="switch">
+                        <input type="checkbox" checked>
+                        <span class="slider"></span>
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <!-- 数据管理 -->
+        <div class="settings-section">
+            <div class="section-title">数据管理</div>
+            
+            <div class="setting-item" onclick="showStorageUsage()">
+                <div class="setting-icon">
+                    <i class="fas fa-database"></i>
+                </div>
+                <div class="setting-content">
+                    <div class="setting-title">存储空间</div>
+                    <div class="setting-desc">查看应用数据使用情况</div>
+                </div>
+                <div class="setting-action">
+                    <div class="value-text">56.8MB</div>
+                    <div class="arrow">›</div>
+                </div>
+            </div>
+            
+            <div class="setting-item">
+                <div class="setting-icon">
+                    <i class="fas fa-cloud-download-alt"></i>
+                </div>
+                <div class="setting-content">
+                    <div class="setting-title">自动备份</div>
+                    <div class="setting-desc">自动备份恢复记录和设置</div>
+                </div>
+                <div class="setting-action">
+                    <label class="switch">
+                        <input type="checkbox" checked>
+                        <span class="slider"></span>
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <!-- 关于 -->
+        <div class="settings-section">
+            <div class="section-title">关于</div>
+            
+            <div class="setting-item" onclick="checkForUpdates()">
+                <div class="setting-icon">
+                    <i class="fas fa-sync-alt"></i>
+                </div>
+                <div class="setting-content">
+                    <div class="setting-title">检查更新</div>
+                    <div class="setting-desc">当前版本 v1.1.31</div>
+                </div>
+                <div class="setting-action">
+                    <div class="arrow">›</div>
+                </div>
+            </div>
+            
+            <div class="setting-item" onclick="goToHelp()">
+                <div class="setting-icon">
+                    <i class="fas fa-question-circle"></i>
+                </div>
+                <div class="setting-content">
+                    <div class="setting-title">帮助与反馈</div>
+                    <div class="setting-desc">获取帮助或提交反馈</div>
+                </div>
+                <div class="setting-action">
+                    <div class="arrow">›</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 清除缓存按钮 -->
+        <button class="clear-cache-btn" onclick="showClearCacheConfirm()">清除缓存</button>
+
+        <!-- 退出登录按钮 -->
+        <button class="logout-btn" onclick="showLogoutConfirm()">退出登录</button>
+    </div>
+
+    <!-- 确认模态框 -->
+    <div id="confirmModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-title" id="modalTitle">确认操作</div>
+            <div class="modal-text" id="modalText">您确定要执行此操作吗？</div>
+            <div class="modal-buttons">
+                <button class="modal-btn cancel-btn" onclick="closeModal()">取消</button>
+                <button class="modal-btn confirm-btn" id="confirmBtn">确定</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function goBack() {
+            window.location.href = 'profile.html';
+        }
+        
+        function showLogoutConfirm() {
+            document.getElementById('modalTitle').textContent = '退出登录';
+            document.getElementById('modalText').textContent = '确定要退出当前账号吗？';
+            
+            const confirmBtn = document.getElementById('confirmBtn');
+            confirmBtn.onclick = function() {
+                // 执行退出登录操作
+                alert('已退出登录');
+                window.location.href = 'index.html';
+                closeModal();
+            };
+            
+            document.getElementById('confirmModal').style.display = 'block';
+        }
+        
+        function showClearCacheConfirm() {
+            document.getElementById('modalTitle').textContent = '清除缓存';
+            document.getElementById('modalText').textContent = '清除缓存将删除临时文件，但不会影响您的数据。确定要清除吗？';
+            
+            const confirmBtn = document.getElementById('confirmBtn');
+            confirmBtn.onclick = function() {
+                // 执行清除缓存操作
+                setTimeout(() => {
+                    alert('缓存已清除');
+                    closeModal();
+                }, 500);
+            };
+            
+            document.getElementById('confirmModal').style.display = 'block';
+        }
+        
+        function closeModal() {
+            document.getElementById('confirmModal').style.display = 'none';
+        }
+        
+        function showLanguageOptions() {
+            alert('目前仅支持简体中文');
+        }
+        
+        function goToAccountSecurity() {
+            alert('账户安全页面正在开发中');
+        }
+        
+        function goToPrivacy() {
+            window.location.href = 'service-agreement.html';
+        }
+        
+        function showStorageUsage() {
+            alert('存储空间：应用数据 42.5MB，缓存 14.3MB');
+        }
+        
+        function checkForUpdates() {
+            alert('已是最新版本 v1.1.31');
+        }
+        
+        function goToHelp() {
+            window.location.href = 'contact-service.html';
+        }
+        
+        // 点击模态框外部关闭
+        window.onclick = function(event) {
+            const modal = document.getElementById('confirmModal');
+            if (event.target === modal) {
+                closeModal();
+            }
+        }
+    </script>
+</body>
+</html> 

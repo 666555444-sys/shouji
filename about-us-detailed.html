@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>关于我们</title>
+    <!-- Add Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #ffffff;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 375px;
+            margin: 0 auto;
+            background: white;
+            min-height: 100vh;
+            position: relative;
+        }
+
+        .status-bar {
+            background: #1ec0ff;
+            color: white;
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            font-size: 14px;
+            font-weight: 500;
+            position: relative;
+            z-index: 2;
+        }
+
+        .header-bg {
+            background: linear-gradient(135deg, #1ec0ff 0%, #5ad8ff 100%);
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 180px;
+            border-bottom-left-radius: 50px;
+            border-bottom-right-radius: 50px;
+            z-index: 1;
+            box-shadow: 0 5px 15px rgba(30, 192, 255, 0.2);
+        }
+
+        .header {
+            position: relative;
+            color: white;
+            padding: 20px 20px;
+            text-align: center;
+            z-index: 2;
+            display: flex;
+            align-items: center;
+        }
+        
+        .back-btn {
+            font-size: 24px;
+            color: white;
+            cursor: pointer;
+            position: absolute;
+            left: 20px;
+        }
+
+        .header-title {
+            font-size: 20px;
+            font-weight: bold;
+            margin: 0 auto;
+        }
+
+        .company-logo {
+            margin: 30px auto;
+            width: 100px;
+            height: 100px;
+            background: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            position: relative;
+            z-index: 2;
+        }
+        
+        .logo-icon {
+            font-size: 40px;
+            color: #1ec0ff;
+        }
+
+        .content-section {
+            background: white;
+            margin: 20px;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            overflow: hidden;
+            position: relative;
+            z-index: 2;
+            padding: 20px;
+        }
+        
+        .section-title {
+            font-size: 18px;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        
+        .info-item {
+            display: flex;
+            padding: 12px 0;
+            border-bottom: 1px solid #f9f9f9;
+        }
+        
+        .info-item:last-child {
+            border-bottom: none;
+        }
+        
+        .info-label {
+            width: 100px;
+            color: #888;
+            font-size: 14px;
+        }
+        
+        .info-value {
+            flex: 1;
+            color: #333;
+            font-size: 14px;
+            font-weight: 500;
+        }
+        
+        .company-desc {
+            font-size: 14px;
+            line-height: 1.6;
+            color: #666;
+            margin-bottom: 15px;
+        }
+        
+        .feature-list {
+            padding-left: 20px;
+        }
+        
+        .feature-list li {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 8px;
+        }
+        
+        .contact-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+        
+        .contact-icon {
+            width: 30px;
+            height: 30px;
+            background: #f0f8ff;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            color: #1ec0ff;
+        }
+        
+        .contact-text {
+            font-size: 14px;
+            color: #666;
+        }
+        
+        .bottom-area {
+            text-align: center;
+            padding: 20px;
+            color: #999;
+            font-size: 12px;
+        }
+        
+        .social-links {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 15px;
+        }
+        
+        .social-link {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: #f5f5f5;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 10px;
+            color: #666;
+        }
+        
+        .btn {
+            background: linear-gradient(135deg, #1ec0ff 0%, #5ad8ff 100%);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 25px;
+            font-size: 14px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 15px;
+            display: block;
+            text-align: center;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- 背景半圆弧 -->
+        <div class="header-bg"></div>
+        
+        <!-- 状态栏 -->
+        <div class="status-bar">
+            <span>10:58</span>
+            <div>
+                <span>🔋</span>
+                <span>📶</span>
+            </div>
+        </div>
+
+        <!-- 头部 -->
+        <div class="header">
+            <div class="back-btn" onclick="goBack()">&#10094;</div>
+            <div class="header-title">关于我们</div>
+        </div>
+        
+        <!-- 公司Logo -->
+        <div class="company-logo">
+            <div class="logo-icon"><i class="fas fa-mobile-alt"></i></div>
+        </div>
+
+        <!-- 公司基本信息 -->
+        <div class="content-section">
+            <div class="section-title">企业信息</div>
+            <div class="info-item">
+                <div class="info-label">企业名称</div>
+                <div class="info-value">苏州沐决网络科技有限公司</div>
+            </div>
+            <div class="info-item">
+                <div class="info-label">成立时间</div>
+                <div class="info-value">2018年</div>
+            </div>
+            <div class="info-item">
+                <div class="info-label">产品名称</div>
+                <div class="info-value">手机恢复备份</div>
+            </div>
+            <div class="info-item">
+                <div class="info-label">当前版本</div>
+                <div class="info-value">V7.3</div>
+            </div>
+        </div>
+        
+        <!-- 公司介绍 -->
+        <div class="content-section">
+            <div class="section-title">企业简介</div>
+            <div class="company-desc">
+                苏州沐决网络科技有限公司是一家专注于移动数据恢复技术的高科技企业。我们致力于为用户提供专业、高效、安全的数据恢复解决方案，帮助用户找回珍贵的数字回忆。
+            </div>
+            <div class="company-desc">
+                我们的团队由一群热爱技术、充满创新精神的工程师组成，拥有多年数据恢复行业经验，擅长移动设备数据修复和恢复。
+            </div>
+        </div>
+        
+        <!-- 产品特点 -->
+        <div class="content-section">
+            <div class="section-title">产品特点</div>
+            <ul class="feature-list">
+                <li>专业的微信数据恢复能力，支持聊天记录、图片、视频等多种数据恢复</li>
+                <li>快速扫描识别，精准定位丢失数据</li>
+                <li>安全保障，恢复过程中不会泄露用户隐私</li>
+                <li>操作简单，无需复杂步骤即可完成数据恢复</li>
+                <li>专业的技术支持，为用户提供全方位服务</li>
+            </ul>
+        </div>
+        
+        <!-- 联系我们 -->
+        <div class="content-section">
+            <div class="section-title">联系我们</div>
+            <div class="contact-item">
+                <div class="contact-icon"><i class="fas fa-phone"></i></div>
+                <div class="contact-text">客服电话：400-888-8888</div>
+            </div>
+            <div class="contact-item">
+                <div class="contact-icon"><i class="fab fa-qq"></i></div>
+                <div class="contact-text">客服QQ：37115958</div>
+            </div>
+            <div class="contact-item">
+                <div class="contact-icon"><i class="fas fa-envelope"></i></div>
+                <div class="contact-text">邮箱：service@example.com</div>
+            </div>
+            <div class="contact-item">
+                <div class="contact-icon"><i class="fas fa-map-marker-alt"></i></div>
+                <div class="contact-text">地址：江苏省苏州市高新区科技创新大厦</div>
+            </div>
+        </div>
+        
+        <!-- 底部区域 -->
+        <div class="bottom-area">
+            <div class="social-links">
+                <div class="social-link"><i class="fab fa-weixin"></i></div>
+                <div class="social-link"><i class="fab fa-weibo"></i></div>
+                <div class="social-link"><i class="fas fa-globe"></i></div>
+            </div>
+            <div>© 2024 苏州沐决网络科技有限公司 版权所有</div>
+            <button class="btn" onclick="goBack()">返回个人中心</button>
+        </div>
+    </div>
+
+    <script>
+        function goBack() {
+            window.location.href = 'profile.html';
+        }
+    </script>
+</body>
+</html> 

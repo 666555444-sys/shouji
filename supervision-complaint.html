@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>监督投诉</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+        }
+        
+        body {
+            background-color: #f5f5f5;
+        }
+        
+        .container {
+            max-width: 414px;
+            margin: 0 auto;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        /* 头部导航栏 */
+        .header {
+            background-color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px;
+            position: relative;
+        }
+        
+        .back-btn {
+            font-size: 24px;
+            color: #333;
+            cursor: pointer;
+        }
+        
+        .page-title {
+            font-size: 18px;
+            font-weight: bold;
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+        
+        /* 灰色分隔线 */
+        .divider {
+            height: 10px;
+            background-color: #f5f5f5;
+            border-top: 1px solid #eee;
+            border-bottom: 1px solid #eee;
+        }
+        
+        /* 主要内容区域 */
+        .main-content {
+            flex: 1;
+            padding: 20px;
+        }
+        
+        /* 表单区域 */
+        .form-section {
+            margin-bottom: 30px;
+        }
+        
+        .section-label {
+            position: relative;
+            font-size: 16px;
+            margin-bottom: 15px;
+            color: #333;
+            display: flex;
+            align-items: center;
+        }
+        
+        .required {
+            color: #e53935;
+            margin-right: 5px;
+        }
+        
+        .input-field {
+            background-color: #f9f9f9;
+            border: none;
+            border-radius: 8px;
+            padding: 15px;
+            font-size: 16px;
+            color: #999;
+            width: 100%;
+            margin-bottom: 5px;
+        }
+        
+        .textarea-field {
+            background-color: #f9f9f9;
+            border: none;
+            border-radius: 8px;
+            padding: 15px;
+            font-size: 16px;
+            color: #999;
+            width: 100%;
+            height: 150px;
+            resize: none;
+            margin-bottom: 5px;
+        }
+        
+        /* 选择框 */
+        .select-field {
+            background-color: #f9f9f9;
+            border: none;
+            border-radius: 8px;
+            padding: 15px;
+            font-size: 16px;
+            color: #333;
+            width: 100%;
+            margin-bottom: 5px;
+            appearance: none;
+            background-image: url("data:image/svg+xml;utf8,<svg fill='gray' height='24' viewBox='0 0 24 24' width='24' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/><path d='M0 0h24v24H0z' fill='none'/></svg>");
+            background-repeat: no-repeat;
+            background-position: right 15px center;
+        }
+        
+        /* 底部提交按钮 */
+        .bottom-area {
+            padding: 20px;
+            margin-top: auto;
+        }
+        
+        .submit-btn {
+            background: linear-gradient(135deg, #4389ff 0%, #2974ff 100%);
+            color: white;
+            font-size: 18px;
+            font-weight: bold;
+            text-align: center;
+            padding: 15px 0;
+            border-radius: 50px;
+            width: 100%;
+            border: none;
+            cursor: pointer;
+        }
+        
+        /* 点击效果 */
+        .submit-btn:active,
+        .back-btn:active {
+            opacity: 0.7;
+        }
+        
+        /* 说明文字 */
+        .info-text {
+            font-size: 14px;
+            color: #888;
+            margin-top: 10px;
+            line-height: 1.5;
+        }
+        
+        /* 隐私协议 */
+        .privacy-agreement {
+            display: flex;
+            align-items: flex-start;
+            margin-top: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .checkbox-container {
+            width: 20px;
+            height: 20px;
+            border: 2px solid #ccc;
+            border-radius: 4px;
+            margin-right: 10px;
+            margin-top: 2px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+        
+        .checkbox-container.checked {
+            background-color: #4389ff;
+            border-color: #4389ff;
+            color: white;
+        }
+        
+        .agreement-text {
+            font-size: 14px;
+            color: #666;
+            flex: 1;
+        }
+        
+        .agreement-link {
+            color: #4389ff;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- 头部导航栏 -->
+        <div class="header">
+            <div class="back-btn">&#10094;</div>
+            <div class="page-title">监督投诉</div>
+        </div>
+        
+        <!-- 灰色分隔线 -->
+        <div class="divider"></div>
+        
+        <!-- 主要内容区域 -->
+        <div class="main-content">
+            <!-- 投诉类型 -->
+            <div class="form-section">
+                <div class="section-label">
+                    <span class="required">*</span>投诉类型
+                </div>
+                <select class="select-field" id="complaintType">
+                    <option value="" disabled selected>请选择投诉类型</option>
+                    <option value="service">服务问题</option>
+                    <option value="product">产品质量</option>
+                    <option value="fee">收费争议</option>
+                    <option value="staff">人员态度</option>
+                    <option value="other">其他问题</option>
+                </select>
+            </div>
+            
+            <!-- 联系方式 -->
+            <div class="form-section">
+                <div class="section-label">
+                    <span class="required">*</span>联系方式
+                </div>
+                <input type="text" class="input-field" placeholder="请输入您的手机号码">
+            </div>
+            
+            <!-- 订单号 -->
+            <div class="form-section">
+                <div class="section-label">
+                    订单号
+                </div>
+                <input type="text" class="input-field" placeholder="请输入相关订单号（选填）">
+            </div>
+            
+            <!-- 投诉内容 -->
+            <div class="form-section">
+                <div class="section-label">
+                    <span class="required">*</span>投诉内容
+                </div>
+                <textarea class="textarea-field" placeholder="请详细描述您遇到的问题，我们会尽快处理..."></textarea>
+            </div>
+            
+            <!-- 隐私协议 -->
+            <div class="privacy-agreement">
+                <div class="checkbox-container" id="privacyCheckbox"></div>
+                <div class="agreement-text">
+                    我已阅读并同意<span class="agreement-link">《隐私协议》</span>，允许平台收集必要的信息以解决我的投诉问题
+                </div>
+            </div>
+            
+            <!-- 说明文字 -->
+            <div class="info-text">
+                注：我们会在3个工作日内处理您的投诉，并通过短信或电话的方式与您联系。请保持电话畅通。
+            </div>
+        </div>
+        
+        <!-- 底部提交按钮 -->
+        <div class="bottom-area">
+            <button class="submit-btn">提交投诉</button>
+        </div>
+    </div>
+    
+    <script>
+        // 返回按钮功能
+        document.querySelector('.back-btn').addEventListener('click', function() {
+            window.location.href = 'profile.html';
+        });
+        
+        // 复选框功能
+        const checkbox = document.getElementById('privacyCheckbox');
+        checkbox.addEventListener('click', function() {
+            this.classList.toggle('checked');
+            if (this.classList.contains('checked')) {
+                this.innerHTML = '✓';
+            } else {
+                this.innerHTML = '';
+            }
+        });
+        
+        // 提交按钮功能
+        document.querySelector('.submit-btn').addEventListener('click', function() {
+            const complaintType = document.getElementById('complaintType').value;
+            const contactInfo = document.querySelector('.input-field').value;
+            const complaintContent = document.querySelector('.textarea-field').value;
+            const isAgreed = document.getElementById('privacyCheckbox').classList.contains('checked');
+            
+            if (!complaintType) {
+                alert('请选择投诉类型');
+                return;
+            }
+            
+            if (!contactInfo.trim()) {
+                alert('请填写联系方式');
+                return;
+            }
+            
+            if (!complaintContent.trim()) {
+                alert('请填写投诉内容');
+                return;
+            }
+            
+            if (!isAgreed) {
+                alert('请阅读并同意隐私协议');
+                return;
+            }
+            
+            alert('投诉提交成功！我们将尽快处理您的问题。');
+            // 提交成功后返回到个人页面
+            window.location.href = 'profile.html';
+        });
+    </script>
+</body>
+</html> 

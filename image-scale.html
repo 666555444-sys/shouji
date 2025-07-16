@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>图片缩放工具</title>
+    <!-- 添加Font Awesome图标库 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #ffffff;
+            min-height: 100vh;
+            padding: 20px 0;
+        }
+
+        .container {
+            max-width: 375px;
+            margin: 0 auto;
+            background: #f8f9fa;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            position: relative;
+            min-height: 600px;
+        }
+
+        /* 顶部蓝色背景 */
+        .blue-background {
+            background: #4facfe;
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 180px;
+            z-index: 0;
+            border-radius: 0 0 30px 30px;
+        }
+
+        .status-bar {
+            background: transparent;
+            color: white;
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            font-size: 14px;
+            font-weight: 500;
+            position: relative;
+            z-index: 3;
+        }
+
+        .header {
+            background: none;
+            padding: 15px 20px;
+            text-align: left;
+            color: black;
+            position: relative;
+            z-index: 3;
+            display: flex;
+            align-items: center;
+        }
+
+        .back-button {
+            color: black;
+            font-size: 20px;
+            margin-right: 15px;
+            text-decoration: none;
+        }
+
+        .header h1 {
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        .content {
+            padding: 20px;
+            position: relative;
+            z-index: 3;
+        }
+
+        .upload-area {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+            margin-bottom: 20px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+        }
+
+        .upload-icon {
+            font-size: 40px;
+            color: #4facfe;
+            margin-bottom: 10px;
+        }
+
+        .upload-text {
+            color: #666;
+            font-size: 14px;
+            margin-bottom: 15px;
+        }
+
+        .upload-btn {
+            background: #4facfe;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .upload-btn:hover {
+            background: #3a9efd;
+            transform: translateY(-2px);
+        }
+
+        .image-preview {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+            display: none; /* 默认隐藏 */
+        }
+
+        .preview-container {
+            width: 100%;
+            height: 250px;
+            overflow: hidden;
+            position: relative;
+            margin-bottom: 15px;
+            border: 1px dashed #ddd;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .preview-image {
+            max-width: 100%;
+            max-height: 100%;
+            transition: transform 0.3s ease;
+        }
+
+        .scale-controls {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .scale-btn {
+            background: #f0f0f0;
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            font-size: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .scale-btn:hover {
+            background: #e0e0e0;
+        }
+
+        .scale-value {
+            width: 60px;
+            text-align: center;
+            font-size: 16px;
+            margin: 0 10px;
+        }
+
+        .action-buttons {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .action-btn {
+            flex: 1;
+            padding: 10px;
+            border: none;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .cancel-btn {
+            background: #f0f0f0;
+            color: #666;
+            margin-right: 10px;
+        }
+
+        .save-btn {
+            background: #4facfe;
+            color: white;
+            margin-left: 10px;
+        }
+
+        .action-btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .cancel-btn:hover {
+            background: #e0e0e0;
+        }
+
+        .save-btn:hover {
+            background: #3a9efd;
+        }
+
+        .tips {
+            background: #e8f4ff;
+            border-radius: 10px;
+            padding: 15px;
+            margin-top: 20px;
+        }
+
+        .tips-title {
+            font-size: 14px;
+            font-weight: bold;
+            color: #4facfe;
+            margin-bottom: 5px;
+            display: flex;
+            align-items: center;
+        }
+
+        .tips-title i {
+            margin-right: 5px;
+        }
+
+        .tips-content {
+            font-size: 12px;
+            color: #666;
+            line-height: 1.5;
+        }
+
+        .bottom-nav {
+            background: white;
+            border-top: 1px solid #e9ecef;
+            padding: 15px 0;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            z-index: 3;
+        }
+
+        .nav-item {
+            text-align: center;
+            cursor: pointer;
+            padding: 5px;
+            transition: all 0.3s ease;
+        }
+
+        .nav-item:hover {
+            transform: scale(1.1);
+        }
+
+        .nav-item.active {
+            color: #4facfe;
+        }
+
+        .nav-icon {
+            font-size: 24px;
+            margin-bottom: 5px;
+            display: block;
+        }
+
+        .nav-text {
+            font-size: 12px;
+            color: #666;
+        }
+
+        .nav-item.active .nav-text {
+            color: #4facfe;
+        }
+
+        /* 文件输入隐藏 */
+        #imageInput {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- 蓝色背景 -->
+        <div class="blue-background"></div>
+        
+        <!-- 状态栏 -->
+        <div class="status-bar">
+            <span>20:27</span>
+            <div>
+                <span>🔋</span>
+                <span>📶</span>
+                <span>📶</span>
+                <span>📶</span>
+                <span>📶</span>
+                <span>📶</span>
+                <span>184 KB/s</span>
+            </div>
+        </div>
+
+        <!-- 头部 -->
+        <div class="header">
+            <a href="index.html" class="back-button">
+                <i class="fas fa-arrow-left"></i>
+            </a>
+            <h1>图片缩放</h1>
+        </div>
+
+        <!-- 内容区域 -->
+        <div class="content">
+            <!-- 上传区域 -->
+            <div class="upload-area" id="uploadArea">
+                <div class="upload-icon">
+                    <i class="fas fa-cloud-upload-alt"></i>
+                </div>
+                <div class="upload-text">
+                    点击下方按钮选择图片进行缩放
+                </div>
+                <input type="file" id="imageInput" accept="image/*">
+                <button class="upload-btn" onclick="document.getElementById('imageInput').click()">
+                    选择图片
+                </button>
+            </div>
+
+            <!-- 图片预览和缩放区域 -->
+            <div class="image-preview" id="imagePreview">
+                <div class="preview-container">
+                    <img src="" alt="预览图片" class="preview-image" id="previewImage">
+                </div>
+                
+                <div class="scale-controls">
+                    <button class="scale-btn" id="zoomOut">
+                        <i class="fas fa-minus"></i>
+                    </button>
+                    <div class="scale-value" id="scaleValue">100%</div>
+                    <button class="scale-btn" id="zoomIn">
+                        <i class="fas fa-plus"></i>
+                    </button>
+                </div>
+                
+                <div class="action-buttons">
+                    <button class="action-btn cancel-btn" id="cancelBtn">取消</button>
+                    <button class="action-btn save-btn" id="saveBtn">保存</button>
+                </div>
+            </div>
+
+            <!-- 使用提示 -->
+            <div class="tips">
+                <div class="tips-title">
+                    <i class="fas fa-lightbulb"></i>
+                    使用提示
+                </div>
+                <div class="tips-content">
+                    <p>1. 点击"选择图片"按钮上传您需要缩放的图片</p>
+                    <p>2. 使用"+"和"-"按钮调整图片大小</p>
+                    <p>3. 满意后点击"保存"按钮下载调整后的图片</p>
+                    <p>4. 图片缩放范围：25% - 200%</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- 底部导航 -->
+        <div class="bottom-nav">
+            <div class="nav-item" onclick="window.location.href='index.html'">
+                <span class="nav-icon"><i class="fas fa-home"></i></span>
+                <div class="nav-text">首页</div>
+            </div>
+            <div class="nav-item" onclick="window.location.href='cases.html'">
+                <span class="nav-icon"><i class="fas fa-clipboard-list"></i></span>
+                <div class="nav-text">案例</div>
+            </div>
+            <div class="nav-item" onclick="window.location.href='order.html'">
+                <span class="nav-icon"><i class="fas fa-file-alt"></i></span>
+                <div class="nav-text">订单</div>
+            </div>
+            <div class="nav-item" onclick="window.location.href='profile.html'">
+                <span class="nav-icon"><i class="fas fa-user"></i></span>
+                <div class="nav-text">我的</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 获取DOM元素
+        const imageInput = document.getElementById('imageInput');
+        const uploadArea = document.getElementById('uploadArea');
+        const imagePreview = document.getElementById('imagePreview');
+        const previewImage = document.getElementById('previewImage');
+        const zoomIn = document.getElementById('zoomIn');
+        const zoomOut = document.getElementById('zoomOut');
+        const scaleValue = document.getElementById('scaleValue');
+        const cancelBtn = document.getElementById('cancelBtn');
+        const saveBtn = document.getElementById('saveBtn');
+        
+        // 初始缩放比例
+        let scale = 1;
+        const minScale = 0.25;
+        const maxScale = 2;
+        const scaleStep = 0.1;
+        
+        // 监听文件选择
+        imageInput.addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(event) {
+                    previewImage.src = event.target.result;
+                    uploadArea.style.display = 'none';
+                    imagePreview.style.display = 'block';
+                    scale = 1;
+                    updateScale();
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+        
+        // 放大按钮
+        zoomIn.addEventListener('click', function() {
+            if (scale < maxScale) {
+                scale += scaleStep;
+                updateScale();
+            }
+        });
+        
+        // 缩小按钮
+        zoomOut.addEventListener('click', function() {
+            if (scale > minScale) {
+                scale -= scaleStep;
+                updateScale();
+            }
+        });
+        
+        // 更新缩放比例
+        function updateScale() {
+            // 限制比例范围
+            scale = Math.max(minScale, Math.min(maxScale, scale));
+            
+            // 更新显示比例
+            const percentage = Math.round(scale * 100);
+            scaleValue.textContent = percentage + '%';
+            
+            // 应用缩放
+            previewImage.style.transform = `scale(${scale})`;
+        }
+        
+        // 取消按钮
+        cancelBtn.addEventListener('click', function() {
+            imagePreview.style.display = 'none';
+            uploadArea.style.display = 'block';
+            previewImage.src = '';
+            imageInput.value = '';
+        });
+        
+        // 保存按钮
+        saveBtn.addEventListener('click', function() {
+            // 创建一个canvas来绘制缩放后的图片
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+            
+            // 获取原始图片尺寸
+            const img = new Image();
+            img.src = previewImage.src;
+            
+            img.onload = function() {
+                // 设置canvas尺寸为缩放后的尺寸
+                canvas.width = img.width * scale;
+                canvas.height = img.height * scale;
+                
+                // 绘制缩放后的图片
+                ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+                
+                // 创建下载链接
+                const link = document.createElement('a');
+                link.download = 'scaled_image.png';
+                link.href = canvas.toDataURL('image/png');
+                link.click();
+                
+                // 显示成功消息
+                alert('图片已保存！');
+            };
+        });
+    </script>
+</body>
+</html> 

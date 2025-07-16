@@ -47,9 +47,9 @@
             position: absolute;
             left: 20px;
             top: 20px;
-            background: rgba(255,255,255,0.2);
-            border: none;
-            color: white;
+            background: rgba(46, 213, 115, 0.2);
+            border: 1px solid rgba(46, 213, 115, 0.5);
+            color: #2ed573;
             font-size: 18px;
             width: 36px;
             height: 36px;
@@ -58,6 +58,12 @@
             display: flex;
             align-items: center;
             justify-content: center;
+            transition: all 0.3s ease;
+        }
+        
+        .back-btn:hover {
+            background: rgba(46, 213, 115, 0.3);
+            transform: translateY(-2px);
         }
 
         .success-content {
@@ -316,6 +322,11 @@
                 <span>📶</span>
             </div>
         </div>
+        
+        <!-- 返回按钮 -->
+        <div style="padding: 15px 20px; position: relative;">
+            <button class="back-btn" onclick="goToOrderPage()">←</button>
+        </div>
 
         <!-- 成功内容 -->
         <div class="success-content">
@@ -390,6 +401,10 @@
 
         function goToHome() {
             window.location.href = 'index.html';
+        }
+        
+        function goToOrderPage() {
+            window.location.href = 'order.html?paymentSuccess=true';
         }
 
         // 自动聚焦输入框

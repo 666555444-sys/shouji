@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>图片裁剪工具</title>
+    <!-- 添加Font Awesome图标库 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- 添加Cropper.js库 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #ffffff;
+            min-height: 100vh;
+            padding: 20px 0;
+        }
+
+        .container {
+            max-width: 375px;
+            margin: 0 auto;
+            background: #f8f9fa;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            position: relative;
+            min-height: 600px;
+        }
+
+        /* 顶部蓝色背景 */
+        .blue-background {
+            background: #4facfe;
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 180px;
+            z-index: 0;
+            border-radius: 0 0 30px 30px;
+        }
+
+        .status-bar {
+            background: transparent;
+            color: white;
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            font-size: 14px;
+            font-weight: 500;
+            position: relative;
+            z-index: 3;
+        }
+
+        .header {
+            background: none;
+            padding: 15px 20px;
+            text-align: left;
+            color: black;
+            position: relative;
+            z-index: 3;
+            display: flex;
+            align-items: center;
+        }
+
+        .back-button {
+            color: black;
+            font-size: 20px;
+            margin-right: 15px;
+            text-decoration: none;
+        }
+
+        .header h1 {
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        .content {
+            padding: 20px;
+            position: relative;
+            z-index: 3;
+        }
+
+        .upload-area {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+            margin-bottom: 20px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+        }
+
+        .upload-icon {
+            font-size: 40px;
+            color: #4facfe;
+            margin-bottom: 10px;
+        }
+
+        .upload-text {
+            color: #666;
+            font-size: 14px;
+            margin-bottom: 15px;
+        }
+
+        .upload-btn {
+            background: #4facfe;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .upload-btn:hover {
+            background: #3a9efd;
+            transform: translateY(-2px);
+        }
+
+        .crop-area {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+            display: none; /* 默认隐藏 */
+        }
+
+        .img-container {
+            max-height: 300px;
+            margin-bottom: 15px;
+        }
+
+        .img-preview {
+            width: 100%;
+            height: 150px;
+            overflow: hidden;
+            margin-bottom: 15px;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+        }
+
+        .aspect-ratio-controls {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+        }
+
+        .ratio-btn {
+            background: #f0f0f0;
+            border: none;
+            padding: 8px 12px;
+            margin: 0 5px 5px 0;
+            border-radius: 15px;
+            font-size: 12px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .ratio-btn:hover, .ratio-btn.active {
+            background: #4facfe;
+            color: white;
+        }
+
+        .crop-controls {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 15px;
+        }
+
+        .crop-btn {
+            background: #f0f0f0;
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            font-size: 18px;
+            margin: 0 5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .crop-btn:hover {
+            background: #e0e0e0;
+        }
+
+        .action-buttons {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .action-btn {
+            flex: 1;
+            padding: 10px;
+            border: none;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .cancel-btn {
+            background: #f0f0f0;
+            color: #666;
+            margin-right: 10px;
+        }
+
+        .save-btn {
+            background: #4facfe;
+            color: white;
+            margin-left: 10px;
+        }
+
+        .action-btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .cancel-btn:hover {
+            background: #e0e0e0;
+        }
+
+        .save-btn:hover {
+            background: #3a9efd;
+        }
+
+        .tips {
+            background: #e8f4ff;
+            border-radius: 10px;
+            padding: 15px;
+            margin-top: 20px;
+        }
+
+        .tips-title {
+            font-size: 14px;
+            font-weight: bold;
+            color: #4facfe;
+            margin-bottom: 5px;
+            display: flex;
+            align-items: center;
+        }
+
+        .tips-title i {
+            margin-right: 5px;
+        }
+
+        .tips-content {
+            font-size: 12px;
+            color: #666;
+            line-height: 1.5;
+        }
+
+        .bottom-nav {
+            background: white;
+            border-top: 1px solid #e9ecef;
+            padding: 15px 0;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            z-index: 3;
+        }
+
+        .nav-item {
+            text-align: center;
+            cursor: pointer;
+            padding: 5px;
+            transition: all 0.3s ease;
+        }
+
+        .nav-item:hover {
+            transform: scale(1.1);
+        }
+
+        .nav-item.active {
+            color: #4facfe;
+        }
+
+        .nav-icon {
+            font-size: 24px;
+            margin-bottom: 5px;
+            display: block;
+        }
+
+        .nav-text {
+            font-size: 12px;
+            color: #666;
+        }
+
+        .nav-item.active .nav-text {
+            color: #4facfe;
+        }
+
+        /* 文件输入隐藏 */
+        #imageInput {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- 蓝色背景 -->
+        <div class="blue-background"></div>
+        
+        <!-- 状态栏 -->
+        <div class="status-bar">
+            <span>20:27</span>
+            <div>
+                <span>🔋</span>
+                <span>📶</span>
+                <span>📶</span>
+                <span>📶</span>
+                <span>📶</span>
+                <span>📶</span>
+                <span>184 KB/s</span>
+            </div>
+        </div>
+
+        <!-- 头部 -->
+        <div class="header">
+            <a href="index.html" class="back-button">
+                <i class="fas fa-arrow-left"></i>
+            </a>
+            <h1>图片裁剪</h1>
+        </div>
+
+        <!-- 内容区域 -->
+        <div class="content">
+            <!-- 上传区域 -->
+            <div class="upload-area" id="uploadArea">
+                <div class="upload-icon">
+                    <i class="fas fa-crop-alt"></i>
+                </div>
+                <div class="upload-text">
+                    点击下方按钮选择图片进行裁剪
+                </div>
+                <input type="file" id="imageInput" accept="image/*">
+                <button class="upload-btn" onclick="document.getElementById('imageInput').click()">
+                    选择图片
+                </button>
+            </div>
+
+            <!-- 裁剪区域 -->
+            <div class="crop-area" id="cropArea">
+                <!-- 图片容器 -->
+                <div class="img-container">
+                    <img id="cropImage" src="" alt="待裁剪图片">
+                </div>
+                
+                <!-- 预览区域 -->
+                <div class="img-preview"></div>
+                
+                <!-- 比例控制 -->
+                <div class="aspect-ratio-controls">
+                    <button class="ratio-btn active" data-ratio="free">自由裁剪</button>
+                    <button class="ratio-btn" data-ratio="1:1">1:1</button>
+                    <button class="ratio-btn" data-ratio="4:3">4:3</button>
+                    <button class="ratio-btn" data-ratio="16:9">16:9</button>
+                    <button class="ratio-btn" data-ratio="9:16">9:16</button>
+                </div>
+                
+                <!-- 裁剪控制 -->
+                <div class="crop-controls">
+                    <button class="crop-btn" id="rotateLeft" title="向左旋转">
+                        <i class="fas fa-undo"></i>
+                    </button>
+                    <button class="crop-btn" id="rotateRight" title="向右旋转">
+                        <i class="fas fa-redo"></i>
+                    </button>
+                    <button class="crop-btn" id="flipHorizontal" title="水平翻转">
+                        <i class="fas fa-arrows-alt-h"></i>
+                    </button>
+                    <button class="crop-btn" id="flipVertical" title="垂直翻转">
+                        <i class="fas fa-arrows-alt-v"></i>
+                    </button>
+                </div>
+                
+                <!-- 操作按钮 -->
+                <div class="action-buttons">
+                    <button class="action-btn cancel-btn" id="cancelBtn">取消</button>
+                    <button class="action-btn save-btn" id="saveBtn">保存</button>
+                </div>
+            </div>
+
+            <!-- 使用提示 -->
+            <div class="tips">
+                <div class="tips-title">
+                    <i class="fas fa-lightbulb"></i>
+                    使用提示
+                </div>
+                <div class="tips-content">
+                    <p>1. 点击"选择图片"按钮上传您需要裁剪的图片</p>
+                    <p>2. 拖动裁剪框调整裁剪区域</p>
+                    <p>3. 选择合适的裁剪比例（1:1、4:3、16:9等）</p>
+                    <p>4. 可以旋转和翻转图片以获得最佳效果</p>
+                    <p>5. 满意后点击"保存"按钮下载裁剪后的图片</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- 底部导航 -->
+        <div class="bottom-nav">
+            <div class="nav-item" onclick="window.location.href='index.html'">
+                <span class="nav-icon"><i class="fas fa-home"></i></span>
+                <div class="nav-text">首页</div>
+            </div>
+            <div class="nav-item" onclick="window.location.href='cases.html'">
+                <span class="nav-icon"><i class="fas fa-clipboard-list"></i></span>
+                <div class="nav-text">案例</div>
+            </div>
+            <div class="nav-item" onclick="window.location.href='order.html'">
+                <span class="nav-icon"><i class="fas fa-file-alt"></i></span>
+                <div class="nav-text">订单</div>
+            </div>
+            <div class="nav-item" onclick="window.location.href='profile.html'">
+                <span class="nav-icon"><i class="fas fa-user"></i></span>
+                <div class="nav-text">我的</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 获取DOM元素
+        const imageInput = document.getElementById('imageInput');
+        const uploadArea = document.getElementById('uploadArea');
+        const cropArea = document.getElementById('cropArea');
+        const cropImage = document.getElementById('cropImage');
+        const cancelBtn = document.getElementById('cancelBtn');
+        const saveBtn = document.getElementById('saveBtn');
+        const rotateLeftBtn = document.getElementById('rotateLeft');
+        const rotateRightBtn = document.getElementById('rotateRight');
+        const flipHorizontalBtn = document.getElementById('flipHorizontal');
+        const flipVerticalBtn = document.getElementById('flipVertical');
+        const ratioButtons = document.querySelectorAll('.ratio-btn');
+        
+        // 裁剪器实例
+        let cropper;
+        
+        // 监听文件选择
+        imageInput.addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(event) {
+                    cropImage.src = event.target.result;
+                    uploadArea.style.display = 'none';
+                    cropArea.style.display = 'block';
+                    
+                    // 初始化裁剪器
+                    if (cropper) {
+                        cropper.destroy();
+                    }
+                    
+                    cropper = new Cropper(cropImage, {
+                        aspectRatio: NaN, // 自由裁剪
+                        viewMode: 1, // 限制裁剪框不超出图片的范围
+                        guides: true, // 显示裁剪框辅助线
+                        center: true, // 显示裁剪框中心指示器
+                        highlight: false, // 高亮显示裁剪框内的图片区域
+                        background: false, // 显示容器的网格背景
+                        autoCropArea: 0.8, // 定义自动裁剪区域大小
+                        responsive: true, // 重新渲染裁剪框
+                        preview: '.img-preview', // 设置预览区域
+                    });
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+        
+        // 设置裁剪比例
+        ratioButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                // 移除所有按钮的active类
+                ratioButtons.forEach(btn => btn.classList.remove('active'));
+                // 为当前按钮添加active类
+                this.classList.add('active');
+                
+                // 获取比例值
+                const ratio = this.getAttribute('data-ratio');
+                let aspectRatio;
+                
+                switch(ratio) {
+                    case 'free':
+                        aspectRatio = NaN; // 自由裁剪
+                        break;
+                    case '1:1':
+                        aspectRatio = 1;
+                        break;
+                    case '4:3':
+                        aspectRatio = 4/3;
+                        break;
+                    case '16:9':
+                        aspectRatio = 16/9;
+                        break;
+                    case '9:16':
+                        aspectRatio = 9/16;
+                        break;
+                    default:
+                        aspectRatio = NaN;
+                }
+                
+                // 设置裁剪器的比例
+                cropper.setAspectRatio(aspectRatio);
+            });
+        });
+        
+        // 旋转和翻转控制
+        rotateLeftBtn.addEventListener('click', () => cropper.rotate(-90));
+        rotateRightBtn.addEventListener('click', () => cropper.rotate(90));
+        flipHorizontalBtn.addEventListener('click', () => {
+            cropper.scaleX(cropper.getData().scaleX === 1 ? -1 : 1);
+        });
+        flipVerticalBtn.addEventListener('click', () => {
+            cropper.scaleY(cropper.getData().scaleY === 1 ? -1 : 1);
+        });
+        
+        // 取消按钮
+        cancelBtn.addEventListener('click', function() {
+            cropArea.style.display = 'none';
+            uploadArea.style.display = 'block';
+            if (cropper) {
+                cropper.destroy();
+                cropper = null;
+            }
+            cropImage.src = '';
+            imageInput.value = '';
+        });
+        
+        // 保存按钮
+        saveBtn.addEventListener('click', function() {
+            if (!cropper) return;
+            
+            // 获取裁剪后的canvas
+            const canvas = cropper.getCroppedCanvas({
+                maxWidth: 4096,
+                maxHeight: 4096,
+                fillColor: '#fff',
+                imageSmoothingEnabled: true,
+                imageSmoothingQuality: 'high',
+            });
+            
+            if (canvas) {
+                // 创建下载链接
+                canvas.toBlob((blob) => {
+                    const link = document.createElement('a');
+                    link.download = 'cropped_image.png';
+                    link.href = URL.createObjectURL(blob);
+                    link.click();
+                    
+                    // 释放URL对象
+                    setTimeout(() => URL.revokeObjectURL(link.href), 100);
+                    
+                    // 显示成功消息
+                    alert('图片已保存！');
+                });
+            }
+        });
+    </script>
+</body>
+</html> 

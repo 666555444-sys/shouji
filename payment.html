@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>解锁功能</title>
+    <title>服务详情</title>
     <style>
         * {
             margin: 0;
@@ -13,20 +13,20 @@
 
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: #ffffff;
+            background: #5367e4;
             min-height: 100vh;
         }
 
         .container {
             max-width: 375px;
             margin: 0 auto;
-            background: white;
+            background: #5367e4;
             min-height: 100vh;
             position: relative;
         }
 
         .status-bar {
-            background: #4facfe;
+            background: #5367e4;
             color: white;
             padding: 10px 20px;
             display: flex;
@@ -36,47 +36,47 @@
         }
 
         .header {
-            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            background: #5367e4;
             color: white;
-            padding: 20px;
-            text-align: center;
+            padding: 15px;
             position: relative;
-        }
-
-        .back-btn {
-            position: absolute;
-            left: 20px;
-            top: 20px;
-            background: rgba(255,255,255,0.2);
-            border: none;
-            color: white;
-            font-size: 18px;
-            width: 36px;
-            height: 36px;
-            border-radius: 18px;
-            cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
         }
 
+        .back-btn {
+            position: absolute;
+            left: 15px;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+        }
+
         .header-title {
             font-size: 20px;
-            font-weight: bold;
-            margin-bottom: 10px;
+            font-weight: 500;
+            text-align: center;
         }
 
         .recent-purchase {
-            background: rgba(255,255,255,0.1);
-            padding: 10px 15px;
+            background: rgba(255,255,255,0.2);
+            padding: 8px 12px;
             border-radius: 20px;
-            font-size: 14px;
-            margin-top: 15px;
+            font-size: 12px;
+            margin: 10px 20px 0;
+            color: white;
+            display: flex;
+            align-items: center;
         }
 
         .package-selection {
             padding: 20px;
             background: #f8f9fa;
+            border-radius: 20px 20px 0 0;
+            margin-top: 15px;
         }
 
         .section-title {
@@ -84,45 +84,75 @@
             font-weight: bold;
             color: #333;
             margin-bottom: 15px;
-            border-left: 4px solid #4facfe;
-            padding-left: 10px;
+            display: flex;
+            align-items: center;
+        }
+
+        .section-title::before {
+            content: "";
+            display: block;
+            width: 4px;
+            height: 16px;
+            background-color: #5367e4;
+            margin-right: 8px;
         }
 
         .package-card {
             background: white;
-            border-radius: 15px;
-            padding: 20px;
+            border-radius: 10px;
+            padding: 15px;
             margin-bottom: 15px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
             position: relative;
-            cursor: pointer;
+            overflow: hidden;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
             transition: all 0.3s ease;
         }
 
+        /* 左侧内容区域 */
+        .package-left {
+            flex: 1;
+            min-width: 0; /* 防止内容溢出 */
+            padding-right: 10px; /* 与右侧价格区域保持间距 */
+        }
+
+        /* 右侧价格区域 */
+        .package-right {
+            text-align: right;
+            min-width: 80px; /* 确保价格区域有足够宽度 */
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            align-items: flex-end;
+        }
+        
         .package-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 15px rgba(0,0,0,0.1);
         }
 
         .package-card.selected {
-            border: 2px solid #4facfe;
-            background: linear-gradient(135deg, #f8f9ff 0%, #e8f2ff 100%);
+            background-color: #f0f4ff;
+            border: 1px solid #5367e4;
+            box-shadow: 0 2px 12px rgba(83, 103, 228, 0.2);
         }
-
-        .package-card.premium {
-            background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
-        }
-
+        
         .package-badge {
-            position: absolute;
-            top: -8px;
-            left: 20px;
-            background: #ff4757;
+            background-color: #8a3ff7;
             color: white;
-            padding: 5px 12px;
-            border-radius: 12px;
             font-size: 12px;
             font-weight: bold;
+            padding: 4px 10px;
+            border-radius: 4px;
+            display: inline-block;
+            position: absolute;
+            top: -8px;
+            left: -8px;
+            z-index: 2;
+            box-shadow: 0 2px 5px rgba(138, 63, 247, 0.3);
+            transform: rotate(-10deg);
         }
 
         .package-badge.premium {
@@ -132,29 +162,70 @@
         .package-title {
             font-size: 18px;
             font-weight: bold;
-            color: #333;
-            margin-bottom: 10px;
+            margin-bottom: 5px;
+            color: #3a4db1; /* 使标题颜色更加突出 */
+            margin-top: 5px; /* 为超值爆款标签留出空间 */
         }
 
         .package-price {
             font-size: 24px;
             font-weight: bold;
-            color: #4facfe;
-            margin-bottom: 5px;
+            color: #5367e4;
+            text-align: right;
+            margin-bottom: 2px;
         }
 
-        .package-price .original-price {
+        .original-price {
             font-size: 14px;
             color: #999;
             text-decoration: line-through;
-            margin-left: 10px;
+            text-align: right;
         }
 
         .package-description {
             font-size: 14px;
             color: #666;
-            line-height: 1.5;
             margin-bottom: 10px;
+            line-height: 1.4;
+        }
+        
+        .validity-badge {
+            display: flex;
+            align-items: center;
+            color: #ff3b30; /* 改为更鲜明的红色 */
+            font-size: 14px;
+            margin-top: 10px;
+            font-weight: 500;
+        }
+
+        .validity-badge svg {
+            margin-right: 5px;
+            color: #ff3b30; /* 图标也改为红色 */
+        }
+
+        .package-check {
+            position: absolute;
+            right: 15px;
+            bottom: 15px;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background-color: #5367e4;
+            color: white;
+            display: none; /* 默认隐藏对勾 */
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            box-shadow: 0 2px 5px rgba(83, 103, 228, 0.3);
+        }
+        
+        /* 选中的卡片显示对勾 */
+        .package-card.selected .package-check {
+            display: flex; /* 选中时显示对勾 */
+        }
+
+        .package-card.premium {
+            background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
         }
 
         .package-features {
@@ -176,37 +247,35 @@
             font-weight: bold;
         }
 
-        .validity-badge {
-            position: absolute;
-            bottom: 15px;
-            right: 15px;
-            background: #2ed573;
-            color: white;
-            padding: 3px 8px;
-            border-radius: 12px;
-            font-size: 11px;
-            font-weight: bold;
-        }
-
         .service-info {
             padding: 20px;
-            background: white;
+            background: #f8f9fa;
         }
 
         .usage-scenarios {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
+            display: flex;
+            flex-wrap: wrap;
             gap: 10px;
-            margin-top: 15px;
         }
 
         .scenario-item {
-            background: #f8f9fa;
-            padding: 8px 12px;
-            border-radius: 8px;
-            font-size: 12px;
+            background-color: #eef1f6;
+            border-radius: 20px;
+            padding: 8px 15px;
+            font-size: 14px;
             color: #666;
-            text-align: center;
+            display: flex;
+            align-items: center;
+        }
+
+        .scenario-item::before {
+            content: "";
+            display: block;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background-color: #c8d0e0;
+            margin-right: 8px;
         }
 
         .unlimited-recovery {
@@ -244,8 +313,48 @@
 
         .user-reviews {
             padding: 20px;
-            background: #f8f9fa;
+            background: #f5f7fa;
+            margin-top: 20px;
+            border-radius: 10px;
+            position: relative;
+            overflow: hidden; /* 确保斜着的背景图不溢出 */
+            margin-bottom: 80px; /* 添加底部边距，确保内容不被底部操作栏遮挡 */
         }
+
+        .user-reviews::after {
+            content: "";
+            position: absolute;
+            top: 0px;
+            right: 0px;
+            width: 90px; /* 缩小宽度 */
+            height: 90px; /* 缩小高度 */
+            background: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMDAiIGhlaWdodD0iMTAwIiB2aWV3Qm94PSIwIDAgMTAwIDEwMCI+PGNpcmNsZSBjeD0iNTAiIGN5PSI1MCIgcj0iNDUiIGZpbGw9IiNmZmE1MDAiIGZpbGwtb3BhY2l0eT0iMC4xNSIgc3Ryb2tlPSIjZmZhNTAwIiBzdHJva2Utd2lkdGg9IjMiLz48dGV4dCB4PSI1MCIgeT0iNTUiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSIxNCIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZmlsbD0iI2ZmYTUwMCI+5LyY6LSo55So5oi36K+E5Lu3PC90ZXh0Pjwvc3ZnPg==") no-repeat center center;
+            background-size: contain;
+            transform: rotate(15deg);
+            z-index: 1;
+            opacity: 0.5;
+        }
+
+        .reviews-title {
+            font-size: 16px;
+            font-weight: bold;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            position: relative;
+            z-index: 2; /* 确保标题在背景图上方 */
+        }
+
+        .reviews-title::before {
+            content: "";
+            display: block;
+            width: 4px;
+            height: 16px;
+            background-color: #5367e4;
+            margin-right: 8px;
+        }
+
+        /* 移除原来的图片标签 */
 
         .review-item {
             background: white;
@@ -303,16 +412,17 @@
             padding: 15px 20px;
             border-top: 1px solid #e9ecef;
             box-shadow: 0 -5px 15px rgba(0,0,0,0.1);
+            z-index: 10; /* 添加更高的z-index确保在评价区域上方显示 */
         }
 
         .pay-btn {
             width: 100%;
-            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            background: linear-gradient(to right, #ffb870, #ff9040);
             color: white;
             border: none;
             padding: 15px;
-            border-radius: 25px;
-            font-size: 16px;
+            border-radius: 10px;
+            font-size: 18px;
             font-weight: bold;
             cursor: pointer;
             transition: all 0.3s ease;
@@ -367,6 +477,129 @@
         .close:hover {
             color: black;
         }
+        
+        /* 数据修复提醒样式 */
+        .popup-container {
+            width: 300px;
+            background-color: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            position: relative;
+            margin: 15% auto;
+        }
+
+        .popup-header {
+            position: relative;
+            height: 80px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .folder-icon {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #ff6b6b 0%, #ff8a80 100%);
+            border-radius: 10px;
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .folder-icon::before {
+            content: '';
+            position: absolute;
+            top: 20px;
+            left: 10px;
+            width: 40px;
+            height: 20px;
+            background-color: white;
+            opacity: 0.8;
+        }
+
+        .folder-icon::after {
+            content: '';
+            position: absolute;
+            top: 15px;
+            right: -5px;
+            width: 15px;
+            height: 15px;
+            background-color: #4facfe;
+            border-radius: 50%;
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            width: 20px;
+            height: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            color: #999;
+            font-size: 20px;
+        }
+
+        .popup-content {
+            padding: 20px;
+            text-align: center;
+        }
+
+        .popup-title {
+            font-size: 14px;
+            color: #999;
+            margin-bottom: 15px;
+        }
+
+        .popup-message {
+            font-size: 18px;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 25px;
+        }
+
+        .popup-button {
+            background: linear-gradient(to right, #ffb870, #ff9040);
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 10px;
+            width: 100%;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .popup-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .decoration {
+            position: absolute;
+            font-size: 16px;
+            color: #ffeb3b;
+        }
+
+        .decoration-1 {
+            top: 10px;
+            left: 30px;
+        }
+
+        .decoration-2 {
+            top: 25px;
+            right: 40px;
+        }
+
+        .decoration-3 {
+            bottom: 15px;
+            left: 40px;
+        }
     </style>
 </head>
 <body>
@@ -389,36 +622,56 @@
         <div class="header">
             <button class="back-btn" onclick="goBack()">←</button>
             <div class="header-title">服务详情</div>
-            <div class="recent-purchase">
-                👤 150****126 购买了超级恢复 &nbsp;&nbsp; 6分钟前
-            </div>
+        </div>
+        
+        <!-- 最近购买通知 -->
+        <div class="recent-purchase">
+            👤 150****346 购买了图片清除(永久) &nbsp;&nbsp; 3分钟前
         </div>
 
         <!-- 套餐选择 -->
         <div class="package-selection">
             <div class="section-title">选择开通服务</div>
             
-            <!-- 超级恢复套餐 -->
-            <div class="package-card premium selected" onclick="selectPackage('super')">
-                <div class="package-badge premium">超值爆款</div>
-                <div class="package-title">超级恢复</div>
-                <div class="package-price">
-                    ¥ 98
+            <!-- 永久图片清除套餐 -->
+            <div class="package-card selected" onclick="selectPackage('permanent')">
+                <div class="package-badge">超值爆款</div>
+                <div class="package-left">
+                    <div class="package-title">图片清除(永久)</div>
+                    <div class="package-description">该服务可永久无上限清除相册、微信、QQ图片清除</div>
+                    <div class="validity-badge">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <polyline points="12 6 12 12 16 14"></polyline>
+                        </svg>
+                        永久有效
+                    </div>
                 </div>
-                <div class="package-description">
-                    解锁全部恢复功能（微信消息、微信好友、图片、视频、文件、音频）
+                <div class="package-right">
+                    <div class="package-price">¥158</div>
+                    <div class="original-price">¥198</div>
                 </div>
+                <div class="package-check">✓</div>
             </div>
 
-            <!-- 图片恢复套餐 -->
-            <div class="package-card" onclick="selectPackage('image')">
-                <div class="package-title">图片恢复</div>
-                <div class="package-price">
-                    ¥ 88
+            <!-- 一年图片清除套餐 -->
+            <div class="package-card" onclick="selectPackage('annual')">
+                <div class="package-left">
+                    <div class="package-title">图片清除(一年)</div>
+                    <div class="package-description">该服务在一年内可以无上限清除相册、微信、QQ图片清除</div>
+                    <div class="validity-badge">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <polyline points="12 6 12 12 16 14"></polyline>
+                        </svg>
+                        1年有效
+                    </div>
                 </div>
-                <div class="package-description">
-                    全力恢复图片数据
+                <div class="package-right">
+                    <div class="package-price">¥78</div>
+                    <div class="original-price">¥98</div>
                 </div>
+                <div class="package-check">✓</div>
             </div>
         </div>
 
@@ -426,22 +679,17 @@
         <div class="service-info">
             <div class="section-title">使用场景</div>
             <div class="usage-scenarios">
-                <div class="scenario-item">相册误删图片</div>
-                <div class="scenario-item">手机图片丢失</div>
-                <div class="scenario-item">手机照片找回</div>
-                <div class="scenario-item">内存卡数据恢复</div>
+                <div class="scenario-item">手机图片彻底删除</div>
+                <div class="scenario-item">选择清除手机图片</div>
+                <div class="scenario-item">扫描手机图片</div>
             </div>
-        </div>
-
-        <!-- 无上限恢复 -->
-        <div class="unlimited-recovery">
-            <div class="unlimited-text">无上限恢复</div>
-            <div class="unlimited-subtitle">越早恢复，几率越高！！</div>
         </div>
 
         <!-- 用户评价 -->
         <div class="user-reviews">
-            <div class="section-title">优质用户评价</div>
+            <div class="reviews-title">优质用户评价</div>
+            
+            <!-- 第一个评价 -->
             <div class="review-item">
                 <div class="review-header">
                     <div class="review-avatar">冬</div>
@@ -449,16 +697,44 @@
                     <div class="review-rating">⭐ 5分</div>
                 </div>
                 <div class="review-content">
-                    很好用，恢复效果不错，推荐给大家使用！
+                    我非常满意数据修复服务的效果。他们专业的团队帮助我成功修复了丢失的文件，让我感到非常安心和放心。他们高效的工作速度和专业的技术水平让我对他们的服务印象深刻。强烈推荐！
                 </div>
+            </div>
+            
+            <!-- 第二个评价 -->
+            <div class="review-item">
+                <div class="review-header">
+                    <div class="review-avatar">S</div>
+                    <div class="review-name">Starlight99</div>
+                    <div class="review-rating">⭐ 5分</div>
+                </div>
+                <div class="review-content">
+                    我遇到了数据丢失的问题，但幸运的是找到了文件数据修复大师。他们的技术团队非常专业，通过他们的努力，我成功地修复了关键文件。他们提供的服务超出了我的期望，我对他们的工作非常满意。如果您需要数据修复，我强烈推荐选择他们！
+                </div>
+            </div>
+            
+            <!-- 第三个评价 -->
+            <div class="review-item">
+                <div class="review-header">
+                    <div class="review-avatar">F</div>
+                    <div class="review-name">FreeSpirit777</div>
+                    <div class="review-rating">⭐ 5分</div>
+                </div>
+                <div class="review-content">
+                    文件数据修复大师为我提供了出色的帮助。他们的团队非常耐心地解释了整个修复过程，并及时与我沟通进展。最重要的是，他们成功地找回了我认为已经永远丢失的数据。感谢他们的专业和高效服务！
+                </div>
+            </div>
+            
+            <div style="text-align: center; margin-top: 15px; color: #999; font-size: 12px;">
+                随机挑选3条优质评论
             </div>
         </div>
 
         <!-- 底部操作 -->
         <div class="bottom-action">
-            <button class="pay-btn" onclick="showPayment()">立即恢复</button>
+            <button class="pay-btn" onclick="showPayment()">立即购买</button>
             <div class="service-agreement">
-                支付即代表您已阅读并同意《<a href="#">服务说明</a>》
+                支付即代表您已阅读并同意《<a href="service-agreement.html">服务说明</a>》
             </div>
         </div>
     </div>
@@ -469,15 +745,33 @@
             <span class="close" onclick="closeModal()">&times;</span>
             <h3>确认支付</h3>
             <div style="margin: 20px 0;">
-                <p>服务：超级恢复</p>
-                <p>价格：¥98</p>
+                <p>服务：图片清除(永久)</p>
+                <p>价格：¥158</p>
             </div>
             <button class="pay-btn" onclick="processPayment()">确认支付</button>
         </div>
     </div>
+    
+    <!-- 数据修复提醒模态框 -->
+    <div id="recoveryReminderModal" class="modal">
+        <div class="popup-container">
+            <div class="popup-header">
+                <div class="folder-icon"></div>
+                <div class="decoration decoration-1">✦</div>
+                <div class="decoration decoration-2">✦</div>
+                <div class="decoration decoration-3">✦</div>
+                <div class="close-btn" onclick="goToOrderPage()">×</div>
+            </div>
+            <div class="popup-content">
+                <div class="popup-title">温馨提示</div>
+                <div class="popup-message">越早修复，几率越高！！</div>
+                <button class="popup-button" onclick="closeRecoveryReminder()">立即修复</button>
+            </div>
+        </div>
+    </div>
 
     <script>
-        let selectedPackage = 'super';
+        let selectedPackage = 'permanent';
 
         function selectPackage(type) {
             // 移除所有选中状态
@@ -488,10 +782,34 @@
             // 添加选中状态
             event.target.closest('.package-card').classList.add('selected');
             selectedPackage = type;
+            
+            // 更新支付确认模态框中的信息
+            let packageTitle = type === 'permanent' ? '图片清除(永久)' : '图片清除(一年)';
+            let packagePrice = type === 'permanent' ? '¥158' : '¥78';
+            
+            document.querySelector('#paymentModal p:nth-child(1)').textContent = '服务：' + packageTitle;
+            document.querySelector('#paymentModal p:nth-child(2)').textContent = '价格：' + packagePrice;
         }
 
         function goBack() {
-            window.history.back();
+            showRecoveryReminder();
+        }
+        
+        function showRecoveryReminder() {
+            document.getElementById('recoveryReminderModal').style.display = 'block';
+        }
+        
+        function closeRecoveryReminder() {
+            document.getElementById('recoveryReminderModal').style.display = 'none';
+            window.location.href = 'payment.html';
+        }
+        
+        function goToOrderPage() {
+            window.location.href = 'index.html';
+        }
+        
+        function goToProfilePage() {
+            window.location.href = 'profile.html';
         }
 
         function showPayment() {
@@ -512,10 +830,13 @@
 
         // 点击模态框外部关闭
         window.onclick = function(event) {
-            const modal = document.getElementById('paymentModal');
-            if (event.target === modal) {
-                modal.style.display = 'none';
+            const paymentModal = document.getElementById('paymentModal');
+            
+            if (event.target === paymentModal) {
+                paymentModal.style.display = 'none';
             }
+            
+            // 移除点击挽留弹窗外区域的处理代码
         }
     </script>
 </body>
