@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>数据恢复</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #ffffff;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .splash-container {
+            width: 100%;
+            max-width: 375px;
+            height: 100vh;
+            background: linear-gradient(135deg, #4facfe 0%, #1e6ce3 100%);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* 装饰性气泡背景 */
+        .bubble {
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            animation: float 20s infinite ease-in-out;
+        }
+        
+        .bubble:nth-child(1) {
+            width: 120px;
+            height: 120px;
+            top: 10%;
+            left: 10%;
+            animation-delay: 0s;
+            animation-duration: 15s;
+        }
+        
+        .bubble:nth-child(2) {
+            width: 80px;
+            height: 80px;
+            top: 70%;
+            left: 80%;
+            animation-delay: 2s;
+            animation-duration: 17s;
+        }
+        
+        .bubble:nth-child(3) {
+            width: 60px;
+            height: 60px;
+            top: 40%;
+            left: 20%;
+            animation-delay: 1s;
+            animation-duration: 13s;
+        }
+        
+        .bubble:nth-child(4) {
+            width: 100px;
+            height: 100px;
+            top: 20%;
+            left: 75%;
+            animation-delay: 3s;
+            animation-duration: 18s;
+        }
+        
+        .bubble:nth-child(5) {
+            width: 50px;
+            height: 50px;
+            top: 80%;
+            left: 35%;
+            animation-delay: 0.5s;
+            animation-duration: 12s;
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0) translateX(0);
+            }
+            25% {
+                transform: translateY(-10px) translateX(10px);
+            }
+            50% {
+                transform: translateY(15px) translateX(-5px);
+            }
+            75% {
+                transform: translateY(-5px) translateX(-10px);
+            }
+        }
+
+        /* Logo设计 */
+        .logo-container {
+            position: relative;
+            width: 150px;
+            height: 150px;
+            margin-bottom: 40px;
+            animation: pulse 2s infinite alternate ease-in-out;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: scale(0.98);
+            }
+            100% {
+                transform: scale(1.02);
+            }
+        }
+
+        .logo-outer {
+            width: 130px;
+            height: 130px;
+            background: linear-gradient(135deg, #4facfe 0%, #1e6ce3 100%);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .logo-inner {
+            width: 110px;
+            height: 110px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+        }
+
+        .logo-content {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            transform: translateY(-5px);
+        }
+
+        .phone-icon {
+            font-size: 40px;
+            margin-bottom: 5px;
+            color: white;
+            position: relative;
+        }
+
+        .data-icon {
+            position: absolute;
+            font-size: 24px;
+            color: white;
+            bottom: -10px;
+            right: -20px;
+            transform: rotate(10deg);
+        }
+
+        .arrow-icon {
+            position: absolute;
+            font-size: 22px;
+            color: white;
+            top: 30%;
+            right: -15px;
+            animation: moveUpDown 1.5s infinite alternate ease-in-out;
+        }
+
+        @keyframes moveUpDown {
+            0% {
+                transform: translateY(0);
+            }
+            100% {
+                transform: translateY(-5px);
+            }
+        }
+
+        .shield-icon {
+            position: absolute;
+            font-size: 18px;
+            color: rgba(255, 255, 255, 0.8);
+            bottom: 15px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .app-name {
+            color: white;
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+
+        .app-slogan {
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 14px;
+            text-align: center;
+            margin-bottom: 60px;
+        }
+
+        /* 加载动画 */
+        .loading-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 20px;
+        }
+
+        .loading-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background-color: white;
+            margin: 0 6px;
+            animation: loadingDot 1.4s infinite ease-in-out;
+        }
+
+        .loading-dot:nth-child(1) {
+            animation-delay: 0s;
+        }
+
+        .loading-dot:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .loading-dot:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+
+        @keyframes loadingDot {
+            0%, 80%, 100% {
+                transform: scale(0.6);
+                opacity: 0.6;
+            }
+            40% {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        .status-bar {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            padding: 10px 15px;
+            display: flex;
+            justify-content: flex-end;
+            color: white;
+            font-size: 14px;
+        }
+
+        .company-info {
+            position: absolute;
+            bottom: 30px;
+            left: 0;
+            right: 0;
+            text-align: center;
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 12px;
+        }
+    </style>
+</head>
+<body>
+    <div class="splash-container">
+        <!-- 装饰性气泡背景 -->
+        <div class="bubble"></div>
+        <div class="bubble"></div>
+        <div class="bubble"></div>
+        <div class="bubble"></div>
+        <div class="bubble"></div>
+        
+        <!-- 状态栏 -->
+        <div class="status-bar">
+            <span>12:30</span>
+        </div>
+
+        <!-- Logo设计 -->
+        <div class="logo-container">
+            <div class="logo-outer">
+                <div class="logo-inner">
+                    <div class="logo-content">
+                        <div class="phone-icon"><i class="fas fa-mobile-alt"></i></div>
+                        <div class="data-icon"><i class="fas fa-database"></i></div>
+                        <div class="arrow-icon"><i class="fas fa-arrow-up"></i></div>
+                        <div class="shield-icon"><i class="fas fa-shield-alt"></i></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 应用名称和口号 -->
+        <div class="app-name">数据恢复专家</div>
+        <div class="app-slogan">安全高效 · 数据无忧</div>
+
+        <!-- 加载动画 -->
+        <div class="loading-container">
+            <div class="loading-dot"></div>
+            <div class="loading-dot"></div>
+            <div class="loading-dot"></div>
+        </div>
+
+        <!-- 底部公司信息 -->
+        <div class="company-info">© 2025 数据恢复专家 版权所有</div>
+    </div>
+
+    <script>
+        // 动画完成后跳转到首页
+        setTimeout(function() {
+            window.location.href = 'index.html';
+        }, 3000);
+    </script>
+</body>
+</html> 

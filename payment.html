@@ -771,6 +771,12 @@
     </div>
 
     <script>
+        // 添加获取URL参数的函数
+        function getReturnPage() {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get('returnTo');
+        }
+
         let selectedPackage = 'permanent';
 
         function selectPackage(type) {
@@ -792,7 +798,13 @@
         }
 
         function goBack() {
-            showRecoveryReminder();
+            // 检查是否有返回页面的参数
+            const returnPage = getReturnPage();
+            if (returnPage) {
+                window.location.href = returnPage;
+            } else {
+                showRecoveryReminder();
+            }
         }
         
         function showRecoveryReminder() {
