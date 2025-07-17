@@ -603,15 +603,15 @@
         <div class="other-services">
             <h3 class="features-title">其他服务</h3>
             <div class="other-services-grid">
-                <div class="service-card" onclick="showModal('premium')">
+                <div class="service-card" onclick="window.location.href='file-scan.html?startScan=true'">
                     <span class="service-icon"><i class="fas fa-file"></i></span>
                     <div class="service-title">文件修复</div>
                 </div>
-                <div class="service-card" onclick="showModal('premium')">
+                <div class="service-card" onclick="window.location.href='video-scan.html?startScan=true'">
                     <span class="service-icon"><i class="fas fa-video"></i></span>
                     <div class="service-title">视频修复</div>
                 </div>
-                <div class="service-card" onclick="showModal('premium')">
+                <div class="service-card" onclick="window.location.href='audio-scan.html'">
                     <span class="service-icon"><i class="fas fa-music"></i></span>
                     <div class="service-title">音频修复</div>
                 </div>
@@ -671,6 +671,11 @@
             <p>此功能需要开通会员才能使用</p>
             <button class="btn" onclick="window.location.href='payment.html'">立即开通</button>
         </div>
+    </div>
+
+    <!-- 开发测试工具条 - 仅用于开发测试 -->
+    <div style="position: fixed; bottom: 80px; left: 50%; transform: translateX(-50%); background: rgba(0,0,0,0.7); color: white; padding: 5px 10px; border-radius: 5px; z-index: 9999; font-size: 12px;">
+        <a href="splash.html" style="color: white; text-decoration: none;">返回启动页</a>
     </div>
 
     <script>
