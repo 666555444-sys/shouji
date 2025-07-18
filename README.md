@@ -156,7 +156,9 @@ background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
 
 ```
 /
-├── index.html              # 首页
+├── app.html               # 应用程序入口点
+├── splash.html            # 启动动画页面
+├── index.html             # 首页
 ├── scan.html              # 扫描进度页
 ├── payment.html           # 支付页面
 ├── payment-success.html   # 支付成功页
@@ -165,17 +167,37 @@ background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
 ├── file-send.html         # 文件选择页
 ├── cases.html             # 案例页面
 ├── case-detail.html       # 案例详情页
+├── video-scan.html        # 视频扫描页面
+├── video-repair.html      # 视频修复页面
+├── file-scan.html         # 文件扫描页面
 └── README.md              # 项目说明
 ```
 
 ## 使用说明
 
-1. 在浏览器中打开 `index.html` 开始体验
-2. 所有页面间可以通过导航和按钮跳转
-3. 模拟了完整的用户使用流程
-4. 支持触摸操作，适合移动端测试
-5. 点击底部导航的"案例"可查看成功案例
+1. 在浏览器中打开 `app.html` 开始完整体验
+2. 页面加载顺序：app.html → splash.html → index.html
+3. 所有页面间可以通过导航和按钮跳转
+4. 模拟了完整的用户使用流程
+5. 支持触摸操作，适合移动端测试
+6. 点击底部导航的"案例"可查看成功案例
 
+## 应用启动流程
+
+1. **应用入口 (app.html)**:
+   - 简单的加载指示器
+   - 自动重定向到启动动画页面
+   
+2. **启动动画 (splash.html)**:
+   - 精美的logo动画效果
+   - 品牌展示和标语
+   - 气泡背景动画效果
+   - 3秒后自动跳转到首页
+
+3. **首页 (index.html)**:
+   - 展示应用核心功能
+   - 提供导航到各个功能模块
+   
 ## 注意事项
 
 - 本项目为前端原型，未包含后端功能
