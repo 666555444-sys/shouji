@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="100dp"
+    android:height="100dp"
+    android:viewportWidth="100"
+    android:viewportHeight="100">
+
+    <!-- 文件底层阴影 -->
+    <path
+        android:fillColor="#e0e0e0"
+        android:pathData="M23,88 L23,18 L63,18 L83,38 L83,88 Z" />
+
+    <!-- 文件主体 -->
+    <path
+        android:fillColor="#ffffff"
+        android:strokeColor="#cccccc"
+        android:strokeWidth="1"
+        android:pathData="M20,85 L20,15 L60,15 L80,35 L80,85 Z" />
+
+    <!-- 文件折角 -->
+    <path
+        android:fillColor="#f5f5f5"
+        android:strokeColor="#cccccc"
+        android:strokeWidth="1"
+        android:pathData="M60,15 L60,35 L80,35 Z" />
+
+    <!-- 文件内容线条 -->
+    <path
+        android:strokeColor="@color/blue_light"
+        android:strokeWidth="2"
+        android:pathData="M30,45 L70,45" />
+    <path
+        android:strokeColor="#bbbbbb"
+        android:strokeWidth="2"
+        android:pathData="M30,55 L70,55" />
+    <path
+        android:strokeColor="#bbbbbb"
+        android:strokeWidth="2"
+        android:pathData="M30,65 L60,65" />
+
+    <!-- 文件图标 -->
+    <path
+        android:fillColor="@color/blue_light"
+        android:pathData="M40,25 m-5,0 a5,5 0 1,0 10,0 a5,5 0 1,0 -10,0" />
+
+    <!-- 添加星星装饰 -->
+    <path
+        android:fillColor="#ffeb3b"
+        android:strokeColor="#ffd600"
+        android:strokeWidth="0.5"
+        android:pathData="M85,15 L88,22 L95,23 L90,28 L91,35 L85,32 L79,35 L80,28 L75,23 L82,22 Z" />
+    <path
+        android:fillColor="#ffeb3b"
+        android:strokeColor="#ffd600"
+        android:strokeWidth="0.5"
+        android:pathData="M35,75 L37,79 L42,80 L38,83 L39,88 L35,86 L31,88 L32,83 L28,80 L33,79 Z" />
+</vector> 

@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RuoYi Vue Pro - 首页</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            padding-top: 20px;
+            padding-bottom: 20px;
+        }
+        .header {
+            padding-bottom: 20px;
+            border-bottom: 1px solid #e5e5e5;
+            margin-bottom: 30px;
+        }
+        .welcome-message {
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+        .logout-btn {
+            margin-left: 15px;
+        }
+        .user-info {
+            background-color: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+        .user-info h3 {
+            margin-top: 0;
+            margin-bottom: 20px;
+            color: #333;
+        }
+        .user-info-item {
+            margin-bottom: 10px;
+        }
+        .user-info-label {
+            font-weight: bold;
+            margin-right: 10px;
+        }
+        .unauthorized {
+            text-align: center;
+            padding: 50px 0;
+        }
+        #debug {
+            margin-top: 30px;
+            padding: 10px;
+            background-color: #f8f9fa;
+            border-radius: 5px;
+            font-family: monospace;
+            font-size: 14px;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header d-flex align-items-center justify-content-between">
+            <h1>RuoYi Vue Pro</h1>
+            <div>
+                <span id="userNameDisplay"></span>
+                <button id="logoutBtn" class="btn btn-outline-danger logout-btn">退出登录</button>
+            </div>
+        </div>
+
+        <div id="unauthorizedContent" class="unauthorized d-none">
+            <div class="alert alert-warning">
+                <h4>您尚未登录或登录已过期</h4>
+                <p>请先登录后再访问此页面</p>
+                <a href="login.html" class="btn btn-primary mt-3">前往登录</a>
+            </div>
+        </div>
+
+        <div id="authorizedContent" class="d-none">
+            <div class="welcome-message">
+                欢迎回来，<span id="welcomeUserName"></span>！
+            </div>
+
+            <div class="user-info">
+                <h3>用户信息</h3>
+                <div class="user-info-item">
+                    <span class="user-info-label">用户ID:</span>
+                    <span id="userId"></span>
+                </div>
+                <div class="user-info-item">
+                    <span class="user-info-label">用户名:</span>
+                    <span id="username"></span>
+                </div>
+                <div class="user-info-item">
+                    <span class="user-info-label">昵称:</span>
+                    <span id="nickname"></span>
+                </div>
+                <div class="user-info-item">
+                    <span class="user-info-label">部门:</span>
+                    <span id="deptName"></span>
+                </div>
+                <div class="user-info-item">
+                    <span class="user-info-label">角色:</span>
+                    <span id="roles"></span>
+                </div>
+                <div class="user-info-item">
+                    <span class="user-info-label">最后登录时间:</span>
+                    <span id="loginTime"></span>
+                </div>
+                <div class="user-info-item">
+                    <span class="user-info-label">最后登录IP:</span>
+                    <span id="loginIp"></span>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    系统功能
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-4 mb-3">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h5 class="card-title">用户管理</h5>
+                                    <p class="card-text">管理系统用户、分配角色等操作</p>
+                                    <a href="#" class="btn btn-primary">进入</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h5 class="card-title">角色管理</h5>
+                                    <p class="card-text">管理角色及其权限分配</p>
+                                    <a href="#" class="btn btn-primary">进入</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h5 class="card-title">菜单管理</h5>
+                                    <p class="card-text">管理系统菜单及按钮权限</p>
+                                    <a href="#" class="btn btn-primary">进入</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 调试信息 -->
+            <div id="debug" class="mt-4">
+                <h5>调试信息</h5>
+                <pre id="debugInfo"></pre>
+                <button id="showDebugBtn" class="btn btn-sm btn-secondary">显示/隐藏调试信息</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            const BASE_URL = '/api';
+            const accessToken = localStorage.getItem('accessToken');
+            
+            console.log("当前Token:", accessToken ? "已设置" : "未设置"); // 添加调试日志
+            
+            // 检查是否已登录
+            if (!accessToken) {
+                console.log("未检测到Token，显示未授权内容");
+                $('#unauthorizedContent').removeClass('d-none');
+                return;
+            }
+            
+            // 显示已授权内容，但在API验证成功前先显示加载中状态
+            $('#authorizedContent').removeClass('d-none');
+            $('#userNameDisplay').text('加载中...');
+            
+            // 显示调试按钮
+            $('#debug').show();
+            
+            // 获取用户信息
+            $.ajax({
+                url: BASE_URL + '/system/auth/get-permission-info',
+                type: 'GET',
+                headers: {
+                    'Authorization': 'Bearer ' + accessToken
+                },
+                success: function(res) {
+                    console.log("获取用户信息成功:", res);
+                    $('#debugInfo').text(JSON.stringify(res, null, 2));
+                    
+                    if (res.code === 0 && res.data && res.data.user) {
+                        const userInfo = res.data.user;
+                        
+                        // 填充用户信息
+                        $('#userNameDisplay').text(userInfo.nickname || userInfo.username);
+                        $('#welcomeUserName').text(userInfo.nickname || userInfo.username);
+                        $('#userId').text(userInfo.id);
+                        $('#username').text(userInfo.username);
+                        $('#nickname').text(userInfo.nickname || '-');
+                        $('#deptName').text(userInfo.deptName || '-');
+                        $('#loginTime').text(userInfo.loginDate || '-');
+                        $('#loginIp').text(userInfo.loginIp || '-');
+                        
+                        // 显示角色
+                        if (res.data.roles && res.data.roles.length > 0) {
+                            const roleNames = res.data.roles.map(role => role.name).join(', ');
+                            $('#roles').text(roleNames);
+                        } else {
+                            $('#roles').text('-');
+                        }
+                    } else {
+                        // 处理错误响应但不是标准错误格式的情况
+                        let errorMsg = '';
+                        if (res.msg && res.msg.includes('未登录')) {
+                            errorMsg = '您的账号未登录或登录已过期，请重新登录';
+                        } else {
+                            errorMsg = res.msg || '获取用户信息失败';
+                        }
+                        console.error("API返回错误:", errorMsg);
+                        alert(errorMsg);
+                        handleAuthError();
+                    }
+                },
+                error: function(xhr, status, error) {
+                    console.error("获取用户信息失败:", xhr, status, error);
+                    let errorMsg = '获取用户信息失败';
+                    
+                    try {
+                        if (xhr.responseText) {
+                            const res = JSON.parse(xhr.responseText);
+                            errorMsg = res.msg || errorMsg;
+                            
+                            // 特别处理登录过期情况
+                            if (res.msg && res.msg.includes('未登录')) {
+                                errorMsg = '您的账号未登录或登录已过期，请重新登录';
+                            }
+                        }
+                    } catch (e) {
+                        console.error('解析错误响应失败:', e);
+                    }
+                    
+                    $('#debugInfo').text(
+                        "Status: " + status + "\n" +
+                        "Error: " + error + "\n" + 
+                        "Response: " + xhr.responseText
+                    );
+                    
+                    alert(errorMsg);
+                    handleAuthError();
+                }
+            });
+            
+            // 退出登录
+            $('#logoutBtn').click(function() {
+                $.ajax({
+                    url: BASE_URL + '/system/auth/logout',
+                    type: 'POST',
+                    headers: {
+                        'Authorization': 'Bearer ' + accessToken
+                    },
+                    success: function() {
+                        // 清除本地存储的 token
+                        localStorage.removeItem('accessToken');
+                        localStorage.removeItem('refreshToken');
+                        // 跳转到登录页
+                        window.location.href = 'login.html';
+                    },
+                    error: function() {
+                        // 即使请求失败也清除 token 并跳转
+                        localStorage.removeItem('accessToken');
+                        localStorage.removeItem('refreshToken');
+                        window.location.href = 'login.html';
+                    }
+                });
+            });
+            
+            function handleAuthError() {
+                // 授权错误，显示未授权内容
+                $('#authorizedContent').addClass('d-none');
+                $('#unauthorizedContent').removeClass('d-none');
+                
+                // 清除 token
+                localStorage.removeItem('accessToken');
+                localStorage.removeItem('refreshToken');
+            }
+            
+            // 显示/隐藏调试信息
+            $('#showDebugBtn').click(function() {
+                $('#debugInfo').toggle();
+            });
+        });
+    </script>
+</body>
+</html> 

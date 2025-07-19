@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>云存储风格Logo</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f8f9fa;
+        }
+        
+        .logo-container {
+            position: relative;
+            width: 200px;
+            height: 200px;
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+        
+        .cloud {
+            position: relative;
+            width: 100px;
+            height: 60px;
+            background: white;
+            border-radius: 30px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            margin-top: -30px;
+            z-index: 2;
+        }
+        
+        .cloud:before {
+            content: '';
+            position: absolute;
+            width: 50px;
+            height: 50px;
+            background: white;
+            border-radius: 50%;
+            top: -20px;
+            left: 15px;
+        }
+        
+        .cloud:after {
+            content: '';
+            position: absolute;
+            width: 40px;
+            height: 40px;
+            background: white;
+            border-radius: 50%;
+            top: -15px;
+            right: 15px;
+        }
+        
+        .phone {
+            position: absolute;
+            width: 30px;
+            height: 60px;
+            background: #333;
+            border-radius: 5px;
+            bottom: 30px;
+            z-index: 3;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.3);
+        }
+        
+        .phone:before {
+            content: '';
+            position: absolute;
+            width: 26px;
+            height: 46px;
+            background: #f1f1f1;
+            border-radius: 3px;
+            top: 7px;
+            left: 2px;
+        }
+        
+        .data-stream {
+            position: absolute;
+            width: 2px;
+            height: 40px;
+            background: rgba(255,255,255,0.8);
+            top: 30px;
+            animation: stream 2s infinite;
+            z-index: 1;
+        }
+        
+        .stream1 {
+            left: 80px;
+            animation-delay: 0s;
+        }
+        
+        .stream2 {
+            left: 90px;
+            animation-delay: 0.4s;
+        }
+        
+        .stream3 {
+            left: 100px;
+            animation-delay: 0.8s;
+        }
+        
+        @keyframes stream {
+            0% {
+                height: 0;
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            50% {
+                opacity: 1;
+            }
+            100% {
+                height: 40px;
+                opacity: 0;
+                transform: translateY(30px);
+            }
+        }
+        
+        .data-icon {
+            position: absolute;
+            width: 30px;
+            height: 30px;
+            background: #ffeb3b;
+            border-radius: 5px;
+            top: 15px;
+            right: 40px;
+            transform: rotate(-15deg);
+            z-index: 3;
+            box-shadow: 0 3px 5px rgba(0,0,0,0.2);
+        }
+        
+        .data-icon:before {
+            content: '';
+            position: absolute;
+            width: 20px;
+            height: 3px;
+            background: #333;
+            top: 8px;
+            left: 5px;
+            box-shadow: 0 5px 0 #333, 0 10px 0 #333;
+        }
+        
+        .app-name {
+            position: absolute;
+            bottom: -40px;
+            width: 100%;
+            text-align: center;
+            font-family: Arial, sans-serif;
+            font-size: 18px;
+            font-weight: bold;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <div class="logo-container">
+        <div class="cloud"></div>
+        <div class="data-stream stream1"></div>
+        <div class="data-stream stream2"></div>
+        <div class="data-stream stream3"></div>
+        <div class="phone"></div>
+        <div class="data-icon"></div>
+        <div class="app-name">手机数据帮手</div>
+    </div>
+</body>
+</html> 

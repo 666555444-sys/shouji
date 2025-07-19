@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>科技几何风格Logo</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f8f9fa;
+        }
+        
+        .logo-container {
+            position: relative;
+            width: 200px;
+            height: 200px;
+            background: #1e6ce3;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+        
+        .hexagon {
+            position: absolute;
+            width: 120px;
+            height: 69px;
+            background: white;
+            transform: rotate(30deg);
+            z-index: 2;
+        }
+        
+        .hexagon:before,
+        .hexagon:after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 0;
+            border-left: 60px solid transparent;
+            border-right: 60px solid transparent;
+        }
+        
+        .hexagon:before {
+            bottom: 100%;
+            border-bottom: 34.5px solid white;
+        }
+        
+        .hexagon:after {
+            top: 100%;
+            border-top: 34.5px solid white;
+        }
+        
+        .inner-hex {
+            position: absolute;
+            width: 80px;
+            height: 46px;
+            background: #4facfe;
+            transform: rotate(30deg);
+            z-index: 3;
+            left: 60px;
+            top: 60px;
+        }
+        
+        .inner-hex:before,
+        .inner-hex:after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 0;
+            border-left: 40px solid transparent;
+            border-right: 40px solid transparent;
+        }
+        
+        .inner-hex:before {
+            bottom: 100%;
+            border-bottom: 23px solid #4facfe;
+        }
+        
+        .inner-hex:after {
+            top: 100%;
+            border-top: 23px solid #4facfe;
+        }
+        
+        .phone-icon {
+            position: absolute;
+            width: 40px;
+            height: 70px;
+            background: white;
+            border-radius: 5px;
+            z-index: 4;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.2);
+            transform: rotate(-30deg);
+        }
+        
+        .phone-icon:before {
+            content: '';
+            position: absolute;
+            width: 34px;
+            height: 54px;
+            background: #333;
+            border-radius: 3px;
+            top: 8px;
+            left: 3px;
+        }
+        
+        .phone-icon:after {
+            content: '';
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            background: #4facfe;
+            border-radius: 50%;
+            bottom: 5px;
+            left: 16px;
+        }
+        
+        .circuit-line {
+            position: absolute;
+            background: rgba(255,255,255,0.5);
+            z-index: 1;
+        }
+        
+        .line1 {
+            width: 100px;
+            height: 2px;
+            top: 50px;
+            left: 20px;
+            transform: rotate(30deg);
+        }
+        
+        .line2 {
+            width: 80px;
+            height: 2px;
+            bottom: 60px;
+            right: 30px;
+            transform: rotate(-45deg);
+        }
+        
+        .line3 {
+            width: 60px;
+            height: 2px;
+            bottom: 40px;
+            left: 30px;
+            transform: rotate(60deg);
+        }
+        
+        .dot {
+            position: absolute;
+            width: 6px;
+            height: 6px;
+            background: #ffeb3b;
+            border-radius: 50%;
+            z-index: 5;
+        }
+        
+        .dot1 {
+            top: 50px;
+            left: 20px;
+        }
+        
+        .dot2 {
+            bottom: 60px;
+            right: 30px;
+        }
+        
+        .dot3 {
+            bottom: 40px;
+            left: 30px;
+        }
+        
+        .pulse {
+            position: absolute;
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.1);
+            z-index: 1;
+            animation: pulse 3s infinite;
+        }
+        
+        @keyframes pulse {
+            0% {
+                transform: scale(0.5);
+                opacity: 0.5;
+            }
+            100% {
+                transform: scale(1.5);
+                opacity: 0;
+            }
+        }
+        
+        .app-name {
+            position: absolute;
+            bottom: -40px;
+            width: 100%;
+            text-align: center;
+            font-family: Arial, sans-serif;
+            font-size: 18px;
+            font-weight: bold;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <div class="logo-container">
+        <div class="pulse"></div>
+        <div class="hexagon"></div>
+        <div class="inner-hex"></div>
+        <div class="phone-icon"></div>
+        <div class="circuit-line line1"></div>
+        <div class="circuit-line line2"></div>
+        <div class="circuit-line line3"></div>
+        <div class="dot dot1"></div>
+        <div class="dot dot2"></div>
+        <div class="dot dot3"></div>
+        <div class="app-name">手机数据帮手</div>
+    </div>
+</body>
+</html> 

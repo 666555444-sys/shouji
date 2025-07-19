@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>手机数据帮手</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        }
+        
+        body {
+            background-color: #f5f5f5;
+        }
+        
+        .container {
+            max-width: 414px;
+            margin: 0 auto;
+            background-color: white;
+            height: 100vh;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .status-bar {
+            display: flex;
+            justify-content: space-between;
+            padding: 2px 10px;
+            font-size: 12px;
+            color: white;
+            background-color: #32CD32;
+            height: 20px;
+        }
+        
+        .status-left {
+            display: flex;
+            align-items: center;
+            gap: 2px;
+        }
+        
+        .status-right {
+            display: flex;
+            align-items: center;
+            gap: 2px;
+        }
+        
+        .header {
+            background-color: #32CD32;
+            color: white;
+            text-align: center;
+            padding: 10px 0;
+            font-size: 18px;
+            font-weight: bold;
+        }
+        
+        .storage-card {
+            background-color: white;
+            border-radius: 10px;
+            margin: 15px;
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: relative;
+        }
+        
+        .circle-progress {
+            width: 100px;
+            height: 100px;
+            position: relative;
+            margin: 0 auto;
+        }
+        
+        .circle-bg {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background: conic-gradient(#32CD32 0% 97%, #e0e0e0 97% 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .circle-inner {
+            width: 80%;
+            height: 80%;
+            border-radius: 50%;
+            background-color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 28px;
+            font-weight: bold;
+            color: #CC3333;
+        }
+        
+        .storage-info {
+            margin-top: 10px;
+            font-size: 14px;
+        }
+        
+        .storage-row {
+            display: flex;
+            justify-content: flex-start;
+            margin: 4px 0;
+        }
+        
+        .storage-row span {
+            margin-right: 10px;
+        }
+        
+        .promo-text {
+            text-align: right;
+            color: #FF9933;
+            font-size: 14px;
+            margin-top: 10px;
+        }
+        
+        .section-title {
+            margin: 20px 15px 10px;
+            font-size: 16px;
+            font-weight: bold;
+        }
+        
+        .feature-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            grid-gap: 10px;
+            padding: 0 15px;
+        }
+        
+        .feature-item {
+            background-color: #E6F2E6;
+            border-radius: 10px;
+            padding: 15px;
+            display: flex;
+            align-items: center;
+            position: relative;
+        }
+        
+        .feature-item.highlight {
+            background-color: #FFE4B5;
+            position: relative;
+        }
+        
+        .feature-item img {
+            width: 30px;
+            height: 30px;
+            margin-right: 10px;
+        }
+        
+        .feature-item span {
+            font-size: 14px;
+        }
+        
+        .highlight-circle {
+            position: absolute;
+            width: 100px;
+            height: 100px;
+            border: 2px solid #FF6600;
+            border-radius: 50%;
+            top: -15px;
+            right: -20px;
+            z-index: 2;
+        }
+        
+        .highlight-arrow {
+            position: absolute;
+            width: 60px;
+            height: 30px;
+            border: 2px solid #FF6600;
+            border-top: none;
+            border-right: none;
+            border-radius: 0 0 0 30px;
+            bottom: -10px;
+            left: -40px;
+            z-index: 1;
+        }
+        
+        .other-services {
+            margin-top: 20px;
+        }
+        
+        .service-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            grid-gap: 15px;
+            padding: 0 15px;
+        }
+        
+        .service-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+        
+        .service-item img {
+            width: 24px;
+            height: 24px;
+            margin-bottom: 5px;
+            background-color: #f0f0f0;
+            padding: 4px;
+            border-radius: 4px;
+        }
+        
+        .service-item span {
+            font-size: 12px;
+        }
+        
+        .bottom-nav {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 50px;
+            display: flex;
+            background-color: white;
+            border-top: 1px solid #e0e0e0;
+        }
+        
+        .nav-item {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            font-size: 12px;
+        }
+        
+        .nav-item.active {
+            color: #32CD32;
+        }
+        
+        .bottom-buttons {
+            position: absolute;
+            bottom: 50px;
+            left: 0;
+            right: 0;
+            height: 50px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 30px;
+        }
+        
+        .nav-icon {
+            width: 24px;
+            height: 24px;
+            margin-bottom: 3px;
+        }
+        
+        .bottom-button {
+            width: 20px;
+            height: 20px;
+            border: 1px solid #ccc;
+            background: white;
+            border-radius: 3px;
+        }
+        
+        .circle-button {
+            width: 40px;
+            height: 40px;
+            border: 1px solid #ccc;
+            border-radius: 50%;
+            background: white;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Status Bar -->
+        <div class="status-bar">
+            <div class="status-left">
+                <span>📶</span>
+                <span>📱</span>
+                <span>📶</span>
+            </div>
+            <div class="status-center">
+                <span>11:15</span>
+            </div>
+            <div class="status-right">
+                <span>🔋</span>
+                <span>62%</span>
+            </div>
+        </div>
+        
+        <!-- Header -->
+        <div class="header">手机数据帮手</div>
+        
+        <!-- Storage Card -->
+        <div class="storage-card">
+            <div class="circle-progress">
+                <div class="circle-bg">
+                    <div class="circle-inner">
+                        97%
+                    </div>
+                </div>
+            </div>
+            
+            <div class="storage-info">
+                <div class="storage-row"><span>可用空间: 3.04G</span></div>
+                <div class="storage-row"><span>已用空间: 105.58G</span></div>
+                <div class="storage-row"><span>手机空间: 108.62G</span></div>
+                <div class="storage-row"><span>Android 版本: 10</span></div>
+                <div class="storage-row"><span>手机型号: PPA-AL20</span></div>
+            </div>
+            
+            <div class="promo-text">
+                iPhone11Pro Max 快速聊天充实
+            </div>
+        </div>
+        
+        <!-- Hot Features -->
+        <div class="section-title">热门功能</div>
+        <div class="feature-grid">
+            <div class="feature-item">
+                <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjQiIGhlaWdodD0iMjQiIHZpZXdCb3g9IjAgMCAyNCAyNCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cGF0aCBkPSJNMTguOSA4LjFjMC42IDAgMS4yLTAuMSAxLjgtMC4zLTAuNi0zLjEtMy43LTUuNC03LjItNS40LTQuMSAwLTcuNCAzLjMtNy40IDcuMyAwIDEuMiAwLjMgMi40IDAuOSAzLjVMMi45IDE4bDUuMi0xLjRjMS4xIDAuNiAyLjIgMC45IDMuNCAwLjktMC4yLTAuNy0wLjMtMS41LTAuMy0yLjMgMC00LjEgMy4zLTcuNCA3LjctNy4xeiIgZmlsbD0iIzFBQTEzOCIvPjxwYXRoIGQ9Ik0xOC45IDEuOGMtMy40IDAtNi4yIDIuOC02LjIgNi4zIDAgMy40IDIuOCA2LjIgNi4zIDYuMmMxLjEgMCAyLjItMC4zIDMuMi0wLjlsNC41IDEuMi0xLjItNC42YzAuNi0xIDEtMi4yIDEtMy40LTAuMS0zLjUtMi45LTYuMy02LjYtNi4zLTAuMyAwLTAuNyAwLTEgMC4xeiIgZmlsbD0iIzI3QkFGMSIvPjwvc3ZnPg==" alt="WeChat">
+                <span>微信消息恢复</span>
+            </div>
+            <div class="feature-item highlight">
+                <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjQiIGhlaWdodD0iMjQiIHZpZXdCb3g9IjAgMCAyNCAyNCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cGF0aCBkPSJNMiAyYzAgMCAwIDAgMCAwdjE2YzAgMSAxIDEgMSAxaDE4YzAgMCAxIDAgMS0xVjJjMC0xLTEtMS0xLTFIMkMyIDEgMSAxIDEgMnogTTYgMyBoOCBhMiAyIDAgMCAxIDIgMiBWNyBhMiAyIDAgMCAxIC0yIDIgSDYgYTIgMiAwIDAgMSAtMiAtMiBWNSBhMiAyIDAgMCAxIDIgLTJ6IE02IDE1IGgxMiBNNiAxOSBoNiIgc3Ryb2tlPSIjMDA5OUZGIiBzdHJva2Utd2lkdGg9IjIiIGZpbGw9Im5vbmUiLz48L3N2Zz4=" alt="Photo">
+                <span>照片恢复</span>
+                <div class="highlight-circle"></div>
+                <div class="highlight-arrow"></div>
+            </div>
+        </div>
+        
+        <!-- Other Services -->
+        <div class="section-title">其他服务</div>
+        <div class="service-grid">
+            <div class="service-item">
+                <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjQiIGhlaWdodD0iMjQiIHZpZXdCb3g9IjAgMCAyNCAyNCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cGF0aCBkPSJNMTguOSA4LjFjMC42IDAgMS4yLTAuMSAxLjgtMC4zLTAuNi0zLjEtMy43LTUuNC03LjItNS40LTQuMSAwLTcuNCAzLjMtNy40IDcuMyAwIDEuMiAwLjMgMi40IDAuOSAzLjVMMi45IDE4bDUuMi0xLjRjMS4xIDAuNiAyLjIgMC45IDMuNCAwLjktMC4yLTAuNy0wLjMtMS41LTAuMy0yLjMgMC00LjEgMy4zLTcuNCA3LjctNy4xeiIgZmlsbD0iIzFBQTEzOCIvPjwvc3ZnPg==" alt="WeChat Clean">
+                <span>微信清理</span>
+            </div>
+            <div class="service-item">
+                <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjQiIGhlaWdodD0iMjQiIHZpZXdCb3g9IjAgMCAyNCAyNCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cGF0aCBkPSJNNiA0djE2aDEyVjRINnptNiAyYzIuMjEgMCA0IDEuNzkgNCA0cy0xLjc5IDQtNCA0LTQtMS43OS00LTQgMS43OS00IDQtNHptMCA5YzIuNzYgMCA1IDEuMjQgNSAyLjc1VjE4SDdWMTcuNzVDNyAxNi4yNCA5LjI0IDE1IDEyIDE1eiIgZmlsbD0iIzAwNjZGRiIvPjwvc3ZnPg==" alt="Video Clean">
+                <span>视频清理</span>
+            </div>
+            <div class="service-item">
+                <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjQiIGhlaWdodD0iMjQiIHZpZXdCb3g9IjAgMCAyNCAyNCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cGF0aCBkPSJNMTIgMkM2LjQ4IDIgMiA2LjQ4IDIgMTJzNC40OCAxMCAxMCAxMCAxMC00LjQ4IDEwLTEwUzE3LjUyIDIgMTIgMnptNSAxMWgtNHY0aC0ydi00SDd2LTJoNFY3aDJ2NGg0djJ6IiBmaWxsPSIjRkY2NjAwIi8+PC9zdmc+" alt="ID Add Friend">
+                <span>ID加好友</span>
+            </div>
+            <div class="service-item">
+                <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjQiIGhlaWdodD0iMjQiIHZpZXdCb3g9IjAgMCAyNCAyNCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cGF0aCBkPSJNMjEgMTlWNWMwLTEuMS0uOS0yLTItMkg1Yy0xLjEgMC0yIC45LTIgMnYxNGMwIDEuMS45IDIgMiAyaDE0YzEuMSAwIDItLjkgMi0yek04LjU3IDkuOGwzLjUzIDQuNTQgMi41NC0zLjM2TDE4IDEzLjUgMTggMTZINlY2aDEydjcuNXoiIGZpbGw9IiMwMDk5RkYiLz48Y2lyY2xlIGN4PSI5IiBjeT0iOCIgcj0iMS41IiBmaWxsPSIjMDA5OUZGIi8+PC9zdmc+" alt="Image Clean">
+                <span>图片清理</span>
+            </div>
+            <div class="service-item">
+                <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjQiIGhlaWdodD0iMjQiIHZpZXdCb3g9IjAgMCAyNCAyNCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cGF0aCBkPSJNMTkgM0g1Yy0xLjEgMC0yIC45LTIgMnYxNGMwIDEuMS45IDIgMiAyaDE0YzEuMSAwIDItLjkgMi0yVjVjMC0xLjEtLjktMi0yLTJ6bTAgMTZINVY1aDE0djE0em0tMi41LTcuNC0xLjEtMS4xYy0uMi0uMi0uNS0uMi0uNyAwTDEyIDEzLjJsLTIuODMtMi44M2MtLjItLjItLjUtLjItLjcgMGwtMS4xIDEuMWMtLjIuMi0uMi41IDAgLjdsNC4xIDQuMWMuMi4yLjUuMi43IDBsNS4zLTUuM2MuMi0uMi4yLS41IDAtLjd6IiBmaWxsPSIjMzM5OUZGIi8+PC9zdmc+" alt="Account Recover">
+                <span>账单恢复</span>
+            </div>
+            <div class="service-item">
+                <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjQiIGhlaWdodD0iMjQiIHZpZXdCb3g9IjAgMCAyNCAyNCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cGF0aCBkPSJNMTUgMkgzdjE4aDE4VjdjMC0uNDItLjE2LS44My0uNDUtMS4xMkwxNi4xMiAyLjQ1QzE1LjgzIDIuMTYgMTUuNDIgMiAxNSAyem0tMiA5aDRjLjU1IDAgMSAuNDUgMSAxcy0uNDUgMS0xIDFIMTNjLS41NSAwLTEtLjQ1LTEtMXMuNDUtMSAxLTF6bS00IDZoOGMuNTUgMCAxIC40NSAxIDFzLS40NSAxLTEgMUg5Yy0uNTUgMC0xLS40NS0xLTFzLjQ1LTEgMS0xeiIgZmlsbD0iIzMzNjZGRiIvPjwvc3ZnPg==" alt="File Recovery">
+                <span>文件恢复</span>
+            </div>
+            <div class="service-item">
+                <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjQiIGhlaWdodD0iMjQiIHZpZXdCb3g9IjAgMCAyNCAyNCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cGF0aCBkPSJNMTcgMTAuNVY3YzAtLjU1LS40NS0xLTEtMUgzYy0uNTUgMC0xIC40NS0xIDF2MTBjMCAuNTUuNDUgMSAxIDFoMTNjLjU1IDAgMS0uNDUgMS0xdi0zLjVsNCAyLjVWOGwtNCAyLjV6bS0yIDBWN2g0djEwSDVWN2gzdjMuNWMwIC4yOC4yMi41LjUuNWg2YzI4IDAgLjUtLjIyLjUtLjV6IiBmaWxsPSIjMDA5OUZGIi8+PC9zdmc+" alt="Video Recovery">
+                <span>视频恢复</span>
+            </div>
+            <div class="service-item">
+                <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjQiIGhlaWdodD0iMjQiIHZpZXdCb3g9IjAgMCAyNCAyNCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cGF0aCBkPSJNMjAgMTMuMzFMMTMuMzEgNmwtMi42NyAyLjY3TDEwIDggNiAxMmw2IDZ6TTIuNSA1Ljc3TDcuNzcgLjVsMi4wNyAyLjA3TDUuMDcgNy44NHoiIGZpbGw9IiMzMzk5Q0MiLz48L3N2Zz4=" alt="Audio Recovery">
+                <span>音频恢复</span>
+            </div>
+            <div class="service-item">
+                <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjQiIGhlaWdodD0iMjQiIHZpZXdCb3g9IjAgMCAyNCAyNCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cGF0aCBkPSJNMyAxOGgxOHYtMkgzdjJ6bTAtNWgxOHYtMkgzdjJ6bTAtN3YyaDE4VjZIM3oiIGZpbGw9IiM0OTc2QjMiLz48L3N2Zz4=" alt="Service">
+                <span>工程师服务</span>
+            </div>
+        </div>
+        
+        <!-- Bottom Navigation -->
+        <div class="bottom-buttons">
+            <div class="bottom-button"></div>
+            <div class="circle-button"></div>
+            <div class="bottom-button"></div>
+        </div>
+        
+        <div class="bottom-nav">
+            <div class="nav-item active">
+                <img class="nav-icon" src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjQiIGhlaWdodD0iMjQiIHZpZXdCb3g9IjAgMCAyNCAyNCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cGF0aCBkPSJNMTAgMjB2LTZoNHY2aDVWMTBoLTN2NmgtOFYxMEgzdjEwaDd6IiBmaWxsPSIjMzJDRDMyIi8+PHBhdGggZD0iTTEyIDNMMyAxMGg0djEwaDZ2LTZoMnY2aDZ2LTEwaDRMMTIgM3oiIGZpbGw9IiMzMkNEMzIiLz48L3N2Zz4=" alt="Home">
+                <span>首页</span>
+            </div>
+            <div class="nav-item">
+                <img class="nav-icon" src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjQiIGhlaWdodD0iMjQiIHZpZXdCb3g9IjAgMCAyNCAyNCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cGF0aCBkPSJNMTkgM0g1Yy0xLjEgMC0yIC45LTIgMnYxNGMwIDEuMS45IDIgMiAyaDE0YzEuMSAwIDItLjkgMi0yVjVjMC0xLjEtLjktMi0yLTJ6TTE5IDE5SDVWNWgxNHYxNHpNNyA5LjVoMnYtMkg3djJ6bTAgNCBoMnYtMkg3djJ6bTAgNCBoMnYtMkg3djJ6bTEwLTZoLTVWOWg1djIuNXptMCA0aC01VjEzaDV2Mi41em0wIDRoLTVWMTdoNXYyLjV6IiBmaWxsPSIjNjY2NjY2Ii8+PC9zdmc+" alt="Case">
+                <span>案例</span>
+            </div>
+            <div class="nav-item">
+                <img class="nav-icon" src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjQiIGhlaWdodD0iMjQiIHZpZXdCb3g9IjAgMCAyNCAyNCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cGF0aCBkPSJNMTIgMTJjMi4yMSAwIDQtMS43OSA0LTRzLTEuNzktNC00LTQtNCAxLjc5LTQgNCAxLjc5IDQgNCA0em0wIDJjLTIuNjcgMC04IDEuMzQtOCA0djJoMTZ2LTJjMC0yLjY2LTUuMzMtNC04LTR6IiBmaWxsPSIjNjY2NjY2Ii8+PC9zdmc+" alt="My">
+                <span>我的</span>
+            </div>
+        </div>
+    </div>
+</body>
+</html> 

@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>数据修复风格Logo</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f8f9fa;
+        }
+        
+        .logo-container {
+            position: relative;
+            width: 200px;
+            height: 200px;
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+        
+        .data-container {
+            position: relative;
+            width: 140px;
+            height: 140px;
+            background: white;
+            border-radius: 10px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+            z-index: 2;
+        }
+        
+        .data-row {
+            display: flex;
+            margin: 5px 0;
+        }
+        
+        .data-bit {
+            width: 20px;
+            height: 20px;
+            margin: 0 2px;
+            border-radius: 4px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: monospace;
+            font-weight: bold;
+            font-size: 12px;
+        }
+        
+        .bit-1 {
+            background: #4facfe;
+            color: white;
+        }
+        
+        .bit-0 {
+            background: #f1f1f1;
+            color: #333;
+        }
+        
+        .bit-error {
+            background: #ffeb3b;
+            color: #333;
+            animation: blink 1s infinite;
+        }
+        
+        @keyframes blink {
+            0%, 100% {
+                opacity: 1;
+            }
+            50% {
+                opacity: 0.5;
+            }
+        }
+        
+        .repair-tool {
+            position: absolute;
+            width: 40px;
+            height: 40px;
+            background: #333;
+            border-radius: 50%;
+            bottom: 10px;
+            right: 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 3;
+        }
+        
+        .repair-tool:before {
+            content: '';
+            width: 20px;
+            height: 20px;
+            background: #ffeb3b;
+            clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
+        }
+        
+        .binary-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-wrap: wrap;
+            opacity: 0.1;
+            z-index: 1;
+        }
+        
+        .binary-bit {
+            width: 20px;
+            height: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: monospace;
+            color: white;
+            font-size: 12px;
+        }
+        
+        .app-name {
+            position: absolute;
+            bottom: -40px;
+            width: 100%;
+            text-align: center;
+            font-family: Arial, sans-serif;
+            font-size: 18px;
+            font-weight: bold;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <div class="logo-container">
+        <div class="binary-bg" id="binary-bg"></div>
+        <div class="data-container">
+            <div class="data-row">
+                <div class="data-bit bit-1">1</div>
+                <div class="data-bit bit-0">0</div>
+                <div class="data-bit bit-1">1</div>
+                <div class="data-bit bit-0">0</div>
+                <div class="data-bit bit-1">1</div>
+            </div>
+            <div class="data-row">
+                <div class="data-bit bit-0">0</div>
+                <div class="data-bit bit-1">1</div>
+                <div class="data-bit bit-error">?</div>
+                <div class="data-bit bit-1">1</div>
+                <div class="data-bit bit-0">0</div>
+            </div>
+            <div class="data-row">
+                <div class="data-bit bit-1">1</div>
+                <div class="data-bit bit-0">0</div>
+                <div class="data-bit bit-1">1</div>
+                <div class="data-bit bit-error">?</div>
+                <div class="data-bit bit-1">1</div>
+            </div>
+            <div class="data-row">
+                <div class="data-bit bit-0">0</div>
+                <div class="data-bit bit-1">1</div>
+                <div class="data-bit bit-0">0</div>
+                <div class="data-bit bit-1">1</div>
+                <div class="data-bit bit-0">0</div>
+            </div>
+        </div>
+        <div class="repair-tool"></div>
+        <div class="app-name">手机数据帮手</div>
+    </div>
+    
+    <script>
+        // 生成二进制背景
+        const binaryBg = document.getElementById('binary-bg');
+        for (let i = 0; i < 100; i++) {
+            const bit = document.createElement('div');
+            bit.className = 'binary-bit';
+            bit.textContent = Math.random() > 0.5 ? '1' : '0';
+            binaryBg.appendChild(bit);
+        }
+    </script>
+</body>
+</html> 

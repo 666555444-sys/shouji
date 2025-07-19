@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>圆形风格Logo</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f8f9fa;
+        }
+        
+        .logo-container {
+            position: relative;
+            width: 200px;
+            height: 200px;
+        }
+        
+        .circle {
+            position: absolute;
+            border-radius: 50%;
+        }
+        
+        .circle-bg {
+            width: 200px;
+            height: 200px;
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+        
+        .circle-inner {
+            width: 160px;
+            height: 160px;
+            background: white;
+            top: 20px;
+            left: 20px;
+        }
+        
+        .data-icon {
+            position: absolute;
+            width: 100px;
+            height: 100px;
+            top: 50px;
+            left: 50px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .data-line {
+            width: 80%;
+            height: 8px;
+            background: #4facfe;
+            margin: 5px 0;
+            border-radius: 4px;
+        }
+        
+        .data-line:nth-child(2) {
+            width: 60%;
+            background: #00f2fe;
+        }
+        
+        .data-line:nth-child(3) {
+            width: 40%;
+            background: #4facfe;
+        }
+        
+        .circle-accent {
+            width: 40px;
+            height: 40px;
+            background: #ffeb3b;
+            top: 20px;
+            right: 20px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+        }
+        
+        .app-name {
+            position: absolute;
+            bottom: -40px;
+            width: 100%;
+            text-align: center;
+            font-family: Arial, sans-serif;
+            font-size: 18px;
+            font-weight: bold;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <div class="logo-container">
+        <div class="circle circle-bg"></div>
+        <div class="circle circle-inner"></div>
+        <div class="data-icon">
+            <div class="data-line"></div>
+            <div class="data-line"></div>
+            <div class="data-line"></div>
+        </div>
+        <div class="circle circle-accent"></div>
+        <div class="app-name">手机数据帮手</div>
+    </div>
+</body>
+</html> 

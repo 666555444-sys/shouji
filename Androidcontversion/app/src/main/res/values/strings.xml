@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">手机修复</string>
+    <string name="data_recovery">数据修复</string>
+    <string name="recover_early">越早恢复</string>
+    <string name="higher_chance">几率越高！！！</string>
+    <string name="safe_efficient">安全高效</string>
+    <string name="privacy_assured">隐私无忧</string>
+    <string name="news">资讯</string>
+    <string name="notification_example">193****347 购买了微信消息恢复</string>
+    <string name="popular_features">热门功能</string>
+    <string name="other_services">其他服务</string>
+    <string name="tab_home">首页</string>
+    <string name="cases">案例</string>
+    <string name="order">订单</string>
+    <string name="profile">我的</string>
+    
+    <!-- Feature card strings -->
+    <string name="wechat_message_repair">微信消息修复</string>
+    <string name="wechat_message_repair_desc">微信聊天记录修复</string>
+    <string name="wechat_friend_repair">微信好友修复</string>
+    <string name="wechat_friend_repair_desc">微信好友误删修复</string>
+    <string name="image_repair">图片修复</string>
+    <string name="image_repair_desc">手机丢失图片修复</string>
+    <string name="image_scale">图片缩放</string>
+    <string name="image_scale_desc">图片放大缩小工具</string>
+    <string name="image_crop">图片裁剪</string>
+    <string name="image_crop_desc">图片剪裁编辑工具</string>
+    <string name="file_transfer">文件传输</string>
+    <string name="file_transfer_desc">设备间文件传输</string>
+    <string name="call_log_repair">通话记录修复</string>
+    <string name="call_log_repair_desc">手机通话记录修复</string>
+    <string name="sms_repair">短信修复</string>
+    <string name="sms_repair_desc">手机短信记录修复</string>
+    
+    <!-- Service card strings -->
+    <string name="file_repair">文件修复</string>
+    <string name="video_repair">视频修复</string>
+    <string name="audio_repair">音频修复</string>
+    <string name="image_clear">图片清除</string>
+    <string name="qq_data_repair">QQ数据修复</string>
+    <string name="wechat_bill_repair">微信账单修复</string>
+    <string name="tiktok_data_repair">抖音数据修复</string>
+    <string name="engineer_remote_help">工程师远程协助</string>
+    
+    <!-- Badge strings -->
+    <string name="trial">试用</string>
+    <string name="free">免费</string>
+    <string name="paid">付费</string>
+    
+    <!-- Modal strings -->
+    <string name="unlock_member_feature">开启会员功能</string>
+    <string name="member_feature_description">此功能需要开通会员才能使用</string>
+    <string name="activate_now">立即开通</string>
+    <string name="view_logo_designs">查看Logo设计</string>
+    
+    <!-- About Us Screen -->
+    <string name="about_us">关于我们</string>
+    <string name="back">返回</string>
+    <string name="company_logo">公司标志</string>
+    <string name="company_info">企业信息</string>
+    <string name="company_name">企业名称</string>
+    <string name="company_name_value">苏州沐决网络科技有限公司</string>
+    <string name="founded_year">成立时间</string>
+    <string name="founded_year_value">2018年</string>
+    <string name="product_name">产品名称</string>
+    <string name="product_name_value">手机恢复备份</string>
+    <string name="current_version">当前版本</string>
+    <string name="current_version_value">V7.3</string>
+    <string name="company_intro">企业简介</string>
+    <string name="company_desc_1">苏州沐决网络科技有限公司是一家专注于移动数据修复技术的高科技企业。我们致力于为用户提供专业、高效、安全的数据修复解决方案，帮助用户找回珍贵的数字回忆。</string>
+    <string name="company_desc_2">我们的团队由一群热爱技术、充满创新精神的工程师组成，拥有多年数据修复行业经验，擅长移动设备数据修复和修复。</string>
+    <string name="product_features">产品特点</string>
+    <string name="feature_1">专业的微信数据修复能力，支持聊天记录、图片、视频等多种数据修复</string>
+    <string name="feature_2">快速扫描识别，精准定位丢失数据</string>
+    <string name="feature_3">安全保障，修复过程中不会泄露用户隐私</string>
+    <string name="feature_4">操作简单，无需复杂步骤即可完成数据修复</string>
+    <string name="feature_5">专业的技术支持，为用户提供全方位服务</string>
+    <string name="contact_us">联系客服</string>
+    <string name="phone">电话</string>
+    <string name="customer_phone">客服电话：400-888-8888</string>
+    <string name="qq">QQ</string>
+    <string name="customer_qq">客服QQ：37115958</string>
+    <string name="email">邮箱</string>
+    <string name="customer_email">邮箱：service@example.com</string>
+    <string name="location">位置</string>
+    <string name="customer_address">地址：江苏省苏州市高新区科技创新大厦</string>
+    <string name="wechat">微信</string>
+    <string name="tiktok">抖音</string>
+    <string name="website">网站</string>
+    <string name="copyright">© 2024 苏州沐决网络科技有限公司 版权所有</string>
+    <string name="return_to_profile">返回个人中心</string>
+    
+    <!-- Audio Scan Screen -->
+    <string name="all_audio">全部音频</string>
+    <string name="menu">菜单</string>
+    <string name="time">时间</string>
+    <string name="size">大小</string>
+    <string name="scanned_progress">已扫描 10%</string>
+    <string name="scan_deeper_desc">开启「深层扫描」可查看更多音频</string>
+    <string name="recover">去恢复</string>
+    <string name="select_local_audio">选择本地音频文件进行扫描</string>
+    <string name="select_audio_desc">请选择您想要扫描的音频文件</string>
+    <string name="select_audio">选择音频</string>
+    <string name="start_scan">开始扫描</string>
+    <string name="recover_and_scan_deep">去恢复 开放深层扫描查找全部数据</string>
+    <string name="scanning_audio_files">正在扫描音频文件</string>
+    <string name="scanning_audio_desc">系统正在分析您的设备以查找可恢复的音频文件，请稍候...</string>
+    <string name="found_files">已找到 %1$d 个文件</string>
+    <string name="scan_exit_confirm">您确定返回吗？</string>
+    <string name="scan_exit_desc">返回后，重新进入需要重新扫描数据</string>
+    <string name="cancel">取消</string>
+    <string name="confirm">确认</string>
+    <string name="recovery_dialog_title">已扫描7%</string>
+    <string name="recovery_dialog_content">目前只扫描到7%，您如需要开放「深层扫描」查看全部数据，请点击去「去恢复」按钮。</string>
+    
+    <!-- Case Detail Screen -->
+    <string name="case_detail">案例详情</string>
+    <string name="featured_case">精选案例</string>
+    <string name="featured_cases">精选案例</string>
+    <string name="case_image">案例图片</string>
+    
+    <!-- Bottom Navigation Menu -->
+    
+    <!-- Contact Service Screen -->
+    <string name="service_hours">客服服务时间：9:00-21:00（工作日及周末）</string>
+    <string name="contact_methods">联系方式</string>
+    <string name="online_support">在线客服</string>
+    <string name="online_support_desc">工作时间内快速回复，解决您的问题</string>
+    <string name="consult">咨询</string>
+    <string name="hotline">客服热线</string>
+    <string name="hotline_number">400-888-XXXX</string>
+    <string name="call">拨打</string>
+    <string name="support_email">support@datarecovery.com</string>
+    <string name="send">发送</string>
+    <string name="submit_question">提交问题</string>
+    <string name="question_type">问题类型</string>
+    <string name="contact_info">联系方式</string>
+    <string name="contact_info_hint">请输入您的手机号码</string>
+    <string name="question_description">问题描述</string>
+    <string name="question_description_hint">请详细描述您遇到的问题，以便我们更好地为您服务</string>
+    <string name="faq">常见问题</string>
+    <string name="faq_recovery_time_question">数据修复需要多长时间？</string>
+    <string name="faq_recovery_time_answer">数据修复时间取决于数据量大小和损坏程度。一般情况下，小型数据修复可能需要几小时，而大型或复杂的数据修复可能需要1-3天。我们会尽最大努力在最短时间内完成修复。</string>
+    <string name="faq_success_rate_question">如何提高数据修复成功率？</string>
+    <string name="faq_success_rate_answer">数据丢失后应立即停止使用设备，避免新数据覆盖丢失数据。越早进行修复，成功率越高。同时，保持设备电量充足，确保修复过程不会因断电而中断。</string>
+    <string name="faq_payment_question">支付后多久可以使用服务？</string>
+    <string name="faq_payment_answer">支付成功后，您可以立即使用我们的服务。系统会自动为您的账号开通相应的功能权限，无需等待人工审核。</string>
+    <string name="faq_cancel_question">如何取消订阅服务？</string>
+    <string name="faq_cancel_answer">您可以在"我的"-"订单管理"中找到相应的订阅服务，点击"取消订阅"即可。请注意，已支付的费用根据使用情况可能无法全额退款，具体以退款政策为准。</string>
+    
+    <!-- Feedback Screen -->
+    <string name="feedback_title">反馈问题</string>
+    <string name="issue_description">问题描述</string>
+    <string name="feedback_contact_hint">可输入手机号、微信号、QQ号</string>
+    <string name="feedback_issue_hint">请输入您反馈的问题内容</string>
+    <string name="submit_feedback">提交反馈</string>
+    
+    <!-- File Scan Screen -->
+    <string name="all_files">全部文件</string>
+    <string name="select_local_files">选择本地文件进行扫描</string>
+    <string name="select_files_desc">请选择您想要扫描的文件</string>
+    <string name="select_files">选择文件</string>
+    <string name="scanning_files">正在扫描文件</string>
+    <string name="scanning_files_desc">系统正在分析您的设备以查找可恢复的文档文件，请稍候...</string>
+    <string name="word">Word</string>
+    <string name="excel">Excel</string>
+    <string name="ppt">PPT</string>
+    <string name="pdf">PDF</string>
+    <string name="others">其他</string>
+    
+    <!-- Additional missing strings -->
+    <string name="established_year">成立年份</string>
+    <string name="established_year_value">2018年</string>
+    <string name="customer_service_phone">客服电话：400-888-8888</string>
+    <string name="customer_service_qq">客服QQ：37115958</string>
+    <string name="customer_service_email">客服邮箱：service@example.com</string>
+    <string name="address">地址</string>
+    <string name="company_address">江苏省苏州市高新区科技创新大厦</string>
+    <string name="weibo">微博</string>
+    <string name="back_to_profile">返回个人中心</string>
+</resources>
