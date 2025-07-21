@@ -52,38 +52,67 @@ public class CaseDetailActivity extends AppCompatActivity {
     }
 
     private void displayCaseData(String id, String title, String date, String description, String imageUrl) {
-        caseTitle.setText(title);
-        caseDate.setText(date);
+        // 设置标题和日期
+        if (title != null && !title.isEmpty()) {
+            caseTitle.setText(title);
+        }
+        
+        if (date != null && !date.isEmpty()) {
+            caseDate.setText(date);
+        }
         
         // 处理描述中的换行符
-        if (description != null && description.contains("\n\n")) {
-            String[] paragraphs = description.split("\n\n");
-            StringBuilder formattedDescription = new StringBuilder();
-            for (String paragraph : paragraphs) {
-                formattedDescription.append(paragraph).append("\n\n");
+        if (description != null && !description.isEmpty()) {
+            if (description.contains("\n\n")) {
+                String[] paragraphs = description.split("\n\n");
+                StringBuilder formattedDescription = new StringBuilder();
+                for (String paragraph : paragraphs) {
+                    formattedDescription.append(paragraph).append("\n\n");
+                }
+                caseDescription.setText(formattedDescription.toString().trim());
+            } else {
+                caseDescription.setText(description);
             }
-            caseDescription.setText(formattedDescription.toString().trim());
-        } else {
-            caseDescription.setText(description);
         }
         
-        // 根据案例ID设置图片
-        switch (id) {
-            case "case1":
-                caseImage.setImageResource(R.drawable.ic_image);
-                break;
-            case "case2":
-                caseImage.setImageResource(R.drawable.ic_sd_card);
-                break;
-            case "case3":
-                caseImage.setImageResource(R.drawable.ic_wechat);
-                break;
-            case "case4":
-                caseImage.setImageResource(R.drawable.ic_audio);
-                break;
-            default:
-                caseImage.setImageResource(R.drawable.ic_file);
-                break;
+        // 根据案例ID或imageUrl设置图片
+        int imageResource = R.drawable.ic_file; // 默认图片
+        
+        if (id != null) {
+            switch (id) {
+                case "case1":
+                    imageResource = R.drawable.ic_image;
+                    break;
+                case "case2":
+                    imageResource = R.drawable.ic_sd_card;
+                    break;
+                case "case3":
+                    imageResource = R.drawable.ic_wechat;
+                    break;
+                case "case4":
+                    imageResource = R.drawable.ic_audio;
+                    break;
+            }
+        } else if (imageUrl != null) {
+            // 如果有图片URL，根据URL设置图片
+            switch (imageUrl) {
+                case "image_photo":
+                    imageResource = R.drawable.ic_image;
+                    break;
+                case "image_sdcard":
+                    imageResource = R.drawable.ic_sd_card;
+                    break;
+                case "image_wechat":
+                    imageResource = R.drawable.ic_wechat;
+                    break;
+                case "image_audio":
+                    imageResource = R.drawable.ic_audio;
+                    break;
+            }
         }
+        
+        // 设置图片资源
+        caseImage.setImageResource(imageResource);
+        caseImage.setVisibility(View.VISIBLE);
     }
 } 

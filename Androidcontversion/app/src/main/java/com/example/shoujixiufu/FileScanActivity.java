@@ -363,7 +363,7 @@ public class FileScanActivity extends AppCompatActivity {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle(R.string.recovery_dialog_title)
                 .setMessage(R.string.recovery_dialog_content)
-                .setNegativeButton(R.string.cancel, (dialog, which) -> dialog.dismiss())
+                .setNegativeButton(R.string.cancel_action, (dialog, which) -> dialog.dismiss())
                 .setPositiveButton(R.string.recover, (dialog, which) -> navigateToPayment())
                 .setCancelable(false)
                 .show();
@@ -374,8 +374,8 @@ public class FileScanActivity extends AppCompatActivity {
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
             builder.setTitle(R.string.scan_exit_confirm)
                     .setMessage(R.string.scan_exit_desc)
-                    .setNegativeButton(R.string.cancel, (dialog, which) -> dialog.dismiss())
-                    .setPositiveButton(R.string.confirm, (dialog, which) -> finish())
+                    .setNegativeButton(R.string.cancel_action, (dialog, which) -> dialog.dismiss())
+                    .setPositiveButton(R.string.confirm_action, (dialog, which) -> finish())
                     .show();
         } else {
             finish();

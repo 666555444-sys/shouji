@@ -68,21 +68,18 @@ public class MainActivity extends AppCompatActivity {
         });
 
         navCases.setOnClickListener(v -> {
-            // Navigate to cases screen
-            // Intent intent = new Intent(this, CasesActivity.class);
-            // startActivity(intent);
+            Intent intent = new Intent(this, CasesActivity.class);
+            startActivity(intent);
         });
 
         navOrder.setOnClickListener(v -> {
-            // Navigate to order screen
-            // Intent intent = new Intent(this, OrderActivity.class);
-            // startActivity(intent);
+            Intent intent = new Intent(this, OrderActivity.class);
+            startActivity(intent);
         });
 
         navProfile.setOnClickListener(v -> {
-            // Navigate to profile screen
-            // Intent intent = new Intent(this, ProfileActivity.class);
-            // startActivity(intent);
+            Intent intent = new Intent(this, ProfileActivity.class);
+            startActivity(intent);
         });
     }
 

@@ -92,24 +92,29 @@ public class CasesActivity extends AppCompatActivity implements CaseAdapter.OnCa
         });
 
         navOrder.setOnClickListener(v -> {
-            // TODO: 跳转到订单页面
-            // startActivity(new Intent(this, OrderActivity.class));
+            startActivity(new Intent(this, OrderActivity.class));
         });
 
         navProfile.setOnClickListener(v -> {
-            // TODO: 跳转到个人页面
-            // startActivity(new Intent(this, ProfileActivity.class));
+            startActivity(new Intent(this, ProfileActivity.class));
         });
     }
 
     @Override
     public void onCaseClick(CaseModel caseModel) {
+        if (caseModel == null) {
+            return;
+        }
+        
         Intent intent = new Intent(this, CaseDetailActivity.class);
+        
+        // 传递案例数据到详情页面
         intent.putExtra("case_id", caseModel.getId());
         intent.putExtra("case_title", caseModel.getTitle());
         intent.putExtra("case_date", caseModel.getDate());
         intent.putExtra("case_description", caseModel.getDescription());
         intent.putExtra("case_image", caseModel.getImageUrl());
+        
         startActivity(intent);
     }
 } 

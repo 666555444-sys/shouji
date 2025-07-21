@@ -4,58 +4,216 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/blue_light"
     tools:context=".SplashActivity">
 
-    <!-- 应用Logo -->
-    <ImageView
-        android:id="@+id/splash_logo"
-        android:layout_width="150dp"
-        android:layout_height="150dp"
-        android:src="@drawable/app_logo"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.4" />
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/bg_splash_gradient">
 
-    <!-- 应用名称 -->
-    <TextView
-        android:id="@+id/splash_app_name"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
-        android:text="@string/app_name"
-        android:textColor="@color/white"
-        android:textSize="28sp"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/splash_logo" />
+        <!-- 装饰性气泡 -->
+        <View
+            android:id="@+id/bubble1"
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            android:layout_alignParentTop="true"
+            android:layout_marginStart="40dp"
+            android:layout_marginTop="80dp"
+            android:alpha="0.1"
+            android:background="@drawable/bg_bubble" />
 
-    <!-- 应用标语 -->
-    <TextView
-        android:id="@+id/splash_slogan"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:text="@string/safe_efficient"
-        android:textColor="@color/white"
-        android:textSize="16sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/splash_app_name" />
+        <View
+            android:id="@+id/bubble2"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginEnd="40dp"
+            android:layout_marginBottom="160dp"
+            android:alpha="0.1"
+            android:background="@drawable/bg_bubble" />
 
-    <!-- 底部版权信息 -->
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="24dp"
-        android:text="© 2024 手机数据帮手"
-        android:textColor="#80FFFFFF"
-        android:textSize="12sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        <View
+            android:id="@+id/bubble3"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="60dp"
+            android:alpha="0.1"
+            android:background="@drawable/bg_bubble" />
+
+        <View
+            android:id="@+id/bubble4"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_alignParentEnd="true"
+            android:layout_marginTop="120dp"
+            android:layout_marginEnd="50dp"
+            android:alpha="0.1"
+            android:background="@drawable/bg_bubble" />
+
+        <View
+            android:id="@+id/bubble5"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_alignParentBottom="true"
+            android:layout_marginStart="100dp"
+            android:layout_marginBottom="120dp"
+            android:alpha="0.1"
+            android:background="@drawable/bg_bubble" />
+
+        <!-- 状态栏（模拟） -->
+        <TextView
+            android:id="@+id/statusBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="15dp"
+            android:text="12:30"
+            android:textColor="@color/white"
+            android:textSize="14sp" />
+
+        <!-- Logo设计 -->
+        <RelativeLayout
+            android:id="@+id/logoContainer"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="160dp">
+
+            <RelativeLayout
+                android:id="@+id/logoOuter"
+                android:layout_width="130dp"
+                android:layout_height="130dp"
+                android:layout_centerInParent="true"
+                android:background="@drawable/bg_logo_outer">
+
+                <RelativeLayout
+                    android:id="@+id/logoInner"
+                    android:layout_width="110dp"
+                    android:layout_height="110dp"
+                    android:layout_centerInParent="true"
+                    android:background="@drawable/bg_logo_inner">
+
+                    <RelativeLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true">
+
+                        <ImageView
+                            android:id="@+id/phoneIcon"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerHorizontal="true"
+                            android:src="@drawable/ic_phone"
+                            app:tint="@color/white" />
+
+                        <ImageView
+                            android:id="@+id/dataIcon"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@id/phoneIcon"
+                            android:layout_marginTop="-10dp"
+                            android:layout_marginStart="30dp"
+                            android:layout_toEndOf="@id/phoneIcon"
+                            android:rotation="10"
+                            android:src="@drawable/ic_database"
+                            app:tint="@color/white" />
+
+                        <ImageView
+                            android:id="@+id/arrowIcon"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignTop="@id/phoneIcon"
+                            android:layout_marginStart="20dp"
+                            android:layout_toEndOf="@id/phoneIcon"
+                            android:src="@drawable/ic_arrow_up"
+                            app:tint="@color/white" />
+
+                        <ImageView
+                            android:id="@+id/shieldIcon"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@id/phoneIcon"
+                            android:layout_centerHorizontal="true"
+                            android:layout_marginTop="10dp"
+                            android:alpha="0.8"
+                            android:src="@drawable/ic_shield"
+                            app:tint="@color/white" />
+                    </RelativeLayout>
+                </RelativeLayout>
+            </RelativeLayout>
+        </RelativeLayout>
+
+        <!-- 应用名称和口号 -->
+        <TextView
+            android:id="@+id/appName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/logoContainer"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="40dp"
+            android:text="@string/data_recovery_expert"
+            android:textColor="@color/white"
+            android:textSize="24sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/appSlogan"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/appName"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="10dp"
+            android:alpha="0.9"
+            android:text="@string/safe_efficient_privacy_assured"
+            android:textColor="@color/white"
+            android:textSize="14sp" />
+
+        <!-- 加载动画 -->
+        <LinearLayout
+            android:id="@+id/loadingContainer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/appSlogan"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="60dp"
+            android:orientation="horizontal">
+
+            <View
+                android:id="@+id/loadingDot1"
+                android:layout_width="8dp"
+                android:layout_height="8dp"
+                android:layout_margin="6dp"
+                android:background="@drawable/bg_loading_dot" />
+
+            <View
+                android:id="@+id/loadingDot2"
+                android:layout_width="8dp"
+                android:layout_height="8dp"
+                android:layout_margin="6dp"
+                android:background="@drawable/bg_loading_dot" />
+
+            <View
+                android:id="@+id/loadingDot3"
+                android:layout_width="8dp"
+                android:layout_height="8dp"
+                android:layout_margin="6dp"
+                android:background="@drawable/bg_loading_dot" />
+        </LinearLayout>
+
+        <!-- 底部公司信息 -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="30dp"
+            android:alpha="0.6"
+            android:text="@string/copyright_info"
+            android:textColor="@color/white"
+            android:textSize="12sp" />
+    </RelativeLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout> 

@@ -57,6 +57,77 @@
             android:name=".FileScanActivity"
             android:exported="false"
             android:theme="@style/Theme.Shoujixiufu.NoActionBar" />
+        <activity 
+            android:name=".OrderActivity"
+            android:exported="false"
+            android:theme="@style/Theme.Shoujixiufu.NoActionBar" />
+        <activity 
+            android:name=".ProfileActivity"
+            android:exported="false"
+            android:theme="@style/Theme.Shoujixiufu.NoActionBar" />
+        <activity 
+            android:name=".SettingsActivity"
+            android:exported="false"
+            android:theme="@style/Theme.Shoujixiufu.NoActionBar" />
+        <activity 
+            android:name=".ServiceAgreementActivity"
+            android:exported="false"
+            android:theme="@style/Theme.Shoujixiufu.NoActionBar" />
+        <activity 
+            android:name=".ScanActivity"
+            android:exported="false"
+            android:theme="@style/Theme.Shoujixiufu.NoActionBar" />
+        <activity 
+            android:name=".RecoveryReminderActivity"
+            android:exported="false"
+            android:theme="@style/Theme.Shoujixiufu.NoActionBar"
+            android:windowSoftInputMode="stateAlwaysHidden" />
+        <activity
+            android:name=".SplashActivity"
+            android:exported="false"
+            android:theme="@style/Theme.Shoujixiufu.NoActionBar"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".SupervisionComplaintActivity"
+            android:exported="false"
+            android:theme="@style/Theme.Shoujixiufu.NoActionBar"
+            android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name=".TransferActivity"
+            android:exported="false"
+            android:theme="@style/Theme.Shoujixiufu.NoActionBar" />
+        <activity
+            android:name=".VideoRepairActivity"
+            android:exported="false"
+            android:theme="@style/Theme.Shoujixiufu.NoActionBar" />
+        <activity
+            android:name=".VideoScanActivity"
+            android:exported="false"
+            android:theme="@style/Theme.Shoujixiufu.NoActionBar" />
+        <activity
+            android:name=".PaymentActivity"
+            android:exported="false"
+            android:theme="@style/Theme.Shoujixiufu.NoActionBar" />
+        <activity
+            android:name=".PaymentSuccessActivity"
+            android:exported="false"
+            android:theme="@style/Theme.Shoujixiufu.NoActionBar" />
+        <activity
+            android:name=".PrivacyPolicyActivity"
+            android:exported="false"
+            android:theme="@style/Theme.Shoujixiufu.NoActionBar" />
+        <activity
+            android:name=".ImageCropActivity"
+            android:exported="false"
+            android:theme="@style/Theme.Shoujixiufu.NoActionBar" />
+        <activity
+            android:name=".ImageScaleActivity"
+            android:exported="false"
+            android:theme="@style/Theme.Shoujixiufu.NoActionBar" />
+        <activity
+            android:name=".FileSendActivity"
+            android:exported="false"
+            android:theme="@style/Theme.Shoujixiufu.NoActionBar" />
     </application>
 
 </manifest>

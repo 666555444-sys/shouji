@@ -464,7 +464,7 @@
                                 android:layout_width="16dp"
                                 android:layout_height="16dp"
                                 android:layout_gravity="center"
-                                android:contentDescription="@string/qq"
+                                android:contentDescription="@string/qq_item"
                                 android:src="@drawable/ic_qq"
                                 app:tint="#1EC0FF" />
                         </androidx.cardview.widget.CardView>
@@ -570,7 +570,7 @@
                             android:layout_width="20dp"
                             android:layout_height="20dp"
                             android:layout_gravity="center"
-                            android:contentDescription="@string/wechat"
+                            android:contentDescription="@string/wechat_item"
                             android:src="@drawable/ic_wechat"
                             app:tint="#666" />
                     </androidx.cardview.widget.CardView>

@@ -1,34 +1,127 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="purple_200">#FFBB86FC</color>
-    <color name="purple_500">#FF6200EE</color>
-    <color name="purple_700">#FF3700B3</color>
-    <color name="teal_200">#FF03DAC5</color>
-    <color name="teal_700">#FF018786</color>
-    <color name="black">#FF000000</color>
-    <color name="white">#FFFFFFFF</color>
+    <!-- 基础颜色 -->
+    <color name="colorPrimary">#1ec0ff</color>
+    <color name="colorPrimaryDark">#0099cc</color>
+    <color name="colorAccent">#4facfe</color>
+    <color name="white">#FFFFFF</color>
+    <color name="black">#000000</color>
+    <color name="transparent">#00000000</color>
     
-    <!-- 添加自定义颜色 -->
+    <!-- 蓝色系列 -->
     <color name="blue_primary">#4facfe</color>
     <color name="blue_secondary">#3a8ee6</color>
     <color name="blue_light">#9ecfff</color>
     <color name="blue_lighter">#c8e5ff</color>
+    <color name="blue_dark">#0066cc</color>
+    
+    <!-- 黄色系列 -->
     <color name="yellow_primary">#FFC107</color>
     <color name="yellow_light">#FFECB3</color>
+    
+    <!-- 文本颜色 -->
+    <color name="text_color">#333333</color>
+    <color name="text_color_secondary">#666666</color>
+    <color name="text_color_tertiary">#999999</color>
     <color name="text_primary">#333333</color>
     <color name="text_secondary">#666666</color>
     <color name="text_tertiary">#999999</color>
     <color name="text_muted">#AAAAAA</color>
-    <color name="border_color">#F0F0F0</color>
-    <color name="background_light">#F8F9FA</color>
-    <color name="background_color">#FFFFFF</color>
-    <color name="primary_color">#4facfe</color>
-    <color name="primary_light">#9ecfff</color>
+    <color name="text_hint">#999999</color>
+    
+    <!-- 警告和提示颜色 -->
+    <color name="warning_light">#fff3cd</color>
+    <color name="warning_dark">#856404</color>
+    <color name="warning_text">#856404</color>
     <color name="warning_color">#F44336</color>
+    
+    <!-- 服务相关颜色 -->
+    <color name="service_hours_text">#666666</color>
+    
+    <!-- 背景颜色 -->
+    <color name="background_color">#f5f7fa</color>
+    <color name="primary_color">#1ec0ff</color>
+    <color name="secondary_color">#4facfe</color>
+    <color name="primary_light">#9ecfff</color>
+    <color name="background_light">#F8F9FA</color>
+    <color name="background">#f5f7fa</color>
+    <color name="background_dark">#121212</color>
+    <color name="background_dark_lighter">#1f1f1f</color>
+    
+    <!-- 按钮颜色 -->
+    <color name="button_primary">#1ec0ff</color>
+    <color name="button_secondary">#4facfe</color>
+    <color name="button_disabled">#cccccc</color>
+    
+    <!-- 边框颜色 -->
+    <color name="border_color">#e0e0e0</color>
+    <color name="border_light">#f0f0f0</color>
+    
+    <!-- 状态颜色 -->
+    <color name="success_color">#28a745</color>
+    <color name="error_color">#dc3545</color>
+    <color name="info_color">#17a2b8</color>
+    
+    <!-- 支付相关颜色 -->
+    <color name="payment_primary">#5367e4</color>
+    <color name="payment_success">#28a745</color>
+    <color name="purple_payment">#9C27B0</color>
+    <color name="purple_badge">#9C27B0</color>
+    
+    <!-- 图片处理相关颜色 -->
+    <color name="image_crop_overlay">#80000000</color>
+    <color name="image_scale_handle">#ffffff</color>
+    
+    <!-- 文件相关颜色 -->
+    <color name="file_icon_background">#f8f9fa</color>
+    <color name="file_selected">#e3f2fd</color>
+    
+    <!-- 导航栏颜色 -->
+    <color name="nav_active">#1ec0ff</color>
+    <color name="nav_inactive">#999999</color>
+    
+    <!-- 卡片颜色 -->
+    <color name="card_background">#ffffff</color>
+    <color name="card_shadow">#20000000</color>
+    
+    <!-- 分割线颜色 -->
+    <color name="divider_color">#e0e0e0</color>
+    
+    <!-- 联系相关颜色 -->
     <color name="contact_action_background">#F0F8FF</color>
     <color name="contact_icon_background">#E6F0FF</color>
-    <color name="edit_text_border">#E0E0E0</color>
     <color name="contact_primary">#4285F4</color>
+    
+    <!-- 服务相关颜色 -->
     <color name="service_hours_background">#E8F5E9</color>
-    <color name="purple_payment">#9C27B0</color>
+    
+    <!-- 输入框相关颜色 -->
+    <color name="edit_text_border">#E0E0E0</color>
+    
+    <!-- 进度条颜色 -->
+    <color name="progress_background">#f0f0f0</color>
+    <color name="progress_foreground">#1ec0ff</color>
+    
+    <!-- 输入框颜色 -->
+    <color name="input_background">#ffffff</color>
+    <color name="input_border">#e0e0e0</color>
+    <color name="input_focus">#1ec0ff</color>
+    
+    <!-- 阴影颜色 -->
+    <color name="shadow_light">#10000000</color>
+    <color name="shadow_medium">#30000000</color>
+    <color name="shadow_dark">#50000000</color>
+    
+    <!-- 新增颜色 -->
+    <color name="red">#ff3b30</color>
+    <color name="yellow">#ffeb3b</color>
+    <color name="orange_gradient_start">#ffb870</color>
+    <color name="orange_gradient_end">#ff9040</color>
+    <color name="blue_gradient_start">#4facfe</color>
+    <color name="blue_gradient_end">#00f2fe</color>
+    <color name="light_gray">#f8f9fa</color>
+    <color name="divider">#f0f0f0</color>
+    <color name="brown_text">#6b4423</color>
+    <color name="orange_gradient_light">#ffecd2</color>
+    <color name="white_50">#80FFFFFF</color>
 </resources>

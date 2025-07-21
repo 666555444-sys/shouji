@@ -413,7 +413,7 @@
                         android:layout_width="30dp"
                         android:layout_height="30dp"
                         android:background="@drawable/bg_circle_light_blue"
-                        android:contentDescription="@string/qq"
+                        android:contentDescription="@string/qq_item"
                         android:padding="6dp"
                         android:src="@drawable/ic_qq"
                         app:tint="@color/colorPrimary" />
@@ -505,7 +505,7 @@
                     android:layout_height="36dp"
                     android:layout_marginEnd="10dp"
                     android:background="@drawable/bg_circle_light_gray"
-                    android:contentDescription="@string/wechat"
+                    android:contentDescription="@string/wechat_item"
                     android:padding="8dp"
                     android:src="@drawable/ic_wechat_bill" />
 
