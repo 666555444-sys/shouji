@@ -3,6 +3,7 @@ package com.example.shoujixiufu;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -24,17 +25,21 @@ public class CasesActivity extends AppCompatActivity implements CaseAdapter.OnCa
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cases);
 
-        // 初始化RecyclerView
-        casesRecyclerView = findViewById(R.id.cases_recycler_view);
-        casesRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        
-        // 创建并设置适配器
-        List<CaseModel> caseList = createCaseData();
-        caseAdapter = new CaseAdapter(this, caseList, this);
-        casesRecyclerView.setAdapter(caseAdapter);
-        
-        // 设置底部导航点击事件
-        setupBottomNavigation();
+        try {
+            // 初始化RecyclerView
+            casesRecyclerView = findViewById(R.id.cases_recycler_view);
+            casesRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+            
+            // 创建并设置适配器
+            List<CaseModel> caseList = createCaseData();
+            caseAdapter = new CaseAdapter(this, caseList, this);
+            casesRecyclerView.setAdapter(caseAdapter);
+            
+            // 设置底部导航点击事件
+            setupBottomNavigation();
+        } catch (Exception e) {
+            Toast.makeText(this, "加载案例列表失败，请稍后重试", Toast.LENGTH_SHORT).show();
+        }
     }
 
     private List<CaseModel> createCaseData() {
@@ -106,15 +111,19 @@ public class CasesActivity extends AppCompatActivity implements CaseAdapter.OnCa
             return;
         }
         
-        Intent intent = new Intent(this, CaseDetailActivity.class);
-        
-        // 传递案例数据到详情页面
-        intent.putExtra("case_id", caseModel.getId());
-        intent.putExtra("case_title", caseModel.getTitle());
-        intent.putExtra("case_date", caseModel.getDate());
-        intent.putExtra("case_description", caseModel.getDescription());
-        intent.putExtra("case_image", caseModel.getImageUrl());
-        
-        startActivity(intent);
+        try {
+            Intent intent = new Intent(this, CaseDetailActivity.class);
+            
+            // 传递案例数据到详情页面
+            intent.putExtra("case_id", caseModel.getId());
+            intent.putExtra("case_title", caseModel.getTitle());
+            intent.putExtra("case_date", caseModel.getDate());
+            intent.putExtra("case_description", caseModel.getDescription());
+            intent.putExtra("case_image", caseModel.getImageUrl());
+            
+            startActivity(intent);
+        } catch (Exception e) {
+            Toast.makeText(this, "打开案例详情失败，请稍后重试", Toast.LENGTH_SHORT).show();
+        }
     }
 } 

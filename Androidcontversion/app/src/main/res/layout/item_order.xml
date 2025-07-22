@@ -126,8 +126,8 @@
                 android:layout_height="36dp"
                 android:text="@string/view_order_detail"
                 android:textSize="12sp"
-                android:textColor="@color/text_secondary"
-                android:background="@drawable/bg_button_outline"
+                android:textColor="@color/white"
+                android:background="@drawable/bg_button_primary"
                 android:layout_marginEnd="8dp" />
 
             <Button
@@ -136,8 +136,8 @@
                 android:layout_height="36dp"
                 android:text="@string/contact_service"
                 android:textSize="12sp"
-                android:textColor="@color/white"
-                android:background="@drawable/bg_button_primary" />
+                android:textColor="@color/text_secondary"
+                android:background="@drawable/bg_button_outline" />
         </LinearLayout>
     </LinearLayout>
 </androidx.cardview.widget.CardView> 

@@ -18,7 +18,7 @@ public class FeatureAdapter extends RecyclerView.Adapter<FeatureAdapter.FeatureV
     private OnFeatureClickListener listener;
 
     public interface OnFeatureClickListener {
-        void onFeatureClick();
+        void onFeatureClick(FeatureModel feature);
     }
 
     public FeatureAdapter(List<FeatureModel> features, OnFeatureClickListener listener) {
@@ -42,13 +42,22 @@ public class FeatureAdapter extends RecyclerView.Adapter<FeatureAdapter.FeatureV
         holder.description.setText(feature.getDescription());
         holder.badge.setText(feature.getBadgeText());
         
-        // Set card background based on premium status
-        if (feature.isPremium()) {
+        // 检查是否为图片缩放或裁剪功能，并设置为黄色
+        if (feature.getTitle().equals("图片缩放") || feature.getTitle().equals("图片裁剪")) {
+            holder.card.setBackgroundResource(R.drawable.bg_card_free);
+            holder.badge.setBackgroundResource(R.drawable.badge_free);
+            holder.title.setTextColor(holder.itemView.getContext().getResources().getColor(R.color.text_primary));
+            holder.description.setTextColor(holder.itemView.getContext().getResources().getColor(R.color.text_primary));
+        }
+        // 其他高级功能设置为蓝色
+        else if (feature.isPremium()) {
             holder.card.setBackgroundResource(R.drawable.bg_card_premium);
             holder.badge.setBackgroundResource(R.drawable.badge_premium);
             holder.title.setTextColor(holder.itemView.getContext().getResources().getColor(R.color.white));
             holder.description.setTextColor(holder.itemView.getContext().getResources().getColor(R.color.white));
-        } else {
+        }
+        // 免费功能
+        else {
             holder.card.setBackgroundResource(R.drawable.bg_card_free);
             holder.badge.setBackgroundResource(R.drawable.badge_free);
             holder.title.setTextColor(holder.itemView.getContext().getResources().getColor(R.color.text_primary));
@@ -56,11 +65,8 @@ public class FeatureAdapter extends RecyclerView.Adapter<FeatureAdapter.FeatureV
         }
         
         holder.card.setOnClickListener(v -> {
-            if (feature.isPremium()) {
-                listener.onFeatureClick();
-            } else {
-                // Handle free feature click
-                // For example, navigate to the feature activity
+            if (listener != null) {
+                listener.onFeatureClick(feature);
             }
         });
     }

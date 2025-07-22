@@ -17,14 +17,10 @@
         android:orientation="horizontal"
         app:layout_constraintTop_toTopOf="parent">
 
-        <ImageView
+        <!-- 返回按钮已删除 -->
+        <View
             android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:src="@drawable/ic_back"
-            android:layout_gravity="center_vertical"
-            android:clickable="true"
-            android:focusable="true"
-            android:onClick="onBackPressed" />
+            android:layout_height="24dp" />
 
         <TextView
             android:layout_width="0dp"

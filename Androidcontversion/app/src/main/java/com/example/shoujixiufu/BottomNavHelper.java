@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import androidx.appcompat.app.AppCompatActivity;
 
 /**
  * 底部导航栏帮助类，确保统一的导航视觉效果和交互
@@ -156,31 +157,65 @@ public class BottomNavHelper {
                                           LinearLayout navProfile) {
         if (navHome != null) {
             navHome.setOnClickListener(v -> {
-                Intent intent = new Intent(context, MainActivity.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                context.startActivity(intent);
+                // 如果当前不是MainActivity，则跳转到MainActivity并关闭当前页面
+                if (!(context instanceof MainActivity)) {
+                    Intent intent = new Intent(context, MainActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                    context.startActivity(intent);
+                    
+                    // 关闭当前Activity
+                    if (context instanceof AppCompatActivity) {
+                        ((AppCompatActivity) context).finish();
+                    }
+                }
             });
         }
         
         if (navCases != null) {
             navCases.setOnClickListener(v -> {
-                Intent intent = new Intent(context, CasesActivity.class);
-                context.startActivity(intent);
+                // 如果当前不是CasesActivity，则跳转到CasesActivity
+                if (!(context instanceof CasesActivity)) {
+                    Intent intent = new Intent(context, CasesActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                    context.startActivity(intent);
+                    
+                    // 关闭当前Activity
+                    if (context instanceof AppCompatActivity) {
+                        ((AppCompatActivity) context).finish();
+                    }
+                }
             });
         }
         
         if (navOrder != null) {
             navOrder.setOnClickListener(v -> {
-                Intent intent = new Intent(context, OrderActivity.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                context.startActivity(intent);
+                // 如果当前不是OrderActivity，则跳转到OrderActivity
+                if (!(context instanceof OrderActivity)) {
+                    Intent intent = new Intent(context, OrderActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                    context.startActivity(intent);
+                    
+                    // 关闭当前Activity
+                    if (context instanceof AppCompatActivity) {
+                        ((AppCompatActivity) context).finish();
+                    }
+                }
             });
         }
         
         if (navProfile != null) {
             navProfile.setOnClickListener(v -> {
-                Intent intent = new Intent(context, ProfileActivity.class);
-                context.startActivity(intent);
+                // 如果当前不是ProfileActivity，则跳转到ProfileActivity
+                if (!(context instanceof ProfileActivity)) {
+                    Intent intent = new Intent(context, ProfileActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                    context.startActivity(intent);
+                    
+                    // 关闭当前Activity
+                    if (context instanceof AppCompatActivity) {
+                        ((AppCompatActivity) context).finish();
+                    }
+                }
             });
         }
     }

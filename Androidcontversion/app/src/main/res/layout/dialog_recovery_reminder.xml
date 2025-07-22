@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@android:color/transparent">
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:backgroundTint="#FFFBEE"
+        app:cardCornerRadius="15dp"
+        app:cardElevation="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.5"
+        android:layout_marginTop="50dp"
+        android:layout_marginBottom="50dp">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <!-- 永久有效徽章 -->
+            <TextView
+                android:id="@+id/permanent_badge"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="15dp"
+                android:layout_marginTop="15dp"
+                android:background="@drawable/badge_red_bg"
+                android:paddingHorizontal="8dp"
+                android:paddingVertical="3dp"
+                android:text="@string/permanent_valid"
+                android:textColor="@android:color/white"
+                android:textSize="12sp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <!-- 关闭按钮 -->
+            <ImageButton
+                android:id="@+id/close_button"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_marginTop="15dp"
+                android:layout_marginEnd="15dp"
+                android:background="@android:color/transparent"
+                android:contentDescription="关闭"
+                android:src="@drawable/ic_close"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:tint="#999999" />
+
+            <!-- 文件夹图标区域 -->
+            <FrameLayout
+                android:id="@+id/folder_icon_container"
+                android:layout_width="match_parent"
+                android:layout_height="120dp"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <!-- 文件夹图标将在代码中添加 -->
+                <FrameLayout
+                    android:id="@+id/folder_icon"
+                    android:layout_width="100dp"
+                    android:layout_height="80dp"
+                    android:layout_gravity="center">
+
+                    <!-- 文件夹顶部 -->
+                    <View
+                        android:id="@+id/folder_top"
+                        android:layout_width="50dp"
+                        android:layout_height="20dp"
+                        android:layout_gravity="top|start"
+                        android:background="@drawable/folder_top_bg" />
+
+                    <!-- 文件夹主体 -->
+                    <View
+                        android:id="@+id/folder_base"
+                        android:layout_width="100dp"
+                        android:layout_height="56dp"
+                        android:layout_gravity="bottom"
+                        android:background="@drawable/folder_base_bg" />
+
+                    <!-- 后方文档 -->
+                    <View
+                        android:id="@+id/document_back"
+                        android:layout_width="60dp"
+                        android:layout_height="56dp"
+                        android:layout_gravity="center"
+                        android:layout_marginTop="6dp"
+                        android:layout_marginStart="4dp"
+                        android:background="@drawable/document_bg"
+                        android:rotation="3" />
+
+                    <!-- 前方文档 -->
+                    <View
+                        android:id="@+id/document_front"
+                        android:layout_width="65dp"
+                        android:layout_height="60dp"
+                        android:layout_gravity="center"
+                        android:layout_marginTop="-6dp"
+                        android:background="@drawable/document_bg"
+                        android:rotation="-5" />
+
+                </FrameLayout>
+
+                <!-- 装饰星星 -->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="✦"
+                    android:textColor="#FFEB3B"
+                    android:textSize="16sp"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginStart="40dp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="✦"
+                    android:textColor="#FFEB3B"
+                    android:textSize="16sp"
+                    android:layout_marginTop="35dp"
+                    android:layout_marginStart="250dp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="✦"
+                    android:textColor="#FFEB3B"
+                    android:textSize="16sp"
+                    android:layout_marginTop="95dp"
+                    android:layout_marginStart="50dp" />
+            </FrameLayout>
+
+            <!-- 内容区域 -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="20dp"
+                app:layout_constraintTop_toBottomOf="@id/folder_icon_container">
+
+                <TextView
+                    android:id="@+id/reminder_title"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/reminder"
+                    android:textAlignment="center"
+                    android:textColor="#6B4423"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:layout_marginBottom="15dp" />
+
+                <TextView
+                    android:id="@+id/reminder_message"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/repair_asap_message"
+                    android:textAlignment="center"
+                    android:textColor="#6B4423"
+                    android:textSize="24sp"
+                    android:textStyle="bold"
+                    android:layout_marginBottom="30dp" />
+
+                <Button
+                    android:id="@+id/repair_now_button"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/orange_gradient_button_bg"
+                    android:text="@string/repair_now"
+                    android:textColor="@android:color/white"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:padding="15dp" />
+
+            </LinearLayout>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.cardview.widget.CardView>
+
+</androidx.constraintlayout.widget.ConstraintLayout> 

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- 文档底色 -->
+    <item>
+        <shape android:shape="rectangle">
+            <gradient
+                android:angle="270"
+                android:endColor="#F9F9F9"
+                android:startColor="#FFFFFF" />
+            <corners android:radius="4dp" />
+        </shape>
+    </item>
+    
+    <!-- 上方横线 -->
+    <item android:top="10dp" android:left="10dp" android:right="10dp"
+          android:height="5dp">
+        <shape android:shape="rectangle">
+            <gradient
+                android:angle="0"
+                android:endColor="#FFB38A"
+                android:startColor="#FF9966" />
+            <corners android:radius="2dp" />
+        </shape>
+    </item>
+    
+    <!-- 下方横线 -->
+    <item android:top="20dp" android:left="10dp" android:right="20dp"
+          android:height="5dp">
+        <shape android:shape="rectangle">
+            <gradient
+                android:angle="0"
+                android:endColor="#FFB38A"
+                android:startColor="#FF9966" />
+            <corners android:radius="2dp" />
+        </shape>
+    </item>
+</layer-list> 

@@ -141,19 +141,22 @@ public class OrderActivity extends AppCompatActivity implements OrderAdapter.Ord
 
     @Override
     public void onOrderDetailClick(Order order) {
-        // 跳转到订单详情页面
-        Toast.makeText(this, "查看订单详情: " + order.getOrderNumber(), Toast.LENGTH_SHORT).show();
-        // TODO: 实现订单详情页面跳转
-        // Intent intent = new Intent(this, OrderDetailActivity.class);
-        // intent.putExtra("order", order);
-        // startActivity(intent);
+        // 跳转到支付页面
+        Intent intent = new Intent(this, PaymentActivity.class);
+        intent.putExtra("service_type", order.getTitle());
+        intent.putExtra("service_price", "¥" + order.getAmount());
+        startActivity(intent);
     }
 
     @Override
     public void onContactServiceClick(Order order) {
-        // 联系客服
-        Toast.makeText(this, "联系客服: " + order.getOrderNumber(), Toast.LENGTH_SHORT).show();
-        // TODO: 实现联系客服功能
+        // 跳转到联系客服页面
+        try {
+            Intent intent = new Intent(this, ContactServiceActivity.class);
+            startActivity(intent);
+        } catch (Exception e) {
+            Toast.makeText(this, "打开客服页面失败，请稍后再试", Toast.LENGTH_SHORT).show();
+        }
     }
     
     // 处理返回按钮点击

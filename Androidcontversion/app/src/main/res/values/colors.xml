@@ -8,6 +8,11 @@
     <color name="black">#000000</color>
     <color name="transparent">#00000000</color>
     
+    <!-- 绿色系列 -->
+    <color name="green_primary">#2ed573</color>
+    <color name="green_light">#7bed9f</color>
+    <color name="green_dark">#1e9c55</color>
+    
     <!-- 蓝色系列 -->
     <color name="blue_primary">#4facfe</color>
     <color name="blue_secondary">#3a8ee6</color>

@@ -26,7 +26,7 @@
     <string name="order_status_completed">已完成</string>
     <string name="order_status_cancelled">已取消</string>
     <string name="order_status_pending">待支付</string>
-    <string name="view_order_detail">查看详情</string>
+    <string name="view_order_detail">立即付款</string>
     <string name="contact_service">联系客服</string>
     
     <!-- Feature card strings -->
@@ -161,6 +161,21 @@
     <string name="video_recovery_success_desc">视频深度扫描服务已开通，立即查看完整扫描结果</string>
     <string name="audio_recovery_success_desc">音频深度扫描服务已开通，立即查看完整扫描结果</string>
     <string name="file_recovery_success_desc">文件深度扫描服务已开通，立即查看完整扫描结果</string>
+    
+    <!-- New payment success strings -->
+    <string name="congrats_payment_success">+恭喜支付成功+</string>
+    <string name="phone_form_title">手机号码：方便工程师好与您联系</string>
+    <string name="phone_form_subtitle">仅差最后一步，请您填写正确的手机号码，\n以便工程师为您服务</string>
+    <string name="phone_input_hint">请输入您的手机号码</string>
+    <string name="submit">提交</string>
+    <string name="tips_title">温馨提示</string>
+    <string name="tip_1">预留手机号码是为了方便与您对接</string>
+    <string name="tip_2">可根据教程或在线客服协助服务</string>
+    <string name="tip_3">可联系在线客服开具增值税发票(支持电子发票)</string>
+    <string name="service_info_text">⚠️ 数据网络开启可能会消耗流量，请手动关闭。</string>
+    <string name="submit_success">提交成功！</string>
+    <string name="phone_submit_success_desc">您的手机号码已成功提交，工程师会尽快与您联系。</string>
+    <string name="return_to_home">返回首页</string>
     
     <!-- 隐私政策页面 -->
     <string name="privacy_policy">隐私政策</string>

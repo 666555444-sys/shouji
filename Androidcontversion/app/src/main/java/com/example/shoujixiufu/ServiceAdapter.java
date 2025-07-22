@@ -18,7 +18,7 @@ public class ServiceAdapter extends RecyclerView.Adapter<ServiceAdapter.ServiceV
     private OnServiceClickListener listener;
 
     public interface OnServiceClickListener {
-        void onServiceClick();
+        void onServiceClick(ServiceModel service);
     }
 
     public ServiceAdapter(List<ServiceModel> services, OnServiceClickListener listener) {
@@ -38,9 +38,15 @@ public class ServiceAdapter extends RecyclerView.Adapter<ServiceAdapter.ServiceV
         ServiceModel service = services.get(position);
         
         holder.icon.setImageResource(service.getIconResId());
+        // 将所有图标设置为黑色
+        holder.icon.setColorFilter(holder.itemView.getContext().getResources().getColor(R.color.black));
         holder.title.setText(service.getTitle());
         
-        holder.card.setOnClickListener(v -> listener.onServiceClick());
+        holder.card.setOnClickListener(v -> {
+            if (listener != null) {
+                listener.onServiceClick(service);
+            }
+        });
     }
 
     @Override
