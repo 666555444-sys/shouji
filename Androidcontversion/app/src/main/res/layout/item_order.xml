@@ -121,6 +121,16 @@
             android:gravity="end">
 
             <Button
+                android:id="@+id/btn_cancel_order"
+                android:layout_width="wrap_content"
+                android:layout_height="36dp"
+                android:text="@string/cancel_order"
+                android:textSize="12sp"
+                android:textColor="@color/text_secondary"
+                android:background="@drawable/bg_button_outline"
+                android:layout_marginEnd="8dp" />
+
+            <Button
                 android:id="@+id/btn_order_detail"
                 android:layout_width="wrap_content"
                 android:layout_height="36dp"

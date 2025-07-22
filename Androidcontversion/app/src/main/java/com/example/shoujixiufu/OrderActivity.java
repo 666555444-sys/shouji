@@ -2,12 +2,14 @@ package com.example.shoujixiufu;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -31,6 +33,56 @@ public class OrderActivity extends AppCompatActivity implements OrderAdapter.Ord
         initViews();
         setupBottomNavigation();
         setupOrderList();
+        
+        // 检查是否从支付成功页面返回
+        checkPaymentSuccessParam();
+    }
+    
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        setIntent(intent);
+        
+        // 检查是否从支付成功页面返回
+        checkPaymentSuccessParam();
+    }
+    
+    // 检查是否有支付成功的标志
+    private void checkPaymentSuccessParam() {
+        try {
+            Intent intent = getIntent();
+            if (intent != null && intent.hasExtra("paymentSuccess")) {
+                boolean paymentSuccess = intent.getBooleanExtra("paymentSuccess", false);
+                Log.d("OrderActivity", "支付成功参数: " + paymentSuccess);
+                
+                if (paymentSuccess) {
+                    // 如果支付成功，更新第一个待支付订单状态为处理中
+                    updateFirstPendingOrderStatus();
+                }
+            }
+        } catch (Exception e) {
+            Log.e("OrderActivity", "处理支付成功参数时出错", e);
+        }
+    }
+    
+    // 更新第一个待支付订单的状态
+    private void updateFirstPendingOrderStatus() {
+        try {
+            if (orderList != null && !orderList.isEmpty() && orderAdapter != null) {
+                for (int i = 0; i < orderList.size(); i++) {
+                    Order order = orderList.get(i);
+                    if ("待支付".equals(order.getStatus())) {
+                        // 找到第一个待支付订单，更新为处理中
+                        order.setStatus("处理中");
+                        orderAdapter.notifyItemChanged(i);
+                        Toast.makeText(this, "订单支付成功", Toast.LENGTH_SHORT).show();
+                        break;
+                    }
+                }
+            }
+        } catch (Exception e) {
+            Log.e("OrderActivity", "更新订单状态时出错", e);
+        }
     }
 
     private void initViews() {
@@ -156,6 +208,46 @@ public class OrderActivity extends AppCompatActivity implements OrderAdapter.Ord
             startActivity(intent);
         } catch (Exception e) {
             Toast.makeText(this, "打开客服页面失败，请稍后再试", Toast.LENGTH_SHORT).show();
+        }
+    }
+    
+    @Override
+    public void onCancelOrderClick(Order order, int position) {
+        // 弹出确认对话框
+        new AlertDialog.Builder(this)
+            .setTitle("取消订单")
+            .setMessage("确定要取消此订单吗？")
+            .setPositiveButton("确定", (dialog, which) -> {
+                // 执行取消订单操作
+                cancelOrder(order, position);
+            })
+            .setNegativeButton("取消", null)
+            .show();
+    }
+    
+    // 执行取消订单操作
+    private void cancelOrder(Order order, int position) {
+        // 更新订单状态为"已取消"
+        order.setStatus("已取消");
+        
+        // 通知适配器更新界面
+        orderAdapter.notifyItemChanged(position);
+        
+        // 显示取消成功提示
+        Toast.makeText(this, "订单已取消", Toast.LENGTH_SHORT).show();
+        
+        // 如果所有订单都被取消，可以显示空状态
+        boolean allCancelled = true;
+        for (Order o : orderList) {
+            if (!"已取消".equals(o.getStatus()) && !"已完成".equals(o.getStatus())) {
+                allCancelled = false;
+                break;
+            }
+        }
+        
+        if (allCancelled && orderList.size() == 0) {
+            orderRecyclerView.setVisibility(View.GONE);
+            emptyOrderState.setVisibility(View.VISIBLE);
         }
     }
     

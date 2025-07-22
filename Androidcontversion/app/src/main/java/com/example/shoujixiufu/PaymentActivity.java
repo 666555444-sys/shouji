@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
@@ -49,7 +50,7 @@ public class PaymentActivity extends BaseActivity {
         
         // 设置返回按钮
         ImageButton backButton = findViewById(R.id.back_btn);
-        backButton.setOnClickListener(v -> onBackPressed());
+        backButton.setOnClickListener(v -> goToOrderPage());
         
         // 设置套餐点击事件
         setupPackageSelection();
@@ -262,6 +263,22 @@ public class PaymentActivity extends BaseActivity {
         }
     }
     
+    // 添加新方法：导航到订单页面
+    private void goToOrderPage() {
+        try {
+            Log.d("PaymentActivity", "返回订单页面");
+            Intent intent = new Intent(this, OrderActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(intent);
+            finish();
+        } catch (Exception e) {
+            Log.e("PaymentActivity", "导航到订单页面出错", e);
+            // 如果发生错误，使用默认返回行为
+            super.onBackPressed();
+        }
+    }
+    
+    // 重写返回按钮行为
     @Override
     public void onBackPressed() {
         // 如果正在处理支付，显示确认对话框
@@ -272,7 +289,7 @@ public class PaymentActivity extends BaseActivity {
                     .setPositiveButton("确定", (dialog, which) -> {
                         processingLayout.setVisibility(View.GONE);
                         payButton.setEnabled(true);
-                        super.onBackPressed();
+                        goToOrderPage();
                     })
                     .setNegativeButton("继续支付", null)
                     .show();

@@ -60,7 +60,20 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
                 break;
         }
         
+        // 根据订单状态控制取消按钮的显示状态
+        if ("已完成".equals(order.getStatus()) || "已取消".equals(order.getStatus())) {
+            holder.btnCancelOrder.setVisibility(View.GONE);
+        } else {
+            holder.btnCancelOrder.setVisibility(View.VISIBLE);
+        }
+        
         // 设置按钮点击事件
+        holder.btnCancelOrder.setOnClickListener(v -> {
+            if (listener != null) {
+                listener.onCancelOrderClick(order, position);
+            }
+        });
+        
         holder.btnOrderDetail.setOnClickListener(v -> {
             if (listener != null) {
                 listener.onOrderDetailClick(order);
@@ -78,10 +91,18 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
     public int getItemCount() {
         return orderList == null ? 0 : orderList.size();
     }
+    
+    public void removeItem(int position) {
+        if (position >= 0 && position < orderList.size()) {
+            orderList.remove(position);
+            notifyItemRemoved(position);
+            notifyItemRangeChanged(position, orderList.size());
+        }
+    }
 
     public static class OrderViewHolder extends RecyclerView.ViewHolder {
         TextView orderTitle, orderStatus, orderNumber, orderTime, orderAmount;
-        Button btnOrderDetail, btnContactService;
+        Button btnOrderDetail, btnContactService, btnCancelOrder;
 
         public OrderViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -92,11 +113,13 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
             orderAmount = itemView.findViewById(R.id.order_amount);
             btnOrderDetail = itemView.findViewById(R.id.btn_order_detail);
             btnContactService = itemView.findViewById(R.id.btn_contact_service);
+            btnCancelOrder = itemView.findViewById(R.id.btn_cancel_order);
         }
     }
 
     public interface OrderItemClickListener {
         void onOrderDetailClick(Order order);
         void onContactServiceClick(Order order);
+        void onCancelOrderClick(Order order, int position);
     }
 } 

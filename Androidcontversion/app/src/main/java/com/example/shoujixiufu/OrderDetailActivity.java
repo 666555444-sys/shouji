@@ -5,6 +5,7 @@ import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
@@ -59,7 +60,8 @@ public class OrderDetailActivity extends AppCompatActivity {
         Button btnPay = findViewById(R.id.pay_btn);
         ImageButton backBtn = findViewById(R.id.back_btn);
 
-        backBtn.setOnClickListener(v -> onBackPressed());
+        // 修改返回按钮点击事件，直接跳转到订单页面
+        backBtn.setOnClickListener(v -> goToOrderPage());
 
         btnCopy.setOnClickListener(v -> copyOrderId());
         btnCancel.setOnClickListener(v -> cancelOrder());
@@ -112,6 +114,27 @@ public class OrderDetailActivity extends AppCompatActivity {
     private void goToPay() {
         Toast.makeText(this, R.string.go_to_pay, Toast.LENGTH_SHORT).show();
         // Here you can implement jumping to payment activity
+    }
+    
+    // 添加新方法：导航到订单页面
+    private void goToOrderPage() {
+        try {
+            Log.d("OrderDetailActivity", "返回订单页面");
+            Intent intent = new Intent(this, OrderActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(intent);
+            finish();
+        } catch (Exception e) {
+            Log.e("OrderDetailActivity", "导航到订单页面出错", e);
+            // 如果发生错误，使用默认返回行为
+            super.onBackPressed();
+        }
+    }
+    
+    // 重写返回按钮行为
+    @Override
+    public void onBackPressed() {
+        goToOrderPage();
     }
 
     // Bottom navigation setup

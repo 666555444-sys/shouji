@@ -57,11 +57,12 @@ public class PaymentSuccessActivity extends BaseActivity {
             submitButton = findViewById(R.id.submit_btn);
             backButton = findViewById(R.id.back_to_order_btn);
             
-            // 直接在这里设置点击事件，不再依赖onCreate中的设置
+            // 确保返回按钮被找到并设置点击事件
             if (backButton != null) {
                 backButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        Log.d("PaymentSuccessActivity", "返回按钮被点击");
                         safeGoToOrderPage();
                     }
                 });
@@ -157,19 +158,16 @@ public class PaymentSuccessActivity extends BaseActivity {
     
     private void safeGoToOrderPage() {
         try {
-            // 如果有previousActivity，则返回到那个页面
-            if (previousActivity != null) {
-                navigateBack();
-                return;
-            }
+            Log.d("PaymentSuccessActivity", "准备返回订单页面，previousActivity=" + previousActivity);
             
-            // 备用方案：跳转到OrderActivity
+            // 不再依赖previousActivity，直接跳转到OrderActivity
             Intent intent = new Intent(this, OrderActivity.class);
             intent.putExtra("paymentSuccess", true);
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(intent);
             finish();
         } catch (Exception e) {
+            Log.e("PaymentSuccessActivity", "返回订单页面失败", e);
             e.printStackTrace();
             Toast.makeText(this, "返回订单页面失败，请重试", Toast.LENGTH_SHORT).show();
             
@@ -200,7 +198,8 @@ public class PaymentSuccessActivity extends BaseActivity {
     
     @Override
     public void onBackPressed() {
-        // 用户必须提交手机号或者点击返回按钮
+        // 重写此方法，确保使用我们自定义的返回逻辑
+        Log.d("PaymentSuccessActivity", "返回键被按下");
         safeGoToOrderPage();
     }
 } 
