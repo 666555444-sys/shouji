@@ -3,161 +3,134 @@ package com.example.shoujixiufu;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.ImageView;
+import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
+
+// 导入需要的活动类
+import com.example.shoujixiufu.PrivacyPolicyActivity;
+import com.example.shoujixiufu.ServiceAgreementActivity;
 
 public class ProfileActivity extends AppCompatActivity {
-
-    private LinearLayout navHome, navCases, navOrder, navProfile;
-    private LinearLayout profileInfo, orderHistory, settings, aboutUs, feedback, contactService;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
 
-        initViews();
+        // 删除返回按钮相关代码
+
+        // 编辑资料按钮
+        /*
+        Button btnEditProfile = findViewById(R.id.btn_edit_profile);
+        btnEditProfile.setOnClickListener(v -> {
+            Toast.makeText(this, "编辑资料功能正在开发中", Toast.LENGTH_SHORT).show();
+        });
+        */
+
+        // 返回主页按钮
+        Button btnBackToHome = findViewById(R.id.btn_back_to_home);
+        btnBackToHome.setOnClickListener(v -> {
+            // 跳转到MainActivity
+            Intent intent = new Intent(this, MainActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+            startActivity(intent);
+            finish();
+        });
+
+        // 设置页面功能模块的点击事件
+        setupFunctionModules();
+        
+        // 设置底部导航栏
         setupBottomNavigation();
-        setupProfileActions();
     }
 
-    private void initViews() {
-        // 初始化底部导航
-        navHome = findViewById(R.id.nav_home);
-        navCases = findViewById(R.id.nav_cases);
-        navOrder = findViewById(R.id.nav_order);
-        navProfile = findViewById(R.id.nav_profile);
-
-        // 初始化个人中心功能项
-        profileInfo = findViewById(R.id.profile_info);
-        orderHistory = findViewById(R.id.order_history);
-        settings = findViewById(R.id.settings);
-        aboutUs = findViewById(R.id.about_us);
-        feedback = findViewById(R.id.feedback);
-        contactService = findViewById(R.id.contact_service);
-    }
-
+    // 设置底部导航栏
     private void setupBottomNavigation() {
+        LinearLayout navHome = findViewById(R.id.nav_home);
+        LinearLayout navCases = findViewById(R.id.nav_cases);
+        LinearLayout navOrder = findViewById(R.id.nav_order);
+        LinearLayout navProfile = findViewById(R.id.nav_profile);
+        
+        // 设置当前选中状态
+        // 个人中心图标已在XML中设置为选中状态
+        
+        // 首页点击事件
         navHome.setOnClickListener(v -> {
             Intent intent = new Intent(this, MainActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
             startActivity(intent);
-            finish(); // 结束当前Activity
+            finish();
         });
 
+        // 案例点击事件
         navCases.setOnClickListener(v -> {
             Intent intent = new Intent(this, CasesActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
             startActivity(intent);
-            finish(); // 结束当前Activity
+            finish();
         });
 
+        // 订单点击事件
         navOrder.setOnClickListener(v -> {
             Intent intent = new Intent(this, OrderActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
             startActivity(intent);
-            finish(); // 结束当前Activity
+            finish();
         });
 
+        // 个人中心点击事件 - 已在当前页面，不需要操作
         navProfile.setOnClickListener(v -> {
-            // 已经在个人中心页面
+            // 已在个人中心页面，不做任何操作
         });
-
-        // 设置当前页面为选中状态
-        updateNavigationState();
     }
 
-    private void updateNavigationState() {
-        // 重置所有导航项的状态
-        resetNavigationState();
-        
-        // 设置个人中心页面为选中状态
-        if (navProfile != null) {
-            ImageView icon = navProfile.findViewById(R.id.nav_profile_icon);
-            TextView text = navProfile.findViewById(R.id.nav_profile_text);
-            if (icon != null) icon.setImageResource(R.drawable.ic_profile_selected);
-            if (text != null) text.setTextColor(getResources().getColor(R.color.primary_color));
-        }
-    }
-
-    private void resetNavigationState() {
-        // 重置首页
-        if (navHome != null) {
-            ImageView icon = navHome.findViewById(R.id.nav_home_icon);
-            TextView text = navHome.findViewById(R.id.nav_home_text);
-            if (icon != null) icon.setImageResource(R.drawable.ic_home);
-            if (text != null) text.setTextColor(getResources().getColor(R.color.text_secondary));
-        }
-        
-        // 重置案例
-        if (navCases != null) {
-            ImageView icon = navCases.findViewById(R.id.nav_cases_icon);
-            TextView text = navCases.findViewById(R.id.nav_cases_text);
-            if (icon != null) icon.setImageResource(R.drawable.ic_cases);
-            if (text != null) text.setTextColor(getResources().getColor(R.color.text_secondary));
-        }
-        
-        // 重置订单
-        if (navOrder != null) {
-            ImageView icon = navOrder.findViewById(R.id.nav_order_icon);
-            TextView text = navOrder.findViewById(R.id.nav_order_text);
-            if (icon != null) icon.setImageResource(R.drawable.ic_order);
-            if (text != null) text.setTextColor(getResources().getColor(R.color.text_secondary));
-        }
-    }
-
-    private void setupProfileActions() {
-        // 个人信息
-        if (profileInfo != null) {
-            profileInfo.setOnClickListener(v -> {
-                // TODO: 跳转到个人信息编辑页面
-                // Intent intent = new Intent(this, ProfileEditActivity.class);
-                // startActivity(intent);
-            });
-        }
-
-        // 订单历史
-        if (orderHistory != null) {
-            orderHistory.setOnClickListener(v -> {
-                Intent intent = new Intent(this, OrderActivity.class);
+    // 设置各功能模块的点击事件
+    private void setupFunctionModules() {
+        // 隐私政策
+        LinearLayout layoutPrivacyPolicy = findViewById(R.id.layout_privacy_policy);
+        layoutPrivacyPolicy.setOnClickListener(v -> {
+            Intent intent = new Intent(this, PrivacyPolicyActivity.class);
                 startActivity(intent);
             });
-        }
 
-        // 设置
-        if (settings != null) {
-            settings.setOnClickListener(v -> {
-                // TODO: 跳转到设置页面
-                // Intent intent = new Intent(this, SettingsActivity.class);
-                // startActivity(intent);
-            });
-        }
-
-        // 关于我们
-        if (aboutUs != null) {
-            aboutUs.setOnClickListener(v -> {
-                Intent intent = new Intent(this, AboutUsActivity.class);
+        // 服务协议
+        LinearLayout layoutServiceAgreement = findViewById(R.id.layout_service_agreement);
+        layoutServiceAgreement.setOnClickListener(v -> {
+            Intent intent = new Intent(this, ServiceAgreementActivity.class);
                 startActivity(intent);
             });
-        }
+
+        // 语言设置
+        LinearLayout layoutLanguage = findViewById(R.id.layout_language);
+        layoutLanguage.setOnClickListener(v -> {
+            Toast.makeText(this, "目前仅支持简体中文", Toast.LENGTH_SHORT).show();
+        });
 
         // 意见反馈
-        if (feedback != null) {
-            feedback.setOnClickListener(v -> {
+        LinearLayout layoutFeedback = findViewById(R.id.layout_feedback);
+        layoutFeedback.setOnClickListener(v -> {
                 Intent intent = new Intent(this, FeedbackActivity.class);
                 startActivity(intent);
             });
-        }
 
         // 联系客服
-        if (contactService != null) {
-            contactService.setOnClickListener(v -> {
+        LinearLayout layoutContactService = findViewById(R.id.layout_contact_service);
+        layoutContactService.setOnClickListener(v -> {
                 Intent intent = new Intent(this, ContactServiceActivity.class);
                 startActivity(intent);
             });
-        }
+
+        // 关于我们
+        LinearLayout layoutAboutUs = findViewById(R.id.layout_about_us);
+        layoutAboutUs.setOnClickListener(v -> {
+            Intent intent = new Intent(this, AboutUsActivity.class);
+            startActivity(intent);
+        });
     }
 } 

@@ -2,12 +2,12 @@
 <resources>
     <string name="app_name">手机修复</string>
     <string name="data_recovery">数据修复</string>
-    <string name="recover_early">越早恢复</string>
+    <string name="recover_early">越早修复</string>
     <string name="higher_chance">几率越高！！！</string>
     <string name="safe_efficient">安全高效</string>
     <string name="privacy_assured">隐私无忧</string>
     <string name="news">资讯</string>
-    <string name="notification_example">193****347 购买了微信消息恢复</string>
+    <string name="notification_example">193****347 购买了微信消息修复</string>
     <string name="popular_features">热门功能</string>
     <string name="other_services">其他服务</string>
     <string name="tab_home">首页</string>
@@ -59,7 +59,7 @@
     <string name="engineer_remote_help">工程师远程协助</string>
     
     <!-- Badge strings -->
-    <string name="trial">试用</string>
+    <string name="trial">付费</string>
     <string name="free">免费</string>
     <string name="paid">付费</string>
     
@@ -81,7 +81,7 @@
     <string name="established_year">成立年份</string>
     <string name="established_year_value">2018年</string>
     <string name="product_name">产品名称</string>
-    <string name="product_name_value">手机恢复备份</string>
+    <string name="product_name_value">手机修复备份</string>
     <string name="current_version">当前版本</string>
     <string name="current_version_value">V7.3</string>
     <string name="company_intro">企业简介</string>
@@ -122,21 +122,21 @@
     <string name="size">大小</string>
     <string name="scanned_progress">已扫描 10%</string>
     <string name="scan_deeper_desc">开启「深层扫描」可查看更多音频</string>
-    <string name="recover">去恢复</string>
+    <string name="recover">去修复</string>
     <string name="select_local_audio">选择本地音频文件进行扫描</string>
     <string name="select_audio_desc">请选择您想要扫描的音频文件</string>
     <string name="select_audio">选择音频</string>
     <string name="start_scan">开始扫描</string>
-    <string name="recover_and_scan_deep">去恢复 开放深层扫描查找全部数据</string>
+    <string name="recover_and_scan_deep">去修复 开放深层扫描查找全部数据</string>
     <string name="scanning_audio_files">正在扫描音频文件</string>
-    <string name="scanning_audio_desc">系统正在分析您的设备以查找可恢复的音频文件，请稍候...</string>
+    <string name="scanning_audio_desc">系统正在分析您的设备以查找可修复的音频文件，请稍候...</string>
     <string name="found_files">已找到 %1$d 个文件</string>
     
     <!-- 支付页面 -->
     <string name="payment">支付中心</string>
     <string name="deep_scan_service">深层扫描服务</string>
     <string name="service_price">¥39.90</string>
-    <string name="service_description">开启深层扫描服务，可以彻底扫描设备存储空间，恢复更多被删除的数据</string>
+    <string name="service_description">开启深层扫描服务，可以彻底扫描设备存储空间，修复更多被删除的数据</string>
     <string name="service_features">服务特点</string>
     <string name="payment_method">支付方式</string>
     <string name="wechat_pay">微信支付</string>
@@ -261,7 +261,7 @@
     <string name="select_files_desc">请选择您想要扫描的文件</string>
     <string name="select_files">选择文件</string>
     <string name="scanning_files">正在扫描文件</string>
-    <string name="scanning_files_desc">系统正在分析您的设备以查找可恢复的文档文件，请稍候...</string>
+    <string name="scanning_files_desc">系统正在分析您的设备以查找可修复的文档文件，请稍候...</string>
     <string name="word">Word</string>
     <string name="excel">Excel</string>
     <string name="ppt">PPT</string>
@@ -281,40 +281,38 @@
     <string name="qq">QQ</string>
     <string name="other">其他</string>
     <string name="scanned_13_percent">已扫描13%</string>
-    <string name="scan_tip_message">目前只扫描到13%，您如需要开放「深层扫描」查看全部数据，请点击去「去恢复」按钮。</string>
-    <string name="go_to_recover">去恢复</string>
     <string name="album_photo_count">相册（250张）</string>
     <string name="cancel_scan">取消扫描</string>
     <string name="cancel_scan_confirm">确定要取消扫描吗？</string>
     <string name="open_deep_scan">开放深层扫描查找全部数据</string>
     <string name="deep_scan_description">深层扫描可以找到更多已删除的数据</string>
-    <string name="recover_now">立即恢复</string>
+    <string name="recover_now">立即修复</string>
     
     <!-- Service Agreement Screen -->
     <string name="service_agreement_description">服务说明</string>
     <string name="service_overview">服务概述</string>
-    <string name="service_overview_content">本服务提供专业的数据恢复解决方案，包括但不限于微信聊天记录恢复、微信好友恢复、图片恢复、文件恢复、视频恢复等多种数据恢复服务。我们致力于帮助用户找回丢失的重要数据，提供高效、安全、专业的技术支持。</string>
+    <string name="service_overview_content">本服务提供专业的数据修复解决方案，包括但不限于微信聊天记录修复、微信好友修复、图片修复、文件修复、视频修复等多种数据修复服务。我们致力于帮助用户找回丢失的重要数据，提供高效、安全、专业的技术支持。</string>
     <string name="service_content">服务内容</string>
-    <string name="wechat_chat_recovery">微信聊天记录恢复</string>
-    <string name="wechat_friends_recovery">微信好友恢复</string>
-    <string name="photo_recovery">图片恢复</string>
-    <string name="call_log_recovery">通话记录恢复</string>
-    <string name="sms_recovery">短信恢复</string>
+    <string name="wechat_chat_recovery">微信聊天记录修复</string>
+    <string name="wechat_friends_recovery">微信好友修复</string>
+    <string name="photo_recovery">图片修复</string>
+    <string name="call_log_recovery">通话记录修复</string>
+    <string name="sms_recovery">短信修复</string>
     <string name="image_resize_crop">图片缩放裁剪</string>
     <string name="service_terms">服务条款</string>
     <string name="service_period_highlight"><![CDATA[<b>服务期限：</b>根据您购买的套餐不同，服务期限分为一年期和永久期两种。一年期服务自购买之日起一年内有效；永久期服务不设使用期限。]]></string>
     <string name="usage_limit_highlight"><![CDATA[<b>使用限制：</b>每个账号仅限本人使用，不可转让或分享给他人使用。]]></string>
-    <string name="recovery_success_rate_highlight"><![CDATA[<b>恢复成功率：</b>数据恢复成功率受多种因素影响，包括但不限于数据丢失时间、设备状态、覆盖情况等。我们会尽最大努力提供恢复服务，但不能保证100%恢复所有数据。]]></string>
-    <string name="refund_policy_highlight"><![CDATA[<b>退款政策：</b>由于数据恢复服务的特殊性，一旦服务开始，将不予退款。购买前请慎重考虑。]]></string>
+    <string name="recovery_success_rate_highlight"><![CDATA[<b>修复成功率：</b>数据修复成功率受多种因素影响，包括但不限于数据丢失时间、设备状态、覆盖情况等。我们会尽最大努力提供修复服务，但不能保证100%修复所有数据。]]></string>
+    <string name="refund_policy_highlight"><![CDATA[<b>退款政策：</b>由于数据修复服务的特殊性，一旦服务开始，将不予退款。购买前请慎重考虑。]]></string>
     <string name="privacy_protection">隐私保护</string>
     <string name="we_value_privacy">我们高度重视用户隐私保护，承诺：</string>
-    <string name="local_recovery_process">所有恢复过程均在用户设备本地进行，不会上传用户数据到我们的服务器</string>
+    <string name="local_recovery_process">所有修复过程均在用户设备本地进行，不会上传用户数据到我们的服务器</string>
     <string name="no_saving_viewing_data">不会保存、查看或使用用户的个人数据内容</string>
     <string name="encryption_protection">采用先进的加密技术保护用户信息安全</string>
     <string name="no_third_party_sharing">不会向任何第三方分享或出售用户信息</string>
     <string name="usage_statistics_note">请注意：为提供更好的服务，我们可能会收集应用使用统计数据，但这些数据不包含任何可识别个人身份的信息。</string>
     <string name="usage_suggestions">使用建议</string>
-    <string name="timely_recovery_highlight"><![CDATA[<b>及时恢复：</b>数据丢失后应尽快进行恢复操作，越早恢复成功率越高]]></string>
+    <string name="timely_recovery_highlight"><![CDATA[<b>及时修复：</b>数据丢失后应尽快进行修复操作，越早修复成功率越高]]></string>
     <string name="stop_usage_highlight"><![CDATA[<b>停止使用：</b>发现数据丢失后，应立即停止使用该设备，避免新数据覆盖丢失数据]]></string>
     <string name="stable_network_highlight"><![CDATA[<b>稳定网络：</b>在使用我们的服务时，请确保网络连接稳定]]></string>
     <string name="sufficient_battery_highlight"><![CDATA[<b>充足电量：</b>操作前请确保设备电量充足，避免中途断电导致数据进一步损坏]]></string>
@@ -323,19 +321,16 @@
     <string name="service_support_email">电子邮箱：support@datarecovery.com</string>
     <string name="online_customer_service">在线客服：应用内"我的"-"联系客服"</string>
     <string name="i_have_read_and_agree">我已阅读并同意</string>
-    <string name="copyright_text">© 2023-2025 数据恢复服务 版权所有</string>
+    <string name="copyright_text">© 2023-2025 数据修复服务 版权所有</string>
     
     <!-- 现有字符串 -->
     <string name="scanning_video_files">正在扫描视频文件</string>
-    <string name="scanning_video_desc">系统正在分析您的设备以查找可恢复的视频文件，请稍候...</string>
+    <string name="scanning_video_desc">系统正在分析您的设备以查找可修复的视频文件，请稍候...</string>
     <string name="all_videos">全部视频</string>
     <string name="are_you_sure_return">您确定返回吗？</string>
     <string name="rescan_return_note">返回后，重新进入需要重新扫描数据</string>
     <string name="confirm_action">确认</string>
     <string name="cancel_action">取消</string>
-    <string name="recover_immediately">去恢复</string>
-    <string name="click_recover_deep_scan">点击去恢复，开放深层扫描查找数据</string>
-    <string name="open_deep_scan_find_all">去恢复 开放深层扫描查找全部数据</string>
     <string name="files_found">已找到 %1$d 个文件</string>
     <string name="scanned_percent">已扫描%1$d%%</string>
     
@@ -362,7 +357,7 @@
     <string name="storage_space">存储空间</string>
     <string name="storage_space_desc">查看应用数据使用情况</string>
     <string name="auto_backup">自动备份</string>
-    <string name="auto_backup_desc">自动备份恢复记录和设置</string>
+    <string name="auto_backup_desc">自动备份修复记录和设置</string>
     <string name="about">关于</string>
     <string name="check_update">检查更新</string>
     <string name="current_version_v1_1_31">当前版本 v1.1.31</string>
@@ -432,12 +427,12 @@
     <!-- Video Repair Screen -->
     <string name="video_repair_title">视频修复</string>
     <string name="professional_video_repair">专业视频修复</string>
-    <string name="video_repair_desc">我们的视频修复服务可以帮助您找回已删除的视频文件，修复损坏的视频，恢复视频质量。无需专业知识，只需几步操作。</string>
+    <string name="video_repair_desc">我们的视频修复服务可以帮助您找回已删除的视频文件，修复损坏的视频，修复视频质量。无需专业知识，只需几步操作。</string>
     <string name="deep_scan">深度扫描</string>
     <string name="deep_scan_desc">全面扫描设备存储空间，找回删除的视频文件</string>
     <string name="damaged_video_repair">损坏视频修复</string>
     <string name="damaged_video_repair_desc">修复无法播放、卡顿、黑屏等问题视频</string>
-    <string name="fast_recovery">快速恢复</string>
+    <string name="fast_recovery">快速修复</string>
     <string name="fast_recovery_desc">高效算法，快速找回重要的视频文件</string>
     <string name="privacy_protection_feature">隐私保护</string>
     <string name="privacy_protection_feature_desc">所有修复过程在本地进行，保护您的隐私安全</string>
@@ -445,12 +440,20 @@
     <string name="return_rescan_note">返回后，需要重新进入页面</string>
     
     <!-- Recovery Dialog -->
-    <string name="recovery_dialog_title">已扫描7%</string>
-    <string name="recovery_dialog_content">目前只扫描到7%，您如需要开放「深层扫描」查看全部数据，请点击去「去恢复」按钮。</string>
+    <string name="recovery_dialog_title">扫描提示</string>
     
     <!-- Scan Exit Dialog -->
     <string name="scan_exit_confirm">确认退出扫描</string>
     <string name="scan_exit_desc">扫描尚未完成，退出将丢失当前扫描进度。确定要退出吗？</string>
+    
+    <!-- 添加缺失的字符串资源 -->
+    <string name="scan_tip_message">目前只扫描到7%，您如需要开放「深层扫描」查看全部数据，请点击去「去修复」按钮。</string>
+    <string name="go_to_recover">去修复</string>
+    <string name="click_recover_deep_scan">点击去修复，开放深层扫描查找数据</string>
+    <string name="recover_immediately">去修复</string>
+    <string name="open_deep_scan_find_all">去修复 开放深层扫描查找全部数据</string>
+    <string name="recovery_dialog_content">需要开放「深层扫描」才能查看全部数据，是否立即修复？</string>
+    
     <!-- 添加订单详情页需要的字符串 -->
     <string name="order_pending_payment">订单待支付</string>
     <string name="service_purchased">购买服务</string>
@@ -460,4 +463,39 @@
     <string name="all_orders_shown">— 已展示全部订单 —</string>
     <string name="order_id_copied">订单号已复制到剪贴板</string>
     <string name="order_cancelled">订单已取消</string>
+    <string name="select_image">选择图片</string>
+    
+    <!-- 个人信息页面相关字符串 -->
+    <string name="profile_avatar">头像</string>
+    <string name="default_username">用户昵称</string>
+    <string name="user_id_prefix">ID: 1001234567</string>
+    <string name="edit_profile">编辑资料</string>
+    <string name="personal_information">个人信息</string>
+    <string name="default_phone">138****8888</string>
+    <string name="default_email">user@example.com</string>
+    <string name="default_location">江苏省苏州市</string>
+    <string name="account_settings">账号设置</string>
+    <string name="change_password">修改密码</string>
+    <string name="notifications">消息通知</string>
+    <string name="privacy">隐私设置</string>
+    <string name="app_settings">应用设置</string>
+    <string name="default_language">简体中文</string>
+    <string name="feedback">意见反馈</string>
+    <string name="arrow_right">右箭头</string>
+    
+    <!-- 添加缺失的字符串资源 -->
+    <string name="selected_audios">已选择的音频</string>
+    <string name="exit_confirmation">退出确认</string>
+    <string name="exit_scan_message">确定要退出扫描吗？扫描进度将不会保存。</string>
+    <string name="cancel_scan_title">取消扫描</string>
+    <string name="cancel_scan_message">确定要取消扫描吗？当前进度将会丢失。</string>
+    <string name="exit_service_title">退出提示</string>
+    <string name="exit_service_message">确定退出吗？退出后需要重新扫描。</string>
+    <string name="continue_service">继续修复</string>
+    <string name="confirm_exit">确认退出</string>
+    
+    <!-- 扫描相关字符串 -->
+    <string name="scanning">扫描中</string>
+    <string name="scanning_videos">扫描视频中</string>
+    <string name="scanning_audio">扫描音频中</string>
 </resources>

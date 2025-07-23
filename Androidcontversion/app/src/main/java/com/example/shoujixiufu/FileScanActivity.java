@@ -3,11 +3,14 @@ package com.example.shoujixiufu;
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
 import android.app.AlertDialog;
+import android.content.ContentResolver;
 import android.content.Intent;
+import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.provider.MediaStore;
 import android.view.View;
 import android.view.animation.LinearInterpolator;
 import android.widget.Button;
@@ -24,14 +27,18 @@ import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 public class FileScanActivity extends AppCompatActivity {
 
     private ImageButton btnBack;
-    private Button btnTypeWord, btnTypeExcel, btnTypePpt, btnTypePdf, btnTypeOthers;
-    private TextView filterTime, filterSize;
+    // 删除文件类型按钮
     private CardView cardScanProgress, cardFileSelector;
     private Button btnRecover, btnBrowseFile, btnStartScan, btnBottomAction;
     private TextView tvSelectedFiles, tvScanPercentage, tvScanFiles;
@@ -61,16 +68,9 @@ public class FileScanActivity extends AppCompatActivity {
         // Toolbar
         btnBack = findViewById(R.id.btn_back);
 
-        // File type buttons
-        btnTypeWord = findViewById(R.id.btn_type_word);
-        btnTypeExcel = findViewById(R.id.btn_type_excel);
-        btnTypePpt = findViewById(R.id.btn_type_ppt);
-        btnTypePdf = findViewById(R.id.btn_type_pdf);
-        btnTypeOthers = findViewById(R.id.btn_type_others);
+        // 删除文件类型按钮 - 已删除这部分代码
 
-        // Filters
-        filterTime = findViewById(R.id.filter_time);
-        filterSize = findViewById(R.id.filter_size);
+        // 删除过滤器 - 已删除这部分代码
 
         // Cards and containers
         cardScanProgress = findViewById(R.id.card_scan_progress);
@@ -110,65 +110,14 @@ public class FileScanActivity extends AppCompatActivity {
 
         btnBottomAction.setOnClickListener(v -> navigateToPayment());
 
-        // File type button listeners
-        setupFileTypeButtons();
+        // 删除文件类型按钮监听器
 
-        // Filter listeners
-        setupFilterListeners();
+        // 删除过滤器监听器
     }
 
-    private void setupFileTypeButtons() {
-        View.OnClickListener fileTypeClickListener = v -> {
-            // Reset all buttons to inactive state
-            btnTypeWord.setBackgroundResource(R.drawable.bg_file_type_inactive);
-            btnTypeWord.setTextColor(getResources().getColor(R.color.text_secondary));
-            btnTypeExcel.setBackgroundResource(R.drawable.bg_file_type_inactive);
-            btnTypeExcel.setTextColor(getResources().getColor(R.color.text_secondary));
-            btnTypePpt.setBackgroundResource(R.drawable.bg_file_type_inactive);
-            btnTypePpt.setTextColor(getResources().getColor(R.color.text_secondary));
-            btnTypePdf.setBackgroundResource(R.drawable.bg_file_type_inactive);
-            btnTypePdf.setTextColor(getResources().getColor(R.color.text_secondary));
-            btnTypeOthers.setBackgroundResource(R.drawable.bg_file_type_inactive);
-            btnTypeOthers.setTextColor(getResources().getColor(R.color.text_secondary));
+    // 删除setupFileTypeButtons方法
 
-            // Set active state for clicked button
-            v.setBackgroundResource(R.drawable.bg_file_type_active);
-            ((Button) v).setTextColor(getResources().getColor(android.R.color.white));
-
-            // Update file list based on selected type
-            if (scanCompleted) {
-                updateFileList();
-            }
-        };
-
-        btnTypeWord.setOnClickListener(fileTypeClickListener);
-        btnTypeExcel.setOnClickListener(fileTypeClickListener);
-        btnTypePpt.setOnClickListener(fileTypeClickListener);
-        btnTypePdf.setOnClickListener(fileTypeClickListener);
-        btnTypeOthers.setOnClickListener(fileTypeClickListener);
-    }
-
-    private void setupFilterListeners() {
-        View.OnClickListener filterClickListener = v -> {
-            // Reset all filters to inactive state
-            filterTime.setBackgroundResource(R.drawable.bg_filter_inactive);
-            filterTime.setTextColor(getResources().getColor(R.color.text_secondary));
-            filterSize.setBackgroundResource(R.drawable.bg_filter_inactive);
-            filterSize.setTextColor(getResources().getColor(R.color.text_secondary));
-
-            // Set active state for clicked filter
-            v.setBackgroundResource(R.drawable.bg_filter_active);
-            ((TextView) v).setTextColor(getResources().getColor(R.color.primary_color));
-
-            // Update file list based on selected filter
-            if (scanCompleted) {
-                updateFileList();
-            }
-        };
-
-        filterTime.setOnClickListener(filterClickListener);
-        filterSize.setOnClickListener(filterClickListener);
-    }
+    // 删除setupFilterListeners方法
 
     private void setupFilePicker() {
         filePickerLauncher = registerForActivityResult(
@@ -210,8 +159,8 @@ public class FileScanActivity extends AppCompatActivity {
     }
 
     private void checkForDirectScan() {
-        String startScan = getIntent().getStringExtra("startScan");
-        if ("true".equals(startScan)) {
+        boolean startScan = getIntent().getBooleanExtra("startScan", false);
+        if (startScan) {
             cardFileSelector.setVisibility(View.GONE);
             startScanning();
         }
@@ -227,9 +176,241 @@ public class FileScanActivity extends AppCompatActivity {
         // Start animation for scan circles
         startScanCircleAnimations();
         
-        // Start progress animation
-        startProgressAnimation();
+        // 扫描本地文件
+        scanLocalFiles();
     }
+
+    // 修改后的扫描本地文件方法 - 不再区分目录
+    private void scanLocalFiles() {
+        new Thread(() -> {
+            // 显示初始进度
+            handler.post(() -> {
+                scanProgressBar.setProgress(0);
+                tvScanPercentage.setText("0%");
+                tvScanFiles.setText(getString(R.string.scanning_files_desc));
+            });
+            
+            // 获取要扫描的文件列表
+            List<FileItem> localFiles = new ArrayList<>();
+            
+            try {
+                // 模拟进度从0%开始，增加到10%后停止
+                for(int progress = 0; progress <= 10; progress += 2) {
+                    final int currentProgress = progress;
+                    handler.post(() -> {
+                        scanProgressBar.setProgress(currentProgress);
+                        tvScanPercentage.setText(currentProgress + "%");
+                        if(currentProgress > 5) {
+                            filesFound = 5; // 模拟找到5个文件
+                            tvScanFiles.setText(getString(R.string.found_files, filesFound));
+                            tvScanFiles.setAlpha(1f);
+                        }
+                    });
+                    
+                    // 在5%时获取一些文件数据
+                    if(progress == 5) {
+                        // 获取外部存储中的部分文件 - 直接使用MediaStore获取
+                        List<FileItem> files = getAllLocalFiles();
+                        if(files.size() > 0) {
+                            localFiles.addAll(files.subList(0, Math.min(5, files.size())));
+                            filesFound = localFiles.size();
+                        }
+                    }
+                    
+                    Thread.sleep(250);
+                }
+                
+                // 扫描到10%后就停止并显示结果
+                final List<FileItem> finalFiles = localFiles.isEmpty() ? getDefaultFileItems() : localFiles;
+                handler.post(() -> {
+                    scanProgressBar.setProgress(10);
+                    tvScanPercentage.setText("10%");
+                    filesFound = finalFiles.size();
+                    tvScanFiles.setText(getString(R.string.found_files, filesFound));
+                    
+                    // 扫描完成标志（虽然只扫描到10%）
+                    scanCompleted = true;
+                    
+                    // 延迟500ms后隐藏扫描屏幕，显示结果
+                    new Handler().postDelayed(() -> {
+                        // 隐藏扫描屏幕
+                        scanningScreen.setVisibility(View.GONE);
+                        
+                        // 显示文件列表
+                        showScanResults(finalFiles);
+                    }, 500);
+                });
+                
+            } catch (Exception e) {
+                e.printStackTrace();
+                // 如果出错，回到UI线程显示默认结果
+                handler.post(() -> {
+                    scanCompleted = true;
+                    scanningScreen.setVisibility(View.GONE);
+                    showScanResults(getDefaultFileItems());
+                });
+            }
+        }).start();
+    }
+    
+    // 获取所有本地文件的新方法
+    private List<FileItem> getAllLocalFiles() {
+        List<FileItem> allFiles = new ArrayList<>();
+        
+        try {
+            // 使用MediaStore获取所有文件类型
+            ContentResolver contentResolver = getContentResolver();
+            Uri uri = MediaStore.Files.getContentUri("external");
+            
+            String[] projection = {
+                MediaStore.Files.FileColumns.DISPLAY_NAME,
+                MediaStore.Files.FileColumns.SIZE,
+                MediaStore.Files.FileColumns.DATE_MODIFIED,
+                MediaStore.Files.FileColumns.MIME_TYPE
+            };
+            
+            Cursor cursor = contentResolver.query(uri, projection, null, null, null);
+            if (cursor != null) {
+                while (cursor.moveToNext() && allFiles.size() < 50) { // 限制最多显示50个文件
+                    try {
+                        String name = cursor.getString(0);
+                        long size = cursor.getLong(1);
+                        long date = cursor.getLong(2) * 1000; // 转换为毫秒
+                        String mimeType = cursor.getString(3);
+                        
+                        String icon = "F"; // 默认文件图标
+                        if (mimeType != null) {
+                            if (mimeType.contains("image/")) icon = "IMG";
+                            else if (mimeType.contains("video/")) icon = "VID";
+                            else if (mimeType.contains("audio/")) icon = "AUD";
+                            else if (mimeType.contains("text/")) icon = "TXT";
+                            else if (mimeType.contains("pdf")) icon = "PDF";
+                        }
+                        
+                        FileItem item = new FileItem(
+                                name,
+                                formatFileSize(size),
+                                formatDate(date),
+                                icon,
+                                R.drawable.bg_file_icon_doc
+                        );
+                        allFiles.add(item);
+                    } catch (Exception e) {
+                        // 跳过有问题的文件
+                        e.printStackTrace();
+                    }
+                }
+                cursor.close();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        
+        // 如果找不到文件，返回默认样本
+        if (allFiles.isEmpty()) {
+            allFiles = getDefaultFileItems();
+        }
+        
+        return allFiles;
+    }
+    
+    // 删除getFilesFromDirectory方法，因为不再区分目录
+
+    // 格式化文件大小
+    private String formatFileSize(long size) {
+        if (size <= 0)
+            return "0 B";
+        
+        final String[] units = new String[] { "B", "KB", "MB", "GB", "TB" };
+        int digitGroups = (int) (Math.log10(size) / Math.log10(1024));
+        return new DecimalFormat("#,##0.#").format(size / Math.pow(1024, digitGroups)) + " " + units[digitGroups];
+    }
+    
+    // 格式化日期
+    private String formatDate(long timeMillis) {
+        Date date = new Date(timeMillis);
+        Calendar calendar = Calendar.getInstance();
+        Calendar today = Calendar.getInstance();
+        calendar.setTime(date);
+        
+        if (calendar.get(Calendar.YEAR) == today.get(Calendar.YEAR) &&
+                calendar.get(Calendar.DAY_OF_YEAR) == today.get(Calendar.DAY_OF_YEAR)) {
+            return "今天";
+        } else if (calendar.get(Calendar.YEAR) == today.get(Calendar.YEAR) &&
+                calendar.get(Calendar.DAY_OF_YEAR) == today.get(Calendar.DAY_OF_YEAR) - 1) {
+            return "昨天";
+        } else {
+            SimpleDateFormat sdf = new SimpleDateFormat("MM-dd", Locale.getDefault());
+            return sdf.format(date);
+        }
+    }
+    
+    // 获取文件扩展名
+    private String getFileExtension(String fileName) {
+        if (fileName.lastIndexOf(".") != -1 && fileName.lastIndexOf(".") != 0) {
+            return fileName.substring(fileName.lastIndexOf(".") + 1).toLowerCase();
+        } else {
+            return "";
+        }
+    }
+    
+    // 简化的获取图标方法
+    private String getFileIcon(String extension) {
+        if (extension.isEmpty()) return "F";
+        return extension.toUpperCase().substring(0, Math.min(extension.length(), 3));
+    }
+    
+    // 获取图标背景颜色
+    private int getFileIconBackground(String extension) {
+        return R.drawable.bg_file_icon_doc; // 使用默认背景
+    }
+
+    // 显示扫描结果
+    private void showScanResults(List<FileItem> files) {
+        // 显示文件列表容器
+        cardScanProgress.setVisibility(View.VISIBLE);
+        fileList.setVisibility(View.VISIBLE);
+        btnBottomAction.setVisibility(View.VISIBLE);
+        
+        // 设置已扫描10%的文本
+        TextView progressText = findViewById(R.id.tv_progress_text);
+        if (progressText != null) {
+            progressText.setText(getString(R.string.scanned_progress).replace("10%", "10%"));
+        }
+        
+        // 更新文件列表
+        updateFileList(files);
+    }
+
+    // 简化的更新文件列表方法，不再进行过滤
+    private void updateFileList(List<FileItem> items) {
+        // 如果文件列表为空，使用默认样本数据
+        if (items == null || items.isEmpty()) {
+            items = getDefaultFileItems();
+        }
+        
+        // 直接设置适配器，不再进行过滤
+        FileAdapter adapter = new FileAdapter(this, items);
+        fileList.setAdapter(adapter);
+    }
+    
+    // 获取默认的文件列表
+    private List<FileItem> getDefaultFileItems() {
+        List<FileItem> items = new ArrayList<>();
+        
+        // 添加一些样本文件
+        items.add(new FileItem("项目计划书.docx", "1.2MB", "昨天", "DOC", R.drawable.bg_file_icon_doc));
+        items.add(new FileItem("财务报表.xlsx", "1.6MB", "昨天", "XLS", R.drawable.bg_file_icon_doc));
+        items.add(new FileItem("产品发布会.pptx", "5.7MB", "昨天", "PPT", R.drawable.bg_file_icon_doc));
+        items.add(new FileItem("合同文件.pdf", "2.4MB", "昨天", "PDF", R.drawable.bg_file_icon_doc));
+        items.add(new FileItem("程序源代码.zip", "7.5MB", "昨天", "ZIP", R.drawable.bg_file_icon_doc));
+        
+        return items;
+    }
+    
+    // 删除getSampleFilesForType方法
+    
+    // 删除getSelectedFileType方法
 
     private void startScanCircleAnimations() {
         // Outer circle animation
@@ -254,137 +435,37 @@ public class FileScanActivity extends AppCompatActivity {
         innerRotation.start();
     }
 
-    private void startProgressAnimation() {
-        final int targetProgress = 10; // Target progress percentage
-        filesFound = selectedFiles.isEmpty() ? 3 : selectedFiles.size();
-        
-        new Thread(() -> {
-            int progress = 0;
-            
-            // Simulate scanning progress
-            while (progress < targetProgress) {
-                try {
-                    Thread.sleep(300);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                
-                progress += 1;
-                final int currentProgress = progress;
-                
-                handler.post(() -> {
-                    // Update progress bar
-                    scanProgressBar.setProgress(currentProgress);
-                    tvScanPercentage.setText(currentProgress + "%");
-                    
-                    // Show found files with animation
-                    if (currentProgress > 3 && tvScanFiles.getAlpha() == 0) {
-                        tvScanFiles.setText(getString(R.string.found_files, filesFound));
-                        tvScanFiles.animate().alpha(1f).setDuration(500).start();
-                    }
-                });
-            }
-            
-            // Scanning completed
-            handler.postDelayed(() -> {
-                scanningScreen.setVisibility(View.GONE);
-                showScanResults();
-            }, 1000);
-        }).start();
-    }
-
-    private void showScanResults() {
-        // Show scan progress card
-        cardScanProgress.setVisibility(View.VISIBLE);
-        
-        // Show file list
-        updateFileList();
-        fileList.setVisibility(View.VISIBLE);
-        
-        // Show bottom action button
-        btnBottomAction.setVisibility(View.VISIBLE);
-        
-        // Mark scan as completed
-        scanCompleted = true;
-        
-        // Show recovery dialog
-        showRecoveryDialog();
-    }
-
-    private void updateFileList() {
-        // Create sample file items based on selected type
-        List<FileItem> items = new ArrayList<>();
-        
-        String selectedType = getSelectedFileType();
-        
-        // Add sample files based on type
-        if ("word".equals(selectedType)) {
-            items.add(new FileItem("项目计划书.docx", "1.2MB", "昨天", "W", R.drawable.bg_file_icon_doc));
-            items.add(new FileItem("个人简历.doc", "680KB", "7-15", "W", R.drawable.bg_file_icon_doc));
-            items.add(new FileItem("工作报告.docx", "2.3MB", "7-14", "W", R.drawable.bg_file_icon_doc));
-        } else if ("excel".equals(selectedType)) {
-            items.add(new FileItem("财务报表.xlsx", "1.6MB", "昨天", "E", R.drawable.bg_file_icon_doc));
-            items.add(new FileItem("销售数据.xls", "4.2MB", "7-15", "E", R.drawable.bg_file_icon_doc));
-            items.add(new FileItem("人员名单.xlsx", "820KB", "7-14", "E", R.drawable.bg_file_icon_doc));
-        } else if ("ppt".equals(selectedType)) {
-            items.add(new FileItem("产品发布会.pptx", "5.7MB", "昨天", "P", R.drawable.bg_file_icon_doc));
-            items.add(new FileItem("季度总结.ppt", "3.8MB", "7-15", "P", R.drawable.bg_file_icon_doc));
-            items.add(new FileItem("项目提案.pptx", "4.1MB", "7-14", "P", R.drawable.bg_file_icon_doc));
-        } else if ("pdf".equals(selectedType)) {
-            items.add(new FileItem("合同文件.pdf", "2.4MB", "昨天", "PDF", R.drawable.bg_file_icon_doc));
-            items.add(new FileItem("技术手册.pdf", "5.1MB", "7-15", "PDF", R.drawable.bg_file_icon_doc));
-            items.add(new FileItem("研究报告.pdf", "3.7MB", "7-14", "PDF", R.drawable.bg_file_icon_doc));
-        } else {
-            items.add(new FileItem("程序源代码.zip", "7.5MB", "昨天", "ZIP", R.drawable.bg_file_icon_doc));
-            items.add(new FileItem("数据备份.bak", "12.3MB", "7-15", "BAK", R.drawable.bg_file_icon_doc));
-            items.add(new FileItem("网站设计.psd", "18.5MB", "7-14", "PSD", R.drawable.bg_file_icon_doc));
-        }
-        
-        // Set adapter
-        FileAdapter adapter = new FileAdapter(this, items);
-        fileList.setAdapter(adapter);
-    }
-
-    private String getSelectedFileType() {
-        if (btnTypeWord.getTextColors().getDefaultColor() == getResources().getColor(android.R.color.white)) {
-            return "word";
-        } else if (btnTypeExcel.getTextColors().getDefaultColor() == getResources().getColor(android.R.color.white)) {
-            return "excel";
-        } else if (btnTypePpt.getTextColors().getDefaultColor() == getResources().getColor(android.R.color.white)) {
-            return "ppt";
-        } else if (btnTypePdf.getTextColors().getDefaultColor() == getResources().getColor(android.R.color.white)) {
-            return "pdf";
-        } else {
-            return "other";
-        }
-    }
-
     private void showRecoveryDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle(R.string.recovery_dialog_title)
                 .setMessage(R.string.recovery_dialog_content)
-                .setNegativeButton(R.string.cancel_action, (dialog, which) -> dialog.dismiss())
+                .setNegativeButton(R.string.cancel, (dialog, which) -> dialog.dismiss())
                 .setPositiveButton(R.string.recover, (dialog, which) -> navigateToPayment())
                 .setCancelable(false)
                 .show();
     }
 
     private void showExitConfirmDialog() {
-        if (scanCompleted) {
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            builder.setTitle(R.string.scan_exit_confirm)
-                    .setMessage(R.string.scan_exit_desc)
-                    .setNegativeButton(R.string.cancel_action, (dialog, which) -> dialog.dismiss())
-                    .setPositiveButton(R.string.confirm_action, (dialog, which) -> finish())
-                    .show();
+        if (scanningScreen.getVisibility() == View.VISIBLE) {
+            // 正在扫描中的退出提示
+            builder.setTitle(R.string.cancel_scan_title)
+                  .setMessage(R.string.cancel_scan_message)
+                  .setNegativeButton(R.string.no, (dialog, which) -> dialog.dismiss())
+                  .setPositiveButton(R.string.yes, (dialog, which) -> finish());
         } else {
-            finish();
+            // 扫描完成后的退出提示
+            builder.setTitle(R.string.exit_service_title)
+                  .setMessage(R.string.exit_service_message)
+                  .setNegativeButton(R.string.continue_service, (dialog, which) -> dialog.dismiss())
+                  .setPositiveButton(R.string.confirm_exit, (dialog, which) -> finish());
         }
+        builder.setCancelable(false).show();
     }
 
     private void navigateToPayment() {
-        Intent intent = new Intent(this, MainActivity.class); // Replace with PaymentActivity if available
-        intent.putExtra("returnTo", "file-scan");
+        Intent intent = new Intent(this, PaymentActivity.class);
+        intent.putExtra("returnTo", "file_scan");
         startActivity(intent);
     }
 
@@ -440,7 +521,7 @@ public class FileScanActivity extends AppCompatActivity {
         }
     }
 
-    // File adapter for RecyclerView
+    // Adapter remains unchanged
     public class FileAdapter extends RecyclerView.Adapter<FileAdapter.FileViewHolder> {
         private List<FileItem> files;
         private android.content.Context context;

@@ -2,6 +2,20 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <!-- 文件访问权限 - 适用于不同Android版本 -->
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" 
+                     android:maxSdkVersion="32" />
+    <!-- Android 13及以上版本的权限 -->
+    <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" 
+                     android:minSdkVersion="33" />
+    <uses-permission android:name="android.permission.READ_MEDIA_VIDEO" 
+                     android:minSdkVersion="33" />
+    <uses-permission android:name="android.permission.READ_MEDIA_AUDIO" 
+                     android:minSdkVersion="33" />
+    <!-- 写入外部存储权限，用于保存修复后的文件 -->
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"
+                     android:maxSdkVersion="29" />
+
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -11,19 +25,26 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Shoujixiufu"
+        android:requestLegacyExternalStorage="true"
         tools:targetApi="31">
         <activity
-            android:name=".MainActivity"
-            android:exported="true">
+            android:name=".SplashActivity"
+            android:exported="true"
+            android:theme="@style/Theme.Shoujixiufu.NoActionBar"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity
+            android:name=".MainActivity"
+            android:exported="false">
         </activity>
         <activity 
             android:name=".AboutUsActivity"
             android:exported="false"
+            android:theme="@style/Theme.Shoujixiufu.NoActionBar" 
             android:label="@string/about_us" />
         <activity 
             android:name=".LogoViewerActivity"
@@ -83,11 +104,6 @@
             android:theme="@style/Theme.Shoujixiufu.NoActionBar"
             android:windowSoftInputMode="stateAlwaysHidden" />
         <activity
-            android:name=".SplashActivity"
-            android:exported="false"
-            android:theme="@style/Theme.Shoujixiufu.NoActionBar"
-            android:screenOrientation="portrait" />
-        <activity
             android:name=".SupervisionComplaintActivity"
             android:exported="false"
             android:theme="@style/Theme.Shoujixiufu.NoActionBar"
@@ -99,6 +115,7 @@
         <activity
             android:name=".VideoRepairActivity"
             android:exported="false"
+            android:screenOrientation="portrait"
             android:theme="@style/Theme.Shoujixiufu.NoActionBar" />
         <activity
             android:name=".VideoScanActivity"
@@ -127,6 +144,21 @@
         <activity
             android:name=".FileSendActivity"
             android:exported="false"
+            android:theme="@style/Theme.Shoujixiufu.NoActionBar" />
+        <activity
+            android:name=".FileRepairActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.Shoujixiufu.NoActionBar" />
+        <activity
+            android:name=".AudioRepairActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.Shoujixiufu.NoActionBar" />
+        <activity
+            android:name=".VipMembershipActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"
             android:theme="@style/Theme.Shoujixiufu.NoActionBar" />
     </application>
 

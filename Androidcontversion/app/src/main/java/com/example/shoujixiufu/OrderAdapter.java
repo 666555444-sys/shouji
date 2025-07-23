@@ -79,12 +79,6 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
                 listener.onOrderDetailClick(order);
             }
         });
-        
-        holder.btnContactService.setOnClickListener(v -> {
-            if (listener != null) {
-                listener.onContactServiceClick(order);
-            }
-        });
     }
 
     @Override
@@ -102,7 +96,7 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
 
     public static class OrderViewHolder extends RecyclerView.ViewHolder {
         TextView orderTitle, orderStatus, orderNumber, orderTime, orderAmount;
-        Button btnOrderDetail, btnContactService, btnCancelOrder;
+        Button btnOrderDetail, btnCancelOrder;
 
         public OrderViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -112,14 +106,12 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
             orderTime = itemView.findViewById(R.id.order_time);
             orderAmount = itemView.findViewById(R.id.order_amount);
             btnOrderDetail = itemView.findViewById(R.id.btn_order_detail);
-            btnContactService = itemView.findViewById(R.id.btn_contact_service);
             btnCancelOrder = itemView.findViewById(R.id.btn_cancel_order);
         }
     }
 
     public interface OrderItemClickListener {
         void onOrderDetailClick(Order order);
-        void onContactServiceClick(Order order);
         void onCancelOrderClick(Order order, int position);
     }
 } 

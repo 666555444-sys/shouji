@@ -201,17 +201,6 @@ public class OrderActivity extends AppCompatActivity implements OrderAdapter.Ord
     }
 
     @Override
-    public void onContactServiceClick(Order order) {
-        // 跳转到联系客服页面
-        try {
-            Intent intent = new Intent(this, ContactServiceActivity.class);
-            startActivity(intent);
-        } catch (Exception e) {
-            Toast.makeText(this, "打开客服页面失败，请稍后再试", Toast.LENGTH_SHORT).show();
-        }
-    }
-    
-    @Override
     public void onCancelOrderClick(Order order, int position) {
         // 弹出确认对话框
         new AlertDialog.Builder(this)

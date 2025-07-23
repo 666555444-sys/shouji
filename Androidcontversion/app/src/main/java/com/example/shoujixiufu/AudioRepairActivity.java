@@ -30,16 +30,16 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-public class VideoRepairActivity extends AppCompatActivity {
+public class AudioRepairActivity extends AppCompatActivity {
 
     private ImageButton btnBack;
     private TextView tvFilterTime, tvFilterSize;
     private CardView cardScanProgress;
     private Button btnRecover, btnBottomAction;
-    private RecyclerView videoList;
+    private RecyclerView audioList;
     private TextView tvProgressText;
 
-    private List<VideoItem> videos = new ArrayList<>();
+    private List<AudioItem> audios = new ArrayList<>();
     private boolean sortByTimeDesc = true; // 默认按时间降序
     private boolean sortBySizeDesc = false;
     private int scanPercentage = 10;
@@ -49,7 +49,7 @@ public class VideoRepairActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_video_repair);
+        setContentView(R.layout.activity_audio_repair);
 
         // 获取从ScanActivity传递过来的数据
         if (getIntent().hasExtra("scan_percentage")) {
@@ -61,7 +61,7 @@ public class VideoRepairActivity extends AppCompatActivity {
 
         initViews();
         setupListeners();
-        loadVideos();
+        loadAudios();
     }
 
     private void initViews() {
@@ -79,9 +79,9 @@ public class VideoRepairActivity extends AppCompatActivity {
         btnRecover = findViewById(R.id.btn_recover);
         btnBottomAction = findViewById(R.id.btn_bottom_action);
 
-        // 视频列表
-        videoList = findViewById(R.id.video_list);
-        videoList.setLayoutManager(new LinearLayoutManager(this));
+        // 音频列表
+        audioList = findViewById(R.id.audio_list);
+        audioList.setLayoutManager(new LinearLayoutManager(this));
 
         // 进度文本
         tvProgressText = findViewById(R.id.tv_progress_text);
@@ -96,14 +96,14 @@ public class VideoRepairActivity extends AppCompatActivity {
             sortByTimeDesc = !sortByTimeDesc;
             sortBySizeDesc = false;
             updateFilterUI();
-            sortAndUpdateVideoList();
+            sortAndUpdateAudioList();
         });
 
         tvFilterSize.setOnClickListener(v -> {
             sortBySizeDesc = !sortBySizeDesc;
             sortByTimeDesc = false;
             updateFilterUI();
-            sortAndUpdateVideoList();
+            sortAndUpdateAudioList();
         });
 
         // 按钮监听器
@@ -131,45 +131,45 @@ public class VideoRepairActivity extends AppCompatActivity {
                         : R.color.text_secondary));
     }
 
-    private void loadVideos() {
+    private void loadAudios() {
         new Thread(() -> {
             try {
-                // 加载本地视频文件
-                List<VideoItem> localVideos = getAllLocalVideos();
-                if (localVideos.isEmpty()) {
-                    localVideos = getDefaultVideoItems();
+                // 加载本地音频文件
+                List<AudioItem> localAudios = getAllLocalAudios();
+                if (localAudios.isEmpty()) {
+                    localAudios = getDefaultAudioItems();
                 }
                 
-                // 保存视频列表
-                this.videos.clear();
-                this.videos.addAll(localVideos);
+                // 保存音频列表
+                this.audios.clear();
+                this.audios.addAll(localAudios);
                 
                 // 排序并更新UI
                 handler.post(() -> {
-                    sortAndUpdateVideoList();
+                    sortAndUpdateAudioList();
                     
-                    // 显示视频列表
-                    videoList.setVisibility(View.VISIBLE);
+                    // 显示音频列表
+                    audioList.setVisibility(View.VISIBLE);
                     btnBottomAction.setVisibility(View.VISIBLE);
                 });
             } catch (Exception e) {
                 e.printStackTrace();
                 handler.post(() -> {
                     // 显示默认结果
-                    this.videos.clear();
-                    this.videos.addAll(getDefaultVideoItems());
-                    sortAndUpdateVideoList();
+                    this.audios.clear();
+                    this.audios.addAll(getDefaultAudioItems());
+                    sortAndUpdateAudioList();
                 });
             }
         }).start();
     }
 
-    private void sortAndUpdateVideoList() {
+    private void sortAndUpdateAudioList() {
         if (sortByTimeDesc) {
             // 按时间降序排序
-            Collections.sort(videos, new Comparator<VideoItem>() {
+            Collections.sort(audios, new Comparator<AudioItem>() {
                 @Override
-                public int compare(VideoItem o1, VideoItem o2) {
+                public int compare(AudioItem o1, AudioItem o2) {
                     // 将"今天"、"昨天"等转换为可比较的值
                     String date1 = o1.getDate();
                     String date2 = o2.getDate();
@@ -185,18 +185,18 @@ public class VideoRepairActivity extends AppCompatActivity {
             });
         } else if (sortBySizeDesc) {
             // 按大小降序排序
-            Collections.sort(videos, new Comparator<VideoItem>() {
+            Collections.sort(audios, new Comparator<AudioItem>() {
                 @Override
-                public int compare(VideoItem o1, VideoItem o2) {
+                public int compare(AudioItem o1, AudioItem o2) {
                     // 将"1.2MB"、"650KB"等转换为可比较的值
                     return convertSizeToBytes(o2.getSize()) - convertSizeToBytes(o1.getSize());
                 }
             });
         }
         
-        // 更新视频列表
-        VideoAdapter adapter = new VideoAdapter(videos);
-        videoList.setAdapter(adapter);
+        // 更新音频列表
+        AudioAdapter adapter = new AudioAdapter(audios);
+        audioList.setAdapter(adapter);
     }
     
     // 将文件大小字符串转换为字节大小以便比较
@@ -219,41 +219,41 @@ public class VideoRepairActivity extends AppCompatActivity {
         }
     }
 
-    private List<VideoItem> getAllLocalVideos() {
-        List<VideoItem> allVideos = new ArrayList<>();
+    private List<AudioItem> getAllLocalAudios() {
+        List<AudioItem> allAudios = new ArrayList<>();
         
         try {
-            // 使用MediaStore获取视频文件
+            // 使用MediaStore获取音频文件
             ContentResolver contentResolver = getContentResolver();
-            Uri uri = MediaStore.Video.Media.EXTERNAL_CONTENT_URI;
+            Uri uri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
             
             String[] projection = {
-                MediaStore.Video.Media.TITLE,
-                MediaStore.Video.Media.SIZE,
-                MediaStore.Video.Media.DATE_MODIFIED,
-                MediaStore.Video.Media.DURATION,
-                MediaStore.Video.Media.RESOLUTION
+                MediaStore.Audio.Media.TITLE,
+                MediaStore.Audio.Media.SIZE,
+                MediaStore.Audio.Media.DATE_MODIFIED,
+                MediaStore.Audio.Media.DURATION,
+                MediaStore.Audio.Media.ARTIST
             };
             
             Cursor cursor = contentResolver.query(uri, projection, null, null, null);
             if (cursor != null) {
-                while (cursor.moveToNext() && allVideos.size() < 30) { // 限制最多显示30个视频文件
+                while (cursor.moveToNext() && allAudios.size() < 30) { // 限制最多显示30个音频文件
                     try {
                         String title = cursor.getString(0);
                         long size = cursor.getLong(1);
                         long date = cursor.getLong(2) * 1000; // 转换为毫秒
                         long duration = cursor.getLong(3);
-                        String resolution = cursor.getString(4);
+                        String artist = cursor.getString(4);
                         
-                        VideoItem item = new VideoItem(
+                        AudioItem item = new AudioItem(
                                 title,
                                 formatFileSize(size),
                                 formatDate(date),
                                 formatDuration(duration),
-                                resolution == null || resolution.isEmpty() ? "未知分辨率" : resolution,
+                                artist == null || artist.isEmpty() ? "未知艺术家" : artist,
                                 false
                         );
-                        allVideos.add(item);
+                        allAudios.add(item);
                     } catch (Exception e) {
                         // 跳过有问题的文件
                         e.printStackTrace();
@@ -265,7 +265,7 @@ public class VideoRepairActivity extends AppCompatActivity {
             e.printStackTrace();
         }
         
-        return allVideos;
+        return allAudios;
     }
 
     // 格式化文件大小
@@ -305,19 +305,19 @@ public class VideoRepairActivity extends AppCompatActivity {
         return String.format(Locale.getDefault(), "%d:%02d", minutes, seconds);
     }
 
-    // 获取默认的视频列表
-    private List<VideoItem> getDefaultVideoItems() {
-        List<VideoItem> items = new ArrayList<>();
+    // 获取默认的音频列表
+    private List<AudioItem> getDefaultAudioItems() {
+        List<AudioItem> items = new ArrayList<>();
         
-        // 添加一些样本视频文件
-        items.add(new VideoItem("家庭聚会视频", "85.7MB", "今天", "3:20", "1280x720", false));
-        items.add(new VideoItem("旅游风景视频", "125.4MB", "今天", "5:45", "1920x1080", false));
-        items.add(new VideoItem("宝宝成长记录", "45.2MB", "昨天", "2:30", "1280x720", false));
-        items.add(new VideoItem("会议录像", "72.8MB", "昨天", "15:20", "640x480", false));
-        items.add(new VideoItem("视频教程", "108.5MB", "04-12", "10:15", "1280x720", false));
-        items.add(new VideoItem("生日派对", "65.3MB", "04-10", "4:50", "1920x1080", false));
-        items.add(new VideoItem("风景延时摄影", "95.8MB", "04-08", "3:35", "3840x2160", false));
-        items.add(new VideoItem("微视频记录", "12.7MB", "04-05", "0:45", "640x480", false));
+        // 添加一些样本音频文件
+        items.add(new AudioItem("流行音乐1", "4.5MB", "今天", "3:45", "流行歌手", false));
+        items.add(new AudioItem("古典音乐集锦", "12.8MB", "今天", "8:20", "莫扎特", false));
+        items.add(new AudioItem("录音笔记", "1.7MB", "昨天", "2:15", "我", false));
+        items.add(new AudioItem("语音消息", "850KB", "昨天", "1:05", "张三", false));
+        items.add(new AudioItem("会议录音", "6.2MB", "04-12", "5:30", "未知艺术家", false));
+        items.add(new AudioItem("播客节目", "18.5MB", "04-10", "15:20", "知识FM", false));
+        items.add(new AudioItem("英语听力", "5.3MB", "04-08", "4:45", "英语学习", false));
+        items.add(new AudioItem("钢琴曲", "8.7MB", "04-05", "7:12", "贝多芬", false));
         
         return items;
     }
@@ -334,7 +334,7 @@ public class VideoRepairActivity extends AppCompatActivity {
 
     private void navigateToPayment() {
         Intent intent = new Intent(this, PaymentActivity.class);
-        intent.putExtra("returnTo", "video_repair");
+        intent.putExtra("returnTo", "audio_repair");
         startActivity(intent);
     }
 
@@ -343,21 +343,21 @@ public class VideoRepairActivity extends AppCompatActivity {
         showExitConfirmDialog();
     }
 
-    // 视频项类
-    public static class VideoItem {
+    // 音频项类
+    public static class AudioItem {
         private String title;
         private String size;
         private String date;
         private String duration;
-        private String resolution;
+        private String artist;
         private boolean isChecked;
 
-        public VideoItem(String title, String size, String date, String duration, String resolution, boolean isChecked) {
+        public AudioItem(String title, String size, String date, String duration, String artist, boolean isChecked) {
             this.title = title;
             this.size = size;
             this.date = date;
             this.duration = duration;
-            this.resolution = resolution;
+            this.artist = artist;
             this.isChecked = isChecked;
         }
 
@@ -377,8 +377,8 @@ public class VideoRepairActivity extends AppCompatActivity {
             return duration;
         }
 
-        public String getResolution() {
-            return resolution;
+        public String getArtist() {
+            return artist;
         }
 
         public boolean isChecked() {
@@ -391,59 +391,59 @@ public class VideoRepairActivity extends AppCompatActivity {
     }
 
     // 适配器类
-    public class VideoAdapter extends RecyclerView.Adapter<VideoAdapter.VideoViewHolder> {
-        private List<VideoItem> videos;
+    public class AudioAdapter extends RecyclerView.Adapter<AudioAdapter.AudioViewHolder> {
+        private List<AudioItem> audios;
 
-        public VideoAdapter(List<VideoItem> videos) {
-            this.videos = videos;
+        public AudioAdapter(List<AudioItem> audios) {
+            this.audios = audios;
         }
 
         @Override
-        public VideoViewHolder onCreateViewHolder(android.view.ViewGroup parent, int viewType) {
-            View view = getLayoutInflater().inflate(R.layout.item_video, parent, false);
-            return new VideoViewHolder(view);
+        public AudioViewHolder onCreateViewHolder(android.view.ViewGroup parent, int viewType) {
+            View view = getLayoutInflater().inflate(R.layout.item_audio, parent, false);
+            return new AudioViewHolder(view);
         }
 
         @Override
-        public void onBindViewHolder(VideoViewHolder holder, int position) {
-            VideoItem video = videos.get(position);
+        public void onBindViewHolder(AudioViewHolder holder, int position) {
+            AudioItem audio = audios.get(position);
             
-            holder.tvTitle.setText(video.getTitle());
-            holder.tvDate.setText(video.getDate());
-            holder.tvSize.setText(video.getSize());
-            holder.tvDuration.setText(video.getDuration());
-            holder.tvResolution.setText(video.getResolution());
-            holder.checkbox.setChecked(video.isChecked());
+            holder.tvTitle.setText(audio.getTitle());
+            holder.tvDate.setText(audio.getDate());
+            holder.tvSize.setText(audio.getSize());
+            holder.tvDuration.setText(audio.getDuration());
+            holder.tvArtist.setText(audio.getArtist());
+            holder.checkbox.setChecked(audio.isChecked());
             
             holder.checkbox.setOnClickListener(v -> {
                 boolean isChecked = holder.checkbox.isChecked();
-                video.setChecked(isChecked);
+                audio.setChecked(isChecked);
             });
             
             holder.itemView.setOnClickListener(v -> {
-                boolean isChecked = !video.isChecked();
-                video.setChecked(isChecked);
+                boolean isChecked = !audio.isChecked();
+                audio.setChecked(isChecked);
                 holder.checkbox.setChecked(isChecked);
             });
         }
 
         @Override
         public int getItemCount() {
-            return videos.size();
+            return audios.size();
         }
 
-        class VideoViewHolder extends RecyclerView.ViewHolder {
-            TextView tvTitle, tvDate, tvSize, tvDuration, tvResolution;
+        class AudioViewHolder extends RecyclerView.ViewHolder {
+            TextView tvTitle, tvDate, tvSize, tvDuration, tvArtist;
             CheckBox checkbox;
 
-            public VideoViewHolder(View itemView) {
+            public AudioViewHolder(View itemView) {
                 super(itemView);
-                tvTitle = itemView.findViewById(R.id.tv_video_title);
-                tvDate = itemView.findViewById(R.id.tv_video_date);
-                tvSize = itemView.findViewById(R.id.tv_video_size);
-                tvDuration = itemView.findViewById(R.id.tv_video_duration);
-                tvResolution = itemView.findViewById(R.id.tv_video_resolution);
-                checkbox = itemView.findViewById(R.id.checkbox_video);
+                tvTitle = itemView.findViewById(R.id.tv_audio_title);
+                tvDate = itemView.findViewById(R.id.tv_audio_date);
+                tvSize = itemView.findViewById(R.id.tv_audio_size);
+                tvDuration = itemView.findViewById(R.id.tv_audio_duration);
+                tvArtist = itemView.findViewById(R.id.tv_audio_artist);
+                checkbox = itemView.findViewById(R.id.checkbox_audio);
             }
         }
     }

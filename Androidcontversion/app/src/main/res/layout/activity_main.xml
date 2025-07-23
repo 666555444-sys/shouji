@@ -115,18 +115,21 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:drawableStart="@drawable/ic_shield"
-                                android:drawablePadding="5dp"
                                 android:text="@string/safe_efficient"
                                 android:textColor="@color/white"
                                 android:textSize="12sp" />
 
+                            <View
+                                android:layout_width="1dp"
+                                android:layout_height="12dp"
+                                android:layout_gravity="center_vertical"
+                                android:layout_marginStart="5dp"
+                                android:layout_marginEnd="5dp"
+                                android:background="@color/white" />
+
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_marginStart="10dp"
-                                android:drawableStart="@drawable/ic_lock"
-                                android:drawablePadding="5dp"
                                 android:text="@string/privacy_assured"
                                 android:textColor="@color/white"
                                 android:textSize="12sp" />

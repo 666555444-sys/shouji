@@ -96,111 +96,108 @@
                     android:layout_centerInParent="true"
                     android:background="@drawable/bg_logo_inner">
 
-                    <RelativeLayout
+                    <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_centerInParent="true">
+                        android:layout_centerInParent="true"
+                        android:orientation="vertical"
+                        android:gravity="center"
+                        android:translationY="-5dp">
 
+                        <!-- 手机图标 -->
                         <ImageView
-                            android:id="@+id/phoneIcon"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_centerHorizontal="true"
-                            android:src="@drawable/ic_phone"
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:layout_marginBottom="5dp"
+                            android:src="@drawable/ic_mobile"
                             app:tint="@color/white" />
 
+                        <!-- 数据图标 -->
                         <ImageView
-                            android:id="@+id/dataIcon"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_below="@id/phoneIcon"
-                            android:layout_marginTop="-10dp"
-                            android:layout_marginStart="30dp"
-                            android:layout_toEndOf="@id/phoneIcon"
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:layout_marginEnd="-20dp"
+                            android:layout_marginBottom="-10dp"
                             android:rotation="10"
                             android:src="@drawable/ic_database"
                             app:tint="@color/white" />
 
+                        <!-- 上箭头图标 -->
                         <ImageView
                             android:id="@+id/arrowIcon"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_alignTop="@id/phoneIcon"
-                            android:layout_marginStart="20dp"
-                            android:layout_toEndOf="@id/phoneIcon"
+                            android:layout_width="22dp"
+                            android:layout_height="22dp"
+                            android:layout_marginStart="30dp"
+                            android:layout_marginTop="-35dp"
                             android:src="@drawable/ic_arrow_up"
                             app:tint="@color/white" />
 
+                        <!-- 盾牌图标 -->
                         <ImageView
-                            android:id="@+id/shieldIcon"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_below="@id/phoneIcon"
-                            android:layout_centerHorizontal="true"
-                            android:layout_marginTop="10dp"
+                            android:layout_width="18dp"
+                            android:layout_height="18dp"
+                            android:layout_marginTop="25dp"
                             android:alpha="0.8"
                             android:src="@drawable/ic_shield"
                             app:tint="@color/white" />
-                    </RelativeLayout>
+                    </LinearLayout>
                 </RelativeLayout>
             </RelativeLayout>
         </RelativeLayout>
 
         <!-- 应用名称和口号 -->
         <TextView
-            android:id="@+id/appName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/logoContainer"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="40dp"
-            android:text="@string/data_recovery_expert"
+            android:layout_marginTop="20dp"
+            android:text="数据恢复专家"
             android:textColor="@color/white"
             android:textSize="24sp"
             android:textStyle="bold" />
 
         <TextView
-            android:id="@+id/appSlogan"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/appName"
+            android:layout_below="@id/logoContainer"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="10dp"
-            android:alpha="0.9"
-            android:text="@string/safe_efficient_privacy_assured"
+            android:layout_marginTop="60dp"
+            android:text="安全高效 · 数据无忧"
             android:textColor="@color/white"
+            android:alpha="0.9"
             android:textSize="14sp" />
 
         <!-- 加载动画 -->
         <LinearLayout
-            android:id="@+id/loadingContainer"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/appSlogan"
+            android:layout_below="@id/logoContainer"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="60dp"
-            android:orientation="horizontal">
+            android:layout_marginTop="120dp">
 
             <View
                 android:id="@+id/loadingDot1"
                 android:layout_width="8dp"
                 android:layout_height="8dp"
-                android:layout_margin="6dp"
-                android:background="@drawable/bg_loading_dot" />
+                android:layout_marginEnd="12dp"
+                android:background="@drawable/bg_loading_dot"
+                android:backgroundTint="@color/white" />
 
             <View
                 android:id="@+id/loadingDot2"
                 android:layout_width="8dp"
                 android:layout_height="8dp"
-                android:layout_margin="6dp"
-                android:background="@drawable/bg_loading_dot" />
+                android:layout_marginEnd="12dp"
+                android:background="@drawable/bg_loading_dot"
+                android:backgroundTint="@color/white" />
 
             <View
                 android:id="@+id/loadingDot3"
                 android:layout_width="8dp"
                 android:layout_height="8dp"
-                android:layout_margin="6dp"
-                android:background="@drawable/bg_loading_dot" />
+                android:background="@drawable/bg_loading_dot"
+                android:backgroundTint="@color/white" />
         </LinearLayout>
 
         <!-- 底部公司信息 -->
@@ -210,9 +207,9 @@
             android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true"
             android:layout_marginBottom="30dp"
-            android:alpha="0.6"
-            android:text="@string/copyright_info"
+            android:text="© 2025 数据恢复专家 版权所有"
             android:textColor="@color/white"
+            android:alpha="0.6"
             android:textSize="12sp" />
     </RelativeLayout>
 

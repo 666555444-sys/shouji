@@ -1,11 +1,15 @@
 package com.example.shoujixiufu;
 
 import android.animation.ObjectAnimator;
-import android.animation.ValueAnimator;
+import android.content.ContentResolver;
 import android.content.Intent;
+import android.database.Cursor;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,16 +29,20 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
+import java.util.Locale;
+import java.util.Collections;
 
 public class VideoScanActivity extends AppCompatActivity {
 
     private ImageButton backBtn;
     private TextView menuBtn;
-    private TextView filterTime, filterSize;
+    // 删除时间、大小过滤器
     private View scanProgressBar;
     private TextView progressText;
     private Button recoverBtn, bottomActionBtn;
@@ -50,7 +58,6 @@ public class VideoScanActivity extends AppCompatActivity {
     private boolean isScanning = false;
     private int progress = 0;
     private int filesFound = 0;
-    private Timer scanTimer;
     
     // 视频数据
     private List<VideoItem> videoItems;
@@ -87,83 +94,122 @@ public class VideoScanActivity extends AppCompatActivity {
     private void initViews() {
         backBtn = findViewById(R.id.backBtn);
         menuBtn = findViewById(R.id.menuBtn);
-        filterTime = findViewById(R.id.filterTime);
-        filterSize = findViewById(R.id.filterSize);
+        
+        // 隐藏右上角目录按钮
+        if (menuBtn != null) {
+            menuBtn.setVisibility(View.GONE);
+        }
+        
+        // 使用正确的ID
         scanProgressBar = findViewById(R.id.scanProgressBar);
         progressText = findViewById(R.id.progressText);
         recoverBtn = findViewById(R.id.recoverBtn);
         bottomActionBtn = findViewById(R.id.bottomActionBtn);
+        
+        // 视频列表
         videoList = findViewById(R.id.videoList);
         
-        // 扫描界面元素
+        // 扫描界面
         scanningScreen = findViewById(R.id.scanningScreen);
-        outerCircle = findViewById(R.id.outerCircle);
-        middleCircle = findViewById(R.id.middleCircle);
-        innerCircle = findViewById(R.id.innerCircle);
         scanProgressBar2 = findViewById(R.id.scanProgressBar2);
         scanPercentage = findViewById(R.id.scanPercentage);
         scanFiles = findViewById(R.id.scanFiles);
-    }
-    
-    private void setupClickListeners() {
-        // 返回按钮
-        backBtn.setOnClickListener(v -> {
-            showExitConfirmDialog();
-        });
         
-        // 菜单按钮
-        menuBtn.setOnClickListener(v -> {
-            // 这里可以实现菜单功能
-        });
-        
-        // 筛选按钮
+        // 扫描圆圈
+        outerCircle = findViewById(R.id.outerCircle);
+        middleCircle = findViewById(R.id.middleCircle);
+        innerCircle = findViewById(R.id.innerCircle);
+
+        // 设置时间过滤器点击事件
+        TextView filterTime = findViewById(R.id.filterTime);
+        if (filterTime != null) {
         filterTime.setOnClickListener(v -> {
-            // 更新筛选状态
+                // 按时间排序视频
+                if (videoAdapter != null && videoItems != null) {
+                    List<VideoItem> sortedByTime = new ArrayList<>(videoItems);
+                    Collections.sort(sortedByTime, (v1, v2) -> v2.date.compareTo(v1.date));
+                    videoAdapter = new VideoAdapter(sortedByTime);
+                    videoList.setAdapter(videoAdapter);
+                    
+                    // 更新过滤器样式
             filterTime.setBackgroundResource(R.drawable.bg_filter_selected);
             filterTime.setTextColor(getResources().getColor(R.color.blue_primary));
             
+                    TextView filterSize = findViewById(R.id.filterSize);
+                    if (filterSize != null) {
             filterSize.setBackground(null);
             filterSize.setTextColor(getResources().getColor(R.color.text_secondary));
-            
-            // 可以在这里实现按时间排序
+                    }
+                }
         });
+        }
         
+        // 设置大小过滤器点击事件
+        TextView filterSize = findViewById(R.id.filterSize);
+        if (filterSize != null) {
         filterSize.setOnClickListener(v -> {
-            // 更新筛选状态
+                // 按大小排序视频
+                if (videoAdapter != null && videoItems != null) {
+                    List<VideoItem> sortedBySize = new ArrayList<>(videoItems);
+                    Collections.sort(sortedBySize, (v1, v2) -> {
+                        try {
+                            // 从 "100MB" 格式解析
+                            String s1 = v1.size.replaceAll("[^0-9.]", "");
+                            String s2 = v2.size.replaceAll("[^0-9.]", "");
+                            float f1 = Float.parseFloat(s1);
+                            float f2 = Float.parseFloat(s2);
+                            
+                            // 考虑单位
+                            if (v1.size.contains("GB")) f1 *= 1024;
+                            if (v2.size.contains("GB")) f2 *= 1024;
+                            
+                            return Float.compare(f2, f1);
+                        } catch (Exception e) {
+                            return 0;
+                        }
+                    });
+                    videoAdapter = new VideoAdapter(sortedBySize);
+                    videoList.setAdapter(videoAdapter);
+                    
+                    // 更新过滤器样式
             filterSize.setBackgroundResource(R.drawable.bg_filter_selected);
             filterSize.setTextColor(getResources().getColor(R.color.blue_primary));
             
-            filterTime.setBackground(null);
-            filterTime.setTextColor(getResources().getColor(R.color.text_secondary));
-            
-            // 可以在这里实现按大小排序
+                    TextView timeFilter = findViewById(R.id.filterTime);
+                    if (timeFilter != null) {
+                        timeFilter.setBackground(null);
+                        timeFilter.setTextColor(getResources().getColor(R.color.text_secondary));
+                    }
+                }
+            });
+        }
+    }
+    
+    private void setupClickListeners() {
+        // Back button
+        backBtn.setOnClickListener(v -> showExitConfirmDialog());
+        
+        // Menu button
+        menuBtn.setOnClickListener(v -> {
+            // Show menu options if needed
         });
         
-        // 恢复按钮
-        recoverBtn.setOnClickListener(v -> {
-            showRecoverDialog();
-        });
+        // 删除过滤器点击监听器
         
-        // 底部按钮
-        bottomActionBtn.setOnClickListener(v -> {
-            showRecoverDialog();
-        });
+        // Recover button
+        recoverBtn.setOnClickListener(v -> showRecoverDialog());
+        
+        // Bottom action button
+        bottomActionBtn.setOnClickListener(v -> showRecoverDialog());
     }
     
     private void createVideoData() {
-        videoItems = new ArrayList<>();
-        
-        // 模拟视频数据
-        videoItems.add(new VideoItem("家庭旅行视频.mp4", "3:42", "32MB", "昨天", "1080p"));
-        videoItems.add(new VideoItem("朋友聚会.mp4", "2:18", "24MB", "7-15", "720p"));
-        videoItems.add(new VideoItem("生日派对.mov", "5:07", "45MB", "7-14", "1080p"));
-        
-        // 可以添加更多视频数据
+        // 创建默认视频数据样本
+        videoItems = createDefaultVideoData();
     }
     
     private void setupVideoList() {
         videoAdapter = new VideoAdapter(videoItems);
-        videoList.setLayoutManager(new LinearLayoutManager(this));
         videoList.setAdapter(videoAdapter);
     }
     
@@ -176,14 +222,249 @@ public class VideoScanActivity extends AppCompatActivity {
         // 开始旋转动画
         startCircleAnimations();
         
-        // 使用定时器模拟扫描进度
-        scanTimer = new Timer();
-        scanTimer.scheduleAtFixedRate(new TimerTask() {
+        // 扫描本地视频文件
+        scanLocalVideos();
+    }
+    
+    // 扫描本地视频文件 - 不再区分目录
+    private void scanLocalVideos() {
+        new Thread(() -> {
+            try {
+                // 显示初始进度
+                runOnUiThread(() -> {
+                    scanProgressBar2.setProgress(0);
+                    scanPercentage.setText("0%");
+                    scanFiles.setText(getString(R.string.scanning_video_desc));
+                    scanFiles.setAlpha(1f);
+                });
+                
+                // 先创建视频列表，在扫描过程中填充
+                List<VideoItem> videos = new ArrayList<>();
+                
+                // 模拟进度从0%开始，只增加到10%
+                for(int progress = 0; progress <= 10; progress += 2) {
+                    final int currentProgress = progress;
+                    runOnUiThread(() -> {
+                        scanProgressBar2.setProgress(currentProgress);
+                        scanPercentage.setText(currentProgress + "%");
+                        
+                        // 当进度达到一定程度，更新找到的视频数量
+                        if(currentProgress > 5) {
+                            filesFound = videos.size() > 0 ? videos.size() : 3;
+                            scanFiles.setText(getString(R.string.files_found, filesFound));
+                        }
+                    });
+                    
+                    // 如果进度到达5%，开始获取视频
+                    if(progress == 5) {
+                        // 获取部分本地视频
+                        List<VideoItem> localVideos = getLocalVideos();
+                        if (localVideos.size() > 0) {
+                            videos.addAll(localVideos.subList(0, Math.min(5, localVideos.size())));
+                            filesFound = videos.size();
+                        }
+                    }
+                    
+                    Thread.sleep(250);
+                }
+                
+                // 扫描到10%时停止并显示结果
+                final List<VideoItem> finalVideos = videos.isEmpty() ? createDefaultVideoData() : videos;
+                
+                runOnUiThread(() -> {
+                    scanProgressBar2.setProgress(10);
+                    scanPercentage.setText("10%");
+                    filesFound = finalVideos.size();
+                    scanFiles.setText(getString(R.string.files_found, filesFound));
+                    
+                    // 延迟500ms后隐藏扫描屏幕，显示结果
+                    new Handler(Looper.getMainLooper()).postDelayed(() -> {
+                        // 隐藏扫描屏幕
+                        Animation fadeOut = new AlphaAnimation(1f, 0f);
+                        fadeOut.setDuration(300);
+                        fadeOut.setAnimationListener(new Animation.AnimationListener() {
+                            @Override
+                            public void onAnimationStart(Animation animation) {}
+                            
+                            @Override
+                            public void onAnimationEnd(Animation animation) {
+                                // 扫描完成，隐藏扫描屏幕
+                                scanningScreen.setVisibility(View.GONE);
+                                stopCircleAnimations();
+                                
+                                // 显示扫描结果
+                                showScanResults(finalVideos);
+                            }
+                            
             @Override
-            public void run() {
-                runOnUiThread(() -> updateScanProgress());
+                            public void onAnimationRepeat(Animation animation) {}
+                        });
+                        scanningScreen.startAnimation(fadeOut);
+                    }, 500);
+                });
+                
+            } catch (Exception e) {
+                e.printStackTrace();
+                
+                // 如果发生错误，显示默认数据
+                runOnUiThread(() -> {
+                    scanningScreen.setVisibility(View.GONE);
+                    stopCircleAnimations();
+                    showScanResults(createDefaultVideoData());
+                });
             }
-        }, 800, 300); // 延迟800毫秒后，每300毫秒更新一次
+        }).start();
+    }
+    
+    // 修改获取本地视频方法 - 不再区分目录
+    private List<VideoItem> getLocalVideos() {
+        List<VideoItem> videoList = new ArrayList<>();
+        
+        try {
+            // 查询系统媒体库中的视频文件
+            ContentResolver contentResolver = getContentResolver();
+            Uri uri = MediaStore.Video.Media.EXTERNAL_CONTENT_URI;
+            
+            // 创建与Android版本兼容的投影
+            List<String> projectionList = new ArrayList<>();
+            projectionList.add(MediaStore.Video.Media.DISPLAY_NAME);
+            projectionList.add(MediaStore.Video.Media.SIZE);
+            projectionList.add(MediaStore.Video.Media.DATE_MODIFIED);
+            projectionList.add(MediaStore.Video.Media.DURATION);
+            
+            // 有条件地添加RESOLUTION (API 29+ 才有)
+            boolean hasResolution = false;
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                try {
+                    // 反射检查字段是否存在
+                    MediaStore.Video.Media.class.getField("RESOLUTION");
+                    projectionList.add(MediaStore.Video.Media.RESOLUTION);
+                    hasResolution = true;
+                } catch (NoSuchFieldException e) {
+                    // 字段不存在，不添加到投影中
+                }
+            }
+            
+            String[] projection = projectionList.toArray(new String[0]);
+            
+            Cursor cursor = contentResolver.query(uri, projection, null, null, null);
+            if (cursor != null) {
+                // 获取列索引，以防字段顺序不一致
+                int nameIndex = cursor.getColumnIndex(MediaStore.Video.Media.DISPLAY_NAME);
+                int sizeIndex = cursor.getColumnIndex(MediaStore.Video.Media.SIZE);
+                int dateIndex = cursor.getColumnIndex(MediaStore.Video.Media.DATE_MODIFIED);
+                int durationIndex = cursor.getColumnIndex(MediaStore.Video.Media.DURATION);
+                int resolutionIndex = hasResolution ? 
+                        cursor.getColumnIndex(MediaStore.Video.Media.RESOLUTION) : -1;
+                
+                while (cursor.moveToNext() && videoList.size() < 20) { // 限制最多20个视频
+                    String name = nameIndex >= 0 ? cursor.getString(nameIndex) : "未知";
+                    long size = sizeIndex >= 0 ? cursor.getLong(sizeIndex) : 0;
+                    long date = dateIndex >= 0 ? cursor.getLong(dateIndex) * 1000 : 0; // 转换为毫秒
+                    long duration = durationIndex >= 0 ? cursor.getLong(durationIndex) : 0;
+                    
+                    // 安全获取分辨率
+                    String resolution = "未知";
+                    if (resolutionIndex >= 0) {
+                        String resValue = cursor.getString(resolutionIndex);
+                        resolution = (resValue != null) ? resValue : "未知";
+                    }
+                    
+                    VideoItem video = new VideoItem(
+                            name,
+                            formatDuration(duration),
+                            formatSize(size),
+                            formatDate(date),
+                            resolution
+                    );
+                    videoList.add(video);
+                }
+                cursor.close();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            videoList = createDefaultVideoData();
+        }
+        
+        // 如果找不到视频，使用默认数据
+        if (videoList.isEmpty()) {
+            videoList = createDefaultVideoData();
+        }
+        
+        return videoList;
+    }
+    
+    // 删除从目录获取视频文件的方法，因为我们直接使用MediaStore
+
+    private String formatSize(long size) {
+        if (size <= 0) return "0B";
+        final String[] units = new String[]{"B", "KB", "MB", "GB", "TB"};
+        int digitGroups = (int) (Math.log10(size) / Math.log10(1024));
+        return new DecimalFormat("#,##0.#").format(size / Math.pow(1024, digitGroups)) + units[digitGroups];
+    }
+    
+    private String formatDuration(long milliseconds) {
+        if (milliseconds <= 0) return "0:00";
+        
+        long seconds = milliseconds / 1000;
+        long minutes = seconds / 60;
+        long hours = minutes / 60;
+        
+        seconds %= 60;
+        minutes %= 60;
+        
+        if (hours > 0) {
+            return String.format(Locale.getDefault(), "%d:%02d:%02d", hours, minutes, seconds);
+        } else {
+            return String.format(Locale.getDefault(), "%d:%02d", minutes, seconds);
+        }
+    }
+    
+    private String formatDate(long timeMillis) {
+        Date date = new Date(timeMillis);
+        Calendar calendar = Calendar.getInstance();
+        Calendar today = Calendar.getInstance();
+        calendar.setTime(date);
+        
+        if (calendar.get(Calendar.YEAR) == today.get(Calendar.YEAR) &&
+                calendar.get(Calendar.DAY_OF_YEAR) == today.get(Calendar.DAY_OF_YEAR)) {
+            return "今天";
+        } else if (calendar.get(Calendar.YEAR) == today.get(Calendar.YEAR) &&
+                calendar.get(Calendar.DAY_OF_YEAR) == today.get(Calendar.DAY_OF_YEAR) - 1) {
+            return "昨天";
+        } else {
+            SimpleDateFormat sdf = new SimpleDateFormat("MM-dd", Locale.getDefault());
+            return sdf.format(date);
+        }
+    }
+    
+    private List<VideoItem> createDefaultVideoData() {
+        List<VideoItem> videos = new ArrayList<>();
+        videos.add(new VideoItem("家庭旅行视频.mp4", "3:42", "32MB", "昨天", "1080p"));
+        videos.add(new VideoItem("朋友聚会.mp4", "2:18", "24MB", "7-15", "720p"));
+        videos.add(new VideoItem("生日派对.mov", "5:07", "45MB", "7-14", "1080p"));
+        return videos;
+    }
+    
+    private void showScanResults(List<VideoItem> videos) {
+        // 显示视频列表
+        videoItems = videos;
+        videoAdapter = new VideoAdapter(videos);
+        videoList.setAdapter(videoAdapter);
+        videoList.setLayoutManager(new LinearLayoutManager(this));
+        
+        // 显示进度条和底部按钮
+        scanProgressBar.setVisibility(View.VISIBLE);
+        bottomActionBtn.setVisibility(View.VISIBLE);
+        
+        // 设置进度文本显示为10%
+        if (progressText != null) {
+            progressText.setText(getString(R.string.scanned_percent, 10));
+        }
+        
+        // 设置按钮点击事件
+        recoverBtn.setOnClickListener(v -> showRecoverDialog());
+        bottomActionBtn.setOnClickListener(v -> showRecoverDialog());
     }
     
     private void startCircleAnimations() {
@@ -221,131 +502,60 @@ public class VideoScanActivity extends AppCompatActivity {
         innerCircle.clearAnimation();
     }
     
-    private void updateScanProgress() {
-        // 增加进度
-        progress += Math.random() * 0.7;
-        
-        // 进度最多到8%
-        int targetProgress = 8;
-        if (progress > targetProgress) {
-            progress = targetProgress;
-        }
-        
-        // 更新进度条
-        scanProgressBar2.setProgress((int) progress);
-        scanPercentage.setText((int) progress + "%");
-        
-        // 模拟发现文件
-        if (Math.random() > 0.7) {
-            filesFound += Math.floor(Math.random() * 3) + 1;
-            scanFiles.setText(getString(R.string.files_found, filesFound));
-            
-            if (scanFiles.getAlpha() < 1) {
-                // 显示文件计数
-                ObjectAnimator.ofFloat(scanFiles, "alpha", 0f, 1f)
-                        .setDuration(500)
-                        .start();
-            }
-        }
-        
-        // 达到目标进度后完成扫描
-        if (progress >= targetProgress) {
-            completeScan();
-        }
-    }
+    // 删除updateScanProgress方法
+    // 删除completeScan方法，因为scanLocalVideos已经处理了扫描完成逻辑
     
-    private void completeScan() {
-        if (scanTimer != null) {
-            scanTimer.cancel();
-            scanTimer = null;
-        }
-        
-        // 延迟一会儿以显示最终进度
-        new Handler(Looper.getMainLooper()).postDelayed(() -> {
-            // 隐藏扫描界面
-            Animation fadeOut = new AlphaAnimation(1f, 0f);
-            fadeOut.setDuration(500);
-            fadeOut.setAnimationListener(new Animation.AnimationListener() {
-                @Override
-                public void onAnimationStart(Animation animation) {}
-                
-                @Override
-                public void onAnimationEnd(Animation animation) {
-                    scanningScreen.setVisibility(View.GONE);
-                    stopCircleAnimations();
-                    showScanResults();
-                }
-                
-                @Override
-                public void onAnimationRepeat(Animation animation) {}
-            });
-            scanningScreen.startAnimation(fadeOut);
-        }, 1000);
-    }
-    
-    private void showScanResults() {
-        // 显示进度条
-        scanProgressBar.setVisibility(View.VISIBLE);
-        
-        // 设置进度文本
-        progressText.setText(getString(R.string.scanned_percent, 8));
-        
-        // 显示底部按钮
-        bottomActionBtn.setVisibility(View.VISIBLE);
-        
-        // 自动显示弹窗(第一次进入时)
-        // 使用Handler延迟一点时间以避免UI卡顿
-        new Handler(Looper.getMainLooper()).postDelayed(this::showRecoverDialog, 500);
-    }
-    
+    // 退出确认对话框
     private void showExitConfirmDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle(R.string.are_you_sure_return);
-        builder.setMessage(R.string.rescan_return_note);
-        builder.setPositiveButton(R.string.confirm_action, (dialog, which) -> {
-            finish();
-        });
-        builder.setNegativeButton(R.string.cancel_action, null);
-        builder.show();
+        
+        if (scanningScreen.getVisibility() == View.VISIBLE) {
+            // 正在扫描中的退出提示
+            builder.setTitle(getString(R.string.cancel_scan_title))
+                    .setMessage(getString(R.string.cancel_scan_message))
+                    .setPositiveButton(getString(R.string.yes), (dialog, which) -> finish())
+                    .setNegativeButton(getString(R.string.no), (dialog, which) -> dialog.dismiss());
+        } else {
+            // 扫描完成后的退出提示
+            builder.setTitle(R.string.exit_service_title)
+                    .setMessage(R.string.exit_service_message)
+                    .setPositiveButton(R.string.confirm_exit, (dialog, which) -> finish())
+                    .setNegativeButton(R.string.continue_service, (dialog, which) -> dialog.dismiss());
+        }
+        builder.setCancelable(false).show();
     }
     
+    // 恢复对话框
     private void showRecoverDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle(getString(R.string.scanned_percent, 8));
-        builder.setMessage("目前只扫描到8%，您如需要开放「深层扫描」查看全部数据，请点击「去恢复」按钮。");
-        builder.setPositiveButton(R.string.recover_immediately, (dialog, which) -> {
-            goToPayment();
-        });
-        builder.setNegativeButton(R.string.cancel_action, null);
-        builder.show();
+        builder.setTitle(R.string.recovery_dialog_title)
+                .setMessage(R.string.recovery_dialog_content)
+                .setNegativeButton(R.string.cancel, (dialog, which) -> dialog.dismiss())
+                .setPositiveButton(R.string.go_to_recover, (dialog, which) -> goToPayment())
+                .setCancelable(false)
+                .show();
     }
     
     private void goToPayment() {
-        // 跳转到支付页面
         Intent intent = new Intent(this, PaymentActivity.class);
-        intent.putExtra("returnTo", "video-scan.html");
+        intent.putExtra("returnTo", "video_scan");
         startActivity(intent);
     }
     
     @Override
     public void onBackPressed() {
-        if (isScanning) {
             showExitConfirmDialog();
-        } else {
-            super.onBackPressed();
-        }
     }
     
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if (scanTimer != null) {
-            scanTimer.cancel();
-            scanTimer = null;
-        }
+        
+        // Clean up timer if still running
+        // Removed scanTimer as it's no longer used
     }
     
-    // 视频项模型
+    // 视频数据模型
     private static class VideoItem {
         private String name;
         private String duration;
@@ -363,7 +573,7 @@ public class VideoScanActivity extends AppCompatActivity {
         }
     }
     
-    // 视频列表适配器
+    // 保持适配器实现不变
     private class VideoAdapter extends RecyclerView.Adapter<VideoAdapter.VideoViewHolder> {
         
         private List<VideoItem> videoItems;
@@ -431,12 +641,12 @@ public class VideoScanActivity extends AppCompatActivity {
             
             public VideoViewHolder(@NonNull View itemView) {
                 super(itemView);
-                videoName = itemView.findViewById(R.id.videoName);
-                videoDuration = itemView.findViewById(R.id.videoDuration);
-                videoDate = itemView.findViewById(R.id.videoDate);
-                videoSize = itemView.findViewById(R.id.videoSize);
-                videoResolution = itemView.findViewById(R.id.videoResolution);
-                videoCheckbox = itemView.findViewById(R.id.videoCheckbox);
+                videoName = itemView.findViewById(R.id.tv_video_title);
+                videoDuration = itemView.findViewById(R.id.tv_video_duration);
+                videoDate = itemView.findViewById(R.id.tv_video_date);
+                videoSize = itemView.findViewById(R.id.tv_video_size);
+                videoResolution = itemView.findViewById(R.id.tv_video_resolution);
+                videoCheckbox = itemView.findViewById(R.id.checkbox_video);
             }
         }
     }

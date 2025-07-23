@@ -129,4 +129,8 @@
     <color name="brown_text">#6b4423</color>
     <color name="orange_gradient_light">#ffecd2</color>
     <color name="white_50">#80FFFFFF</color>
+
+    <!-- 启动页面颜色 -->
+    <color name="splash_background_start">#4facfe</color>
+    <color name="splash_background_end">#1e6ce3</color>
 </resources>

@@ -294,8 +294,82 @@ public class PaymentActivity extends BaseActivity {
                     .setNegativeButton("继续支付", null)
                     .show();
         } else {
-            showRecoveryReminder();
+            // 获取returnTo参数，判断来源
+            String returnTo = getIntent().getStringExtra("returnTo");
+            if (returnTo != null) {
+                // 来自修复页面或服务详情页面，显示挽留页面
+                showRecoveryReminder();
+            } else {
+                // 其他来源，显示普通的挽留对话框
+                showExitConfirmDialog();
+            }
         }
+    }
+    
+    // 添加新的退出确认对话框
+    private void showExitConfirmDialog() {
+        new AlertDialog.Builder(this)
+                .setTitle(R.string.exit_service_title)
+                .setMessage(R.string.exit_service_message)
+                .setPositiveButton(R.string.confirm_exit, (dialog, which) -> {
+                    // 确认退出
+                    navigateBack();
+                })
+                .setNegativeButton(R.string.continue_service, (dialog, which) -> {
+                    // 继续留在当前页面
+                    dialog.dismiss();
+                })
+                .setCancelable(false)
+                .show();
+    }
+    
+    protected void navigateBack() {
+        // 获取上一个页面信息，返回上一个Activity
+        Intent intent = null;
+        String returnTo = getIntent().getStringExtra("returnTo");
+        
+        if (returnTo != null) {
+            switch (returnTo) {
+                case "file_scan":
+                    intent = new Intent(this, FileScanActivity.class);
+                    break;
+                case "video_scan":
+                    intent = new Intent(this, VideoScanActivity.class);
+                    break;
+                case "audio_scan":
+                    intent = new Intent(this, AudioScanActivity.class);
+                    break;
+                case "file_repair":
+                    intent = new Intent(this, FileRepairActivity.class);
+                    intent.putExtra("scan_percentage", 8);
+                    break;
+                case "video_repair":
+                    intent = new Intent(this, VideoRepairActivity.class);
+                    intent.putExtra("scan_percentage", 9);
+                    break;
+                case "audio_repair":
+                    intent = new Intent(this, AudioRepairActivity.class);
+                    intent.putExtra("scan_percentage", 10);
+                    break;
+                case "vip_membership":
+                    intent = new Intent(this, VipMembershipActivity.class);
+                    break;
+                default:
+                    intent = new Intent(this, MainActivity.class);
+                    break;
+            }
+            // 需要重新扫描
+            if (returnTo.contains("scan")) {
+                intent.putExtra("startScan", true);
+            }
+            startActivity(intent);
+        } else {
+            // 如果没有指定返回页面，返回主页
+            intent = new Intent(this, MainActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(intent);
+        }
+        finish();
     }
     
     private void showRecoveryReminder() {

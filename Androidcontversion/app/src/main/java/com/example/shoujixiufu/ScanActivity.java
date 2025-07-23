@@ -1,185 +1,229 @@
 package com.example.shoujixiufu;
 
+import android.animation.ObjectAnimator;
+import android.animation.ValueAnimator;
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.view.View;
-import android.widget.Button;
+import android.view.animation.LinearInterpolator;
+import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ProgressBar;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-
-import java.util.Random;
-import java.util.Timer;
-import java.util.TimerTask;
 
 public class ScanActivity extends AppCompatActivity {
 
-    private ImageButton backBtn;
-    private Button albumTab, wechatTab, qqTab, otherTab;
-    private ProgressBar progressBar;
-    private TextView progressText;
-    private Button cancelBtn, recoverBtn, unlockBtn, goToPaymentBtn;
-    private RelativeLayout unlockModal;
-    private TextView closeModalBtn;
+    // 扫描类型常量
+    public static final String EXTRA_SCAN_TYPE = "scan_type";
+    public static final String SCAN_TYPE_FILE = "file";
+    public static final String SCAN_TYPE_VIDEO = "video";
+    public static final String SCAN_TYPE_AUDIO = "audio";
     
-    private Timer scanTimer;
-    private int currentProgress = 13;
-    private Random random = new Random();
+    private ImageButton btnBack;
+    private FrameLayout scanningScreen;
+    private ProgressBar scanProgressBar;
+    private View scanCircleOuter, scanCircleMiddle, scanCircleInner;
+    private TextView tvScanPercentage, tvScanFiles, tvScanningTitle, tvScanningDesc;
+    private String scanType;
+    private Handler handler = new Handler(Looper.getMainLooper());
+    private boolean scanCompleted = false;
+    private int filesFound = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_scan);
 
-        // 初始化视图
+        // 获取扫描类型
+        scanType = getIntent().getStringExtra(EXTRA_SCAN_TYPE);
+        if (scanType == null) {
+            scanType = SCAN_TYPE_FILE; // 默认为文件扫描
+        }
+
         initViews();
-        
-        // 设置点击监听
-        setupClickListeners();
-        
-        // 设置初始进度
-        updateProgress(currentProgress);
-        
-        // 模拟扫描进度（注释掉，因为初始设计中默认是不自动扫描的）
-        // startScanSimulation();
+        setupListeners();
+        updateUIBasedOnScanType();
+        startScanning();
     }
-    
+
     private void initViews() {
-        // 头部
-        backBtn = findViewById(R.id.backBtn);
-        
-        // 标签页
-        albumTab = findViewById(R.id.albumTab);
-        wechatTab = findViewById(R.id.wechatTab);
-        qqTab = findViewById(R.id.qqTab);
-        otherTab = findViewById(R.id.otherTab);
-        
-        // 进度
-        progressBar = findViewById(R.id.progressBar);
-        progressText = findViewById(R.id.progressText);
-        
-        // 按钮
-        cancelBtn = findViewById(R.id.cancelBtn);
-        recoverBtn = findViewById(R.id.recoverBtn);
-        unlockBtn = findViewById(R.id.unlockBtn);
-        
-        // 模态框
-        unlockModal = findViewById(R.id.unlockModal);
-        closeModalBtn = findViewById(R.id.closeModalBtn);
-        goToPaymentBtn = findViewById(R.id.goToPaymentBtn);
+        btnBack = findViewById(R.id.btn_back);
+        scanningScreen = findViewById(R.id.scanning_screen);
+        scanProgressBar = findViewById(R.id.scan_progress_bar);
+        scanCircleOuter = findViewById(R.id.scan_circle_outer);
+        scanCircleMiddle = findViewById(R.id.scan_circle_middle);
+        scanCircleInner = findViewById(R.id.scan_circle_inner);
+        tvScanPercentage = findViewById(R.id.tv_scan_percentage);
+        tvScanFiles = findViewById(R.id.tv_scan_files);
+        tvScanningTitle = findViewById(R.id.scanning_title);
+        tvScanningDesc = findViewById(R.id.scanning_desc);
     }
-    
-    private void setupClickListeners() {
-        // 返回按钮
-        backBtn.setOnClickListener(v -> goBack());
-        
-        // 标签页
-        albumTab.setOnClickListener(v -> selectTab(albumTab));
-        wechatTab.setOnClickListener(v -> selectTab(wechatTab));
-        qqTab.setOnClickListener(v -> selectTab(qqTab));
-        otherTab.setOnClickListener(v -> selectTab(otherTab));
-        
-        // 操作按钮
-        cancelBtn.setOnClickListener(v -> showCancelConfirmation());
-        recoverBtn.setOnClickListener(v -> showUnlockModal());
-        unlockBtn.setOnClickListener(v -> showUnlockModal());
-        
-        // 模态框
-        closeModalBtn.setOnClickListener(v -> hideUnlockModal());
-        goToPaymentBtn.setOnClickListener(v -> goToPayment());
+
+    private void setupListeners() {
+        btnBack.setOnClickListener(v -> showExitConfirmDialog());
     }
-    
-    private void selectTab(Button selectedTab) {
-        // 重置所有标签样式
-        albumTab.setBackgroundResource(R.drawable.bg_tab_unselected);
-        albumTab.setTextColor(getResources().getColor(R.color.text_primary));
-        wechatTab.setBackgroundResource(R.drawable.bg_tab_unselected);
-        wechatTab.setTextColor(getResources().getColor(R.color.text_primary));
-        qqTab.setBackgroundResource(R.drawable.bg_tab_unselected);
-        qqTab.setTextColor(getResources().getColor(R.color.text_primary));
-        otherTab.setBackgroundResource(R.drawable.bg_tab_unselected);
-        otherTab.setTextColor(getResources().getColor(R.color.text_primary));
+
+    private void updateUIBasedOnScanType() {
+        TextView scanIcon = findViewById(R.id.scan_icon);
         
-        // 设置选中标签样式
-        selectedTab.setBackgroundResource(R.drawable.bg_tab_selected);
-        selectedTab.setTextColor(getResources().getColor(R.color.white));
+        switch (scanType) {
+            case SCAN_TYPE_VIDEO:
+                tvScanningTitle.setText(R.string.scanning_videos);
+                scanIcon.setText("🎬");
+                break;
+            case SCAN_TYPE_AUDIO:
+                tvScanningTitle.setText(R.string.scanning_audio);
+                scanIcon.setText("🎵");
+                break;
+            case SCAN_TYPE_FILE:
+            default:
+                tvScanningTitle.setText(R.string.scanning_files);
+                scanIcon.setText("📄");
+                break;
+        }
     }
-    
-    private void updateProgress(int progress) {
-        progressBar.setProgress(progress);
-        progressText.setText(progress + "%");
+
+    private void startScanning() {
+        // 显示扫描屏幕
+        scanningScreen.setVisibility(View.VISIBLE);
+        
+        // 开始动画
+        startScanCircleAnimations();
+        
+        // 开始扫描过程
+        simulateScanningProcess();
     }
-    
-    private void startScanSimulation() {
-        scanTimer = new Timer();
-        scanTimer.schedule(new TimerTask() {
-            @Override
-            public void run() {
-                if (currentProgress < 100) {
-                    currentProgress += random.nextInt(5) + 1;
-                    if (currentProgress > 100) {
-                        currentProgress = 100;
-                    }
+
+    private void simulateScanningProcess() {
+        new Thread(() -> {
+            // 显示初始进度
+            handler.post(() -> {
+                scanProgressBar.setProgress(0);
+                tvScanPercentage.setText("0%");
+                tvScanFiles.setAlpha(0f);
+            });
+            
+            try {
+                // 根据扫描类型设置目标进度
+                int targetProgress;
+                switch (scanType) {
+                    case SCAN_TYPE_VIDEO:
+                        targetProgress = 9; // 视频扫描到9%
+                        break;
+                    case SCAN_TYPE_AUDIO:
+                        targetProgress = 10; // 音频扫描到10%
+                        break;
+                    case SCAN_TYPE_FILE:
+                    default:
+                        targetProgress = 8; // 文件扫描到8%
+                        break;
+                }
+                
+                // 模拟进度从0%开始，增加到目标进度后停止
+                for (int progress = 0; progress <= targetProgress; progress++) {
+                    final int currentProgress = progress;
+                    handler.post(() -> {
+                        scanProgressBar.setProgress(currentProgress);
+                        tvScanPercentage.setText(currentProgress + "%");
+                        
+                        // 在5%时模拟找到一些文件
+                        if (currentProgress >= 5) {
+                            filesFound = 5 + currentProgress - 5; // 5-10个文件
+                            tvScanFiles.setText(getString(R.string.found_files, filesFound));
+                            tvScanFiles.setAlpha(1f);
+                        }
+                    });
                     
-                    runOnUiThread(() -> updateProgress(currentProgress));
-                } else {
-                    scanTimer.cancel();
+                    // 每个百分比停留500毫秒
+                    Thread.sleep(500);
                 }
+                
+                // 扫描到目标进度后显示结果并导航到相应页面
+                handler.post(() -> {
+                    // 标记扫描完成
+                    scanCompleted = true;
+                    
+                    // 延迟一秒后跳转到相应修复页面
+                    new Handler().postDelayed(this::navigateToRepairScreen, 1000);
+                });
+                
+            } catch (Exception e) {
+                e.printStackTrace();
+                handler.post(() -> {
+                    scanCompleted = true;
+                    navigateToRepairScreen();
+                });
             }
-        }, 1000, 1000); // 每秒更新一次
+        }).start();
     }
-    
-    private void showCancelConfirmation() {
-        new AlertDialog.Builder(this)
-            .setTitle(R.string.cancel_scan)
-            .setMessage(R.string.cancel_scan_confirm)
-            .setPositiveButton(R.string.confirm_action, (dialog, which) -> {
-                // 停止扫描
-                if (scanTimer != null) {
-                    scanTimer.cancel();
-                }
-                finish();
-            })
-            .setNegativeButton(R.string.cancel_action, null)
-            .show();
-    }
-    
-    private void showUnlockModal() {
-        unlockModal.setVisibility(View.VISIBLE);
-    }
-    
-    private void hideUnlockModal() {
-        unlockModal.setVisibility(View.GONE);
-    }
-    
-    private void goToPayment() {
-        Intent intent = new Intent(this, PaymentActivity.class);
+
+    private void navigateToRepairScreen() {
+        Intent intent = null;
+        
+        switch (scanType) {
+            case SCAN_TYPE_VIDEO:
+                intent = new Intent(this, VideoRepairActivity.class);
+                intent.putExtra("scan_percentage", 9);
+                break;
+            case SCAN_TYPE_AUDIO:
+                intent = new Intent(this, AudioRepairActivity.class);
+                intent.putExtra("scan_percentage", 10);
+                break;
+            case SCAN_TYPE_FILE:
+            default:
+                intent = new Intent(this, FileRepairActivity.class);
+                intent.putExtra("scan_percentage", 8);
+                break;
+        }
+        
+        // 传递扫描完成的百分比和找到的文件数量
+        intent.putExtra("files_found", filesFound);
+        
         startActivity(intent);
+        finish(); // 结束当前扫描页面
     }
-    
-    private void goBack() {
-        onBackPressed();
+
+    private void startScanCircleAnimations() {
+        // 外圆动画
+        ObjectAnimator outerRotation = ObjectAnimator.ofFloat(scanCircleOuter, "rotation", 0f, 360f);
+        outerRotation.setDuration(2000);
+        outerRotation.setRepeatCount(ValueAnimator.INFINITE);
+        outerRotation.setInterpolator(new LinearInterpolator());
+        outerRotation.start();
+
+        // 中圆动画（反方向）
+        ObjectAnimator middleRotation = ObjectAnimator.ofFloat(scanCircleMiddle, "rotation", 0f, -360f);
+        middleRotation.setDuration(1700);
+        middleRotation.setRepeatCount(ValueAnimator.INFINITE);
+        middleRotation.setInterpolator(new LinearInterpolator());
+        middleRotation.start();
+
+        // 内圆动画
+        ObjectAnimator innerRotation = ObjectAnimator.ofFloat(scanCircleInner, "rotation", 0f, 360f);
+        innerRotation.setDuration(1400);
+        innerRotation.setRepeatCount(ValueAnimator.INFINITE);
+        innerRotation.setInterpolator(new LinearInterpolator());
+        innerRotation.start();
     }
-    
+
+    private void showExitConfirmDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        
+        builder.setTitle(R.string.cancel_scan_title)
+               .setMessage(R.string.cancel_scan_message)
+               .setNegativeButton(R.string.no, (dialog, which) -> dialog.dismiss())
+               .setPositiveButton(R.string.yes, (dialog, which) -> finish())
+               .setCancelable(false)
+               .show();
+    }
+
     @Override
     public void onBackPressed() {
-        if (unlockModal.getVisibility() == View.VISIBLE) {
-            hideUnlockModal();
-        } else {
-            showCancelConfirmation();
-        }
-    }
-    
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        if (scanTimer != null) {
-            scanTimer.cancel();
-        }
+        showExitConfirmDialog();
     }
 } 

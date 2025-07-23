@@ -30,16 +30,16 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-public class VideoRepairActivity extends AppCompatActivity {
+public class FileRepairActivity extends AppCompatActivity {
 
     private ImageButton btnBack;
     private TextView tvFilterTime, tvFilterSize;
     private CardView cardScanProgress;
     private Button btnRecover, btnBottomAction;
-    private RecyclerView videoList;
+    private RecyclerView fileList;
     private TextView tvProgressText;
 
-    private List<VideoItem> videos = new ArrayList<>();
+    private List<FileScanActivity.FileItem> files = new ArrayList<>();
     private boolean sortByTimeDesc = true; // 默认按时间降序
     private boolean sortBySizeDesc = false;
     private int scanPercentage = 10;
@@ -49,7 +49,7 @@ public class VideoRepairActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_video_repair);
+        setContentView(R.layout.activity_file_repair);
 
         // 获取从ScanActivity传递过来的数据
         if (getIntent().hasExtra("scan_percentage")) {
@@ -61,7 +61,7 @@ public class VideoRepairActivity extends AppCompatActivity {
 
         initViews();
         setupListeners();
-        loadVideos();
+        loadFiles();
     }
 
     private void initViews() {
@@ -79,9 +79,9 @@ public class VideoRepairActivity extends AppCompatActivity {
         btnRecover = findViewById(R.id.btn_recover);
         btnBottomAction = findViewById(R.id.btn_bottom_action);
 
-        // 视频列表
-        videoList = findViewById(R.id.video_list);
-        videoList.setLayoutManager(new LinearLayoutManager(this));
+        // 文件列表
+        fileList = findViewById(R.id.file_list);
+        fileList.setLayoutManager(new LinearLayoutManager(this));
 
         // 进度文本
         tvProgressText = findViewById(R.id.tv_progress_text);
@@ -96,14 +96,14 @@ public class VideoRepairActivity extends AppCompatActivity {
             sortByTimeDesc = !sortByTimeDesc;
             sortBySizeDesc = false;
             updateFilterUI();
-            sortAndUpdateVideoList();
+            sortAndUpdateFileList();
         });
 
         tvFilterSize.setOnClickListener(v -> {
             sortBySizeDesc = !sortBySizeDesc;
             sortByTimeDesc = false;
             updateFilterUI();
-            sortAndUpdateVideoList();
+            sortAndUpdateFileList();
         });
 
         // 按钮监听器
@@ -131,45 +131,45 @@ public class VideoRepairActivity extends AppCompatActivity {
                         : R.color.text_secondary));
     }
 
-    private void loadVideos() {
+    private void loadFiles() {
         new Thread(() -> {
             try {
-                // 加载本地视频文件
-                List<VideoItem> localVideos = getAllLocalVideos();
-                if (localVideos.isEmpty()) {
-                    localVideos = getDefaultVideoItems();
+                // 加载本地文件
+                List<FileScanActivity.FileItem> localFiles = getAllLocalFiles();
+                if (localFiles.isEmpty()) {
+                    localFiles = getDefaultFileItems();
                 }
                 
-                // 保存视频列表
-                this.videos.clear();
-                this.videos.addAll(localVideos);
+                // 保存文件列表
+                this.files.clear();
+                this.files.addAll(localFiles);
                 
                 // 排序并更新UI
                 handler.post(() -> {
-                    sortAndUpdateVideoList();
+                    sortAndUpdateFileList();
                     
-                    // 显示视频列表
-                    videoList.setVisibility(View.VISIBLE);
+                    // 显示文件列表
+                    fileList.setVisibility(View.VISIBLE);
                     btnBottomAction.setVisibility(View.VISIBLE);
                 });
             } catch (Exception e) {
                 e.printStackTrace();
                 handler.post(() -> {
                     // 显示默认结果
-                    this.videos.clear();
-                    this.videos.addAll(getDefaultVideoItems());
-                    sortAndUpdateVideoList();
+                    this.files.clear();
+                    this.files.addAll(getDefaultFileItems());
+                    sortAndUpdateFileList();
                 });
             }
         }).start();
     }
 
-    private void sortAndUpdateVideoList() {
+    private void sortAndUpdateFileList() {
         if (sortByTimeDesc) {
             // 按时间降序排序
-            Collections.sort(videos, new Comparator<VideoItem>() {
+            Collections.sort(files, new Comparator<FileScanActivity.FileItem>() {
                 @Override
-                public int compare(VideoItem o1, VideoItem o2) {
+                public int compare(FileScanActivity.FileItem o1, FileScanActivity.FileItem o2) {
                     // 将"今天"、"昨天"等转换为可比较的值
                     String date1 = o1.getDate();
                     String date2 = o2.getDate();
@@ -185,18 +185,18 @@ public class VideoRepairActivity extends AppCompatActivity {
             });
         } else if (sortBySizeDesc) {
             // 按大小降序排序
-            Collections.sort(videos, new Comparator<VideoItem>() {
+            Collections.sort(files, new Comparator<FileScanActivity.FileItem>() {
                 @Override
-                public int compare(VideoItem o1, VideoItem o2) {
+                public int compare(FileScanActivity.FileItem o1, FileScanActivity.FileItem o2) {
                     // 将"1.2MB"、"650KB"等转换为可比较的值
                     return convertSizeToBytes(o2.getSize()) - convertSizeToBytes(o1.getSize());
                 }
             });
         }
         
-        // 更新视频列表
-        VideoAdapter adapter = new VideoAdapter(videos);
-        videoList.setAdapter(adapter);
+        // 更新文件列表
+        FileAdapter adapter = new FileAdapter(this, files);
+        fileList.setAdapter(adapter);
     }
     
     // 将文件大小字符串转换为字节大小以便比较
@@ -219,41 +219,47 @@ public class VideoRepairActivity extends AppCompatActivity {
         }
     }
 
-    private List<VideoItem> getAllLocalVideos() {
-        List<VideoItem> allVideos = new ArrayList<>();
+    private List<FileScanActivity.FileItem> getAllLocalFiles() {
+        List<FileScanActivity.FileItem> allFiles = new ArrayList<>();
         
         try {
-            // 使用MediaStore获取视频文件
+            // 使用MediaStore获取所有文件类型
             ContentResolver contentResolver = getContentResolver();
-            Uri uri = MediaStore.Video.Media.EXTERNAL_CONTENT_URI;
+            Uri uri = MediaStore.Files.getContentUri("external");
             
             String[] projection = {
-                MediaStore.Video.Media.TITLE,
-                MediaStore.Video.Media.SIZE,
-                MediaStore.Video.Media.DATE_MODIFIED,
-                MediaStore.Video.Media.DURATION,
-                MediaStore.Video.Media.RESOLUTION
+                MediaStore.Files.FileColumns.DISPLAY_NAME,
+                MediaStore.Files.FileColumns.SIZE,
+                MediaStore.Files.FileColumns.DATE_MODIFIED,
+                MediaStore.Files.FileColumns.MIME_TYPE
             };
             
             Cursor cursor = contentResolver.query(uri, projection, null, null, null);
             if (cursor != null) {
-                while (cursor.moveToNext() && allVideos.size() < 30) { // 限制最多显示30个视频文件
+                while (cursor.moveToNext() && allFiles.size() < 30) { // 限制最多显示30个文件
                     try {
-                        String title = cursor.getString(0);
+                        String name = cursor.getString(0);
                         long size = cursor.getLong(1);
                         long date = cursor.getLong(2) * 1000; // 转换为毫秒
-                        long duration = cursor.getLong(3);
-                        String resolution = cursor.getString(4);
+                        String mimeType = cursor.getString(3);
                         
-                        VideoItem item = new VideoItem(
-                                title,
+                        String icon = "F"; // 默认文件图标
+                        if (mimeType != null) {
+                            if (mimeType.contains("image/")) icon = "IMG";
+                            else if (mimeType.contains("video/")) icon = "VID";
+                            else if (mimeType.contains("audio/")) icon = "AUD";
+                            else if (mimeType.contains("text/")) icon = "TXT";
+                            else if (mimeType.contains("pdf")) icon = "PDF";
+                        }
+                        
+                        FileScanActivity.FileItem item = new FileScanActivity.FileItem(
+                                name,
                                 formatFileSize(size),
                                 formatDate(date),
-                                formatDuration(duration),
-                                resolution == null || resolution.isEmpty() ? "未知分辨率" : resolution,
-                                false
+                                icon,
+                                R.drawable.bg_file_icon_doc
                         );
-                        allVideos.add(item);
+                        allFiles.add(item);
                     } catch (Exception e) {
                         // 跳过有问题的文件
                         e.printStackTrace();
@@ -265,7 +271,7 @@ public class VideoRepairActivity extends AppCompatActivity {
             e.printStackTrace();
         }
         
-        return allVideos;
+        return allFiles;
     }
 
     // 格式化文件大小
@@ -296,28 +302,20 @@ public class VideoRepairActivity extends AppCompatActivity {
             return sdf.format(date);
         }
     }
-    
-    // 格式化时长
-    private String formatDuration(long duration) {
-        long seconds = duration / 1000;
-        long minutes = seconds / 60;
-        seconds = seconds % 60;
-        return String.format(Locale.getDefault(), "%d:%02d", minutes, seconds);
-    }
 
-    // 获取默认的视频列表
-    private List<VideoItem> getDefaultVideoItems() {
-        List<VideoItem> items = new ArrayList<>();
+    // 获取默认的文件列表
+    private List<FileScanActivity.FileItem> getDefaultFileItems() {
+        List<FileScanActivity.FileItem> items = new ArrayList<>();
         
-        // 添加一些样本视频文件
-        items.add(new VideoItem("家庭聚会视频", "85.7MB", "今天", "3:20", "1280x720", false));
-        items.add(new VideoItem("旅游风景视频", "125.4MB", "今天", "5:45", "1920x1080", false));
-        items.add(new VideoItem("宝宝成长记录", "45.2MB", "昨天", "2:30", "1280x720", false));
-        items.add(new VideoItem("会议录像", "72.8MB", "昨天", "15:20", "640x480", false));
-        items.add(new VideoItem("视频教程", "108.5MB", "04-12", "10:15", "1280x720", false));
-        items.add(new VideoItem("生日派对", "65.3MB", "04-10", "4:50", "1920x1080", false));
-        items.add(new VideoItem("风景延时摄影", "95.8MB", "04-08", "3:35", "3840x2160", false));
-        items.add(new VideoItem("微视频记录", "12.7MB", "04-05", "0:45", "640x480", false));
+        // 添加一些样本文件
+        items.add(new FileScanActivity.FileItem("项目计划书.docx", "1.2MB", "今天", "DOC", R.drawable.bg_file_icon_doc));
+        items.add(new FileScanActivity.FileItem("财务报表.xlsx", "650KB", "今天", "XLS", R.drawable.bg_file_icon_doc));
+        items.add(new FileScanActivity.FileItem("产品发布会.pptx", "5.7MB", "昨天", "PPT", R.drawable.bg_file_icon_doc));
+        items.add(new FileScanActivity.FileItem("合同文件.pdf", "2.4MB", "昨天", "PDF", R.drawable.bg_file_icon_doc));
+        items.add(new FileScanActivity.FileItem("程序源代码.zip", "7.5MB", "04-15", "ZIP", R.drawable.bg_file_icon_doc));
+        items.add(new FileScanActivity.FileItem("学习笔记.txt", "125KB", "04-12", "TXT", R.drawable.bg_file_icon_doc));
+        items.add(new FileScanActivity.FileItem("会议记录.docx", "890KB", "04-10", "DOC", R.drawable.bg_file_icon_doc));
+        items.add(new FileScanActivity.FileItem("销售数据.xlsx", "1.5MB", "04-08", "XLS", R.drawable.bg_file_icon_doc));
         
         return items;
     }
@@ -334,7 +332,7 @@ public class VideoRepairActivity extends AppCompatActivity {
 
     private void navigateToPayment() {
         Intent intent = new Intent(this, PaymentActivity.class);
-        intent.putExtra("returnTo", "video_repair");
+        intent.putExtra("returnTo", "file_repair");
         startActivity(intent);
     }
 
@@ -343,107 +341,63 @@ public class VideoRepairActivity extends AppCompatActivity {
         showExitConfirmDialog();
     }
 
-    // 视频项类
-    public static class VideoItem {
-        private String title;
-        private String size;
-        private String date;
-        private String duration;
-        private String resolution;
-        private boolean isChecked;
-
-        public VideoItem(String title, String size, String date, String duration, String resolution, boolean isChecked) {
-            this.title = title;
-            this.size = size;
-            this.date = date;
-            this.duration = duration;
-            this.resolution = resolution;
-            this.isChecked = isChecked;
-        }
-
-        public String getTitle() {
-            return title;
-        }
-
-        public String getSize() {
-            return size;
-        }
-
-        public String getDate() {
-            return date;
-        }
-
-        public String getDuration() {
-            return duration;
-        }
-
-        public String getResolution() {
-            return resolution;
-        }
-
-        public boolean isChecked() {
-            return isChecked;
-        }
-
-        public void setChecked(boolean checked) {
-            isChecked = checked;
-        }
-    }
-
     // 适配器类
-    public class VideoAdapter extends RecyclerView.Adapter<VideoAdapter.VideoViewHolder> {
-        private List<VideoItem> videos;
+    public class FileAdapter extends RecyclerView.Adapter<FileAdapter.FileViewHolder> {
+        private List<FileScanActivity.FileItem> files;
+        private android.content.Context context;
 
-        public VideoAdapter(List<VideoItem> videos) {
-            this.videos = videos;
+        public FileAdapter(android.content.Context context, List<FileScanActivity.FileItem> files) {
+            this.context = context;
+            this.files = files;
         }
 
         @Override
-        public VideoViewHolder onCreateViewHolder(android.view.ViewGroup parent, int viewType) {
-            View view = getLayoutInflater().inflate(R.layout.item_video, parent, false);
-            return new VideoViewHolder(view);
+        public FileViewHolder onCreateViewHolder(android.view.ViewGroup parent, int viewType) {
+            View view = getLayoutInflater().inflate(R.layout.item_file, parent, false);
+            return new FileViewHolder(view);
         }
 
         @Override
-        public void onBindViewHolder(VideoViewHolder holder, int position) {
-            VideoItem video = videos.get(position);
+        public void onBindViewHolder(FileViewHolder holder, int position) {
+            FileScanActivity.FileItem file = files.get(position);
             
-            holder.tvTitle.setText(video.getTitle());
-            holder.tvDate.setText(video.getDate());
-            holder.tvSize.setText(video.getSize());
-            holder.tvDuration.setText(video.getDuration());
-            holder.tvResolution.setText(video.getResolution());
-            holder.checkbox.setChecked(video.isChecked());
+            holder.tvFileName.setText(file.getName());
+            holder.tvFileDate.setText(file.getDate());
+            holder.tvFileSize.setText(file.getSize());
+            holder.tvFileIcon.setText(file.getIcon());
+            holder.fileIconContainer.setBackgroundResource(file.getIconBackground());
+            holder.checkbox.setChecked(file.isChecked());
             
             holder.checkbox.setOnClickListener(v -> {
                 boolean isChecked = holder.checkbox.isChecked();
-                video.setChecked(isChecked);
+                file.setChecked(isChecked);
             });
             
             holder.itemView.setOnClickListener(v -> {
-                boolean isChecked = !video.isChecked();
-                video.setChecked(isChecked);
+                boolean isChecked = !file.isChecked();
+                file.setChecked(isChecked);
                 holder.checkbox.setChecked(isChecked);
             });
         }
 
         @Override
         public int getItemCount() {
-            return videos.size();
+            return files.size();
         }
 
-        class VideoViewHolder extends RecyclerView.ViewHolder {
-            TextView tvTitle, tvDate, tvSize, tvDuration, tvResolution;
+        class FileViewHolder extends RecyclerView.ViewHolder {
+            TextView tvFileName, tvFileDate, tvFileSize, tvFileIcon;
+            View fileIconContainer;
             CheckBox checkbox;
 
-            public VideoViewHolder(View itemView) {
+            public FileViewHolder(View itemView) {
                 super(itemView);
-                tvTitle = itemView.findViewById(R.id.tv_video_title);
-                tvDate = itemView.findViewById(R.id.tv_video_date);
-                tvSize = itemView.findViewById(R.id.tv_video_size);
-                tvDuration = itemView.findViewById(R.id.tv_video_duration);
-                tvResolution = itemView.findViewById(R.id.tv_video_resolution);
-                checkbox = itemView.findViewById(R.id.checkbox_video);
+                tvFileName = itemView.findViewById(R.id.tv_file_name);
+                tvFileDate = itemView.findViewById(R.id.tv_file_date);
+                tvFileSize = itemView.findViewById(R.id.tv_file_size);
+                tvFileIcon = itemView.findViewById(R.id.tv_file_icon);
+                fileIconContainer = itemView.findViewById(R.id.file_icon_container);
+                checkbox = itemView.findViewById(R.id.checkbox_file);
             }
         }
     }

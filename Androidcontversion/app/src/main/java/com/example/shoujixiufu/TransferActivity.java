@@ -89,10 +89,10 @@ public class TransferActivity extends AppCompatActivity {
         builder.setMessage(R.string.select_file_type);
         builder.setPositiveButton(R.string.select_file, (dialog, which) -> {
             // 跳转到文件选择页面
-            Toast.makeText(this, R.string.going_to_file_selection, Toast.LENGTH_SHORT).show();
+            // Toast.makeText(this, R.string.going_to_file_selection, Toast.LENGTH_SHORT).show();
             // 在实际应用中，这里可以跳转到文件选择页面：
-            // Intent intent = new Intent(this, FileSendActivity.class);
-            // startActivity(intent);
+            Intent intent = new Intent(this, FileSendActivity.class);
+            startActivity(intent);
         });
         builder.setNegativeButton(R.string.cancel_action, null);
         builder.show();

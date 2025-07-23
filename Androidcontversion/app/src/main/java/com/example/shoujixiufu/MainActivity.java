@@ -1,7 +1,10 @@
 package com.example.shoujixiufu;
 
+import android.Manifest;
 import android.app.Dialog;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
@@ -10,11 +13,22 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+
+// 导入扫描活动类
+import com.example.shoujixiufu.FileScanActivity;
+import com.example.shoujixiufu.VideoScanActivity;
+import com.example.shoujixiufu.AudioScanActivity;
+import com.example.shoujixiufu.ScanActivity;
 
 public class MainActivity extends BaseActivity implements FeatureAdapter.OnFeatureClickListener, ServiceAdapter.OnServiceClickListener {
 
@@ -23,6 +37,12 @@ public class MainActivity extends BaseActivity implements FeatureAdapter.OnFeatu
     private FeatureAdapter featureAdapter;
     private ServiceAdapter serviceAdapter;
     private Dialog premiumDialog;
+    
+    // 用于存储待启动的意图，在权限被授予后使用
+    private Intent pendingIntent;
+    
+    // 权限请求结果处理器
+    private ActivityResultLauncher<String[]> requestPermissionLauncher;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,6 +50,12 @@ public class MainActivity extends BaseActivity implements FeatureAdapter.OnFeatu
         setContentView(R.layout.activity_main);
 
         try {
+            // 初始化权限请求结果处理器
+            initializePermissionLauncher();
+            
+            // 请求必要的存储权限
+            requestStoragePermissions();
+            
             // Setup features RecyclerView
             featuresRecyclerView = findViewById(R.id.features_grid);
             if (featuresRecyclerView != null) {
@@ -60,22 +86,124 @@ public class MainActivity extends BaseActivity implements FeatureAdapter.OnFeatu
             // Initialize premium dialog
             initPremiumDialog();
             
-            // 删除查看Logo按钮相关代码
         } catch (Exception e) {
             Toast.makeText(this, "页面初始化失败，请重新启动应用", Toast.LENGTH_SHORT).show();
+        }
+    }
+    
+    // 初始化权限请求结果处理器
+    private void initializePermissionLauncher() {
+        requestPermissionLauncher = registerForActivityResult(
+                new ActivityResultContracts.RequestMultiplePermissions(),
+                result -> {
+                    boolean allGranted = true;
+                    for (Boolean granted : result.values()) {
+                        if (!granted) {
+                            allGranted = false;
+                            break;
+                        }
+                    }
+                    
+                    if (allGranted) {
+                        // 如果所有权限都被授予，并且有等待执行的Intent，则启动它
+                        if (pendingIntent != null) {
+                            startActivity(pendingIntent);
+                            pendingIntent = null;
+                        }
+                    } else {
+                        Toast.makeText(this, "没有足够的权限，无法访问文件", Toast.LENGTH_SHORT).show();
+                    }
+                });
+    }
+    
+    // 请求存储权限
+    private void requestStoragePermissions() {
+        // 根据Android版本选择适当的权限
+        List<String> permissions = new ArrayList<>();
+        
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) { // Android 13及以上
+            permissions.add(Manifest.permission.READ_MEDIA_IMAGES);
+            permissions.add(Manifest.permission.READ_MEDIA_VIDEO);
+            permissions.add(Manifest.permission.READ_MEDIA_AUDIO);
+        } else { // Android 12及以下
+            permissions.add(Manifest.permission.READ_EXTERNAL_STORAGE);
+            if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.Q) { // Android 10及以下
+                permissions.add(Manifest.permission.WRITE_EXTERNAL_STORAGE);
+            }
+        }
+        
+        // 检查哪些权限需要请求
+        List<String> permissionsToRequest = new ArrayList<>();
+        for (String permission : permissions) {
+            if (ContextCompat.checkSelfPermission(this, permission) != PackageManager.PERMISSION_GRANTED) {
+                permissionsToRequest.add(permission);
+            }
+        }
+        
+        // 请求需要的权限
+        if (!permissionsToRequest.isEmpty()) {
+            requestPermissionLauncher.launch(permissionsToRequest.toArray(new String[0]));
+        }
+    }
+    
+    // 检查是否有必要的文件访问权限
+    private boolean hasFileAccessPermissions() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            return ContextCompat.checkSelfPermission(this, Manifest.permission.READ_MEDIA_IMAGES) == PackageManager.PERMISSION_GRANTED
+                    && ContextCompat.checkSelfPermission(this, Manifest.permission.READ_MEDIA_VIDEO) == PackageManager.PERMISSION_GRANTED
+                    && ContextCompat.checkSelfPermission(this, Manifest.permission.READ_MEDIA_AUDIO) == PackageManager.PERMISSION_GRANTED;
+        } else {
+            return ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
         }
     }
 
     @Override
     public void onFeatureClick(FeatureModel feature) {
-        // 所有热门功能都需要开通会员
-        showPremiumDialog();
+        // 针对图片裁剪和缩放功能，直接打开相应Activity
+        if (feature.getTitle().equals("图片缩放") || feature.getTitle().equals("图片裁剪")) {
+            navigateToFeatureActivity(feature);
+        } else {
+            // 其他功能仍需开通会员
+            showPremiumDialog();
+        }
     }
 
     @Override
     public void onServiceClick(ServiceModel service) {
-        // 所有服务都需要开通会员
+        try {
+            String serviceTitle = service.getTitle();
+            Intent intent = null;
+            
+            // 根据不同的服务类型，准备相应的Intent
+            if (serviceTitle.equals(getString(R.string.file_repair))) {
+                intent = new Intent(this, ScanActivity.class);
+                intent.putExtra(ScanActivity.EXTRA_SCAN_TYPE, ScanActivity.SCAN_TYPE_FILE);
+            } else if (serviceTitle.equals(getString(R.string.video_repair))) {
+                intent = new Intent(this, ScanActivity.class);
+                intent.putExtra(ScanActivity.EXTRA_SCAN_TYPE, ScanActivity.SCAN_TYPE_VIDEO);
+            } else if (serviceTitle.equals(getString(R.string.audio_repair))) {
+                intent = new Intent(this, ScanActivity.class);
+                intent.putExtra(ScanActivity.EXTRA_SCAN_TYPE, ScanActivity.SCAN_TYPE_AUDIO);
+            } else {
+                // 其他服务仍需要开通会员
         showPremiumDialog();
+                return;
+            }
+            
+            // 检查权限，如有必要则请求权限
+            if (intent != null) {
+                if (hasFileAccessPermissions()) {
+                    // 有权限，直接启动Activity
+                    startActivity(intent);
+                } else {
+                    // 没有权限，保存Intent并请求权限
+                    pendingIntent = intent;
+                    requestStoragePermissions();
+                }
+            }
+        } catch (Exception e) {
+            Toast.makeText(this, "页面跳转失败，请稍后重试", Toast.LENGTH_SHORT).show();
+        }
     }
 
     private void showPremiumOrPaymentDialog(FeatureModel feature) {
@@ -190,9 +318,19 @@ public class MainActivity extends BaseActivity implements FeatureAdapter.OnFeatu
         if (activateButton != null) {
             activateButton.setOnClickListener(v -> {
                 premiumDialog.dismiss();
-                // 跳转到服务详情页面，使用默认服务信息
-                navigateToPayment("会员服务", "¥39.99");
+                // 跳转到会员中心页面
+                navigateToVipMembership();
             });
+        }
+    }
+    
+    // 新增跳转到会员中心的方法
+    private void navigateToVipMembership() {
+        try {
+            Intent intent = new Intent(this, VipMembershipActivity.class);
+            startActivity(intent);
+        } catch (Exception e) {
+            Toast.makeText(this, "打开会员中心失败，请稍后重试", Toast.LENGTH_SHORT).show();
         }
     }
 

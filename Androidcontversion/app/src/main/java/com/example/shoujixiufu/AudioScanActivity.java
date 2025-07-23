@@ -1,13 +1,18 @@
 package com.example.shoujixiufu;
 
 import android.app.AlertDialog;
+import android.content.ContentResolver;
 import android.content.Intent;
+import android.database.Cursor;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.provider.MediaStore;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.view.animation.LinearInterpolator;
 import android.view.animation.RotateAnimation;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -24,8 +29,14 @@ import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
+import java.util.Collections;
 
 public class AudioScanActivity extends AppCompatActivity {
 
@@ -49,6 +60,7 @@ public class AudioScanActivity extends AppCompatActivity {
 
     private ActivityResultLauncher<String[]> audioPickerLauncher;
     private List<Uri> selectedAudioFiles = new ArrayList<>();
+    private List<AudioItem> scannedAudios = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,83 +81,133 @@ public class AudioScanActivity extends AppCompatActivity {
     }
 
     private void initViews() {
-        // Header views
-        ImageButton btnBack = findViewById(R.id.btn_back);
-        ImageButton btnMenu = findViewById(R.id.btn_menu);
-        TextView tvTitle = findViewById(R.id.tv_title);
-
-        // Filter views
-        TextView filterTime = findViewById(R.id.filter_time);
-        TextView filterSize = findViewById(R.id.filter_size);
-
-        // Progress views
+        try {
+            // 基本视图初始化
         cardScanProgress = findViewById(R.id.card_scan_progress);
-        Button btnRecover = findViewById(R.id.btn_recover);
-        TextView tvProgressText = findViewById(R.id.tv_progress_text);
-
-        // Audio selector views
         cardAudioSelector = findViewById(R.id.card_audio_selector);
-        btnBrowseAudio = findViewById(R.id.btn_browse_audio);
-        tvSelectedAudios = findViewById(R.id.tv_selected_audios);
-        btnStartScan = findViewById(R.id.btn_start_scan);
-
-        // Audio list view
         audioList = findViewById(R.id.audio_list);
-        audioList.setLayoutManager(new LinearLayoutManager(this));
-
-        // Bottom action button
         btnBottomAction = findViewById(R.id.btn_bottom_action);
-
-        // Scanning screen views
         scanningScreen = findViewById(R.id.scanning_screen);
         scanProgressBar = findViewById(R.id.scan_progress_bar);
+            
+            // 隐藏右上角的目录按钮
+            ImageButton btnMenu = findViewById(R.id.btn_menu);
+            if (btnMenu != null) {
+                btnMenu.setVisibility(View.GONE);
+            }
+            
+            // 扫描相关视图
         tvScanPercentage = findViewById(R.id.tv_scan_percentage);
         tvScanFiles = findViewById(R.id.tv_scan_files);
-
-        // Scan animation views
+            tvSelectedAudios = findViewById(R.id.tv_selected_audios);
+            btnBrowseAudio = findViewById(R.id.btn_browse_audio);
+            btnStartScan = findViewById(R.id.btn_start_scan);
         scanCircleOuter = findViewById(R.id.scan_circle_outer);
         scanCircleMiddle = findViewById(R.id.scan_circle_middle);
         scanCircleInner = findViewById(R.id.scan_circle_inner);
+            
+            // 设置布局可见性
+            scanningScreen.setVisibility(View.GONE);
+            cardScanProgress.setVisibility(View.GONE);
+            cardAudioSelector.setVisibility(View.VISIBLE);
+            
+            // 初始化音频选择器
+            initAudioPicker();
+            
+            // 设置时间过滤器点击事件
+            TextView filterTime = findViewById(R.id.filter_time);
+            if (filterTime != null) {
+                filterTime.setOnClickListener(v -> {
+                    // 按时间排序音频
+                    if (audioList.getAdapter() != null && audioList.getAdapter() instanceof AudioAdapter) {
+                        AudioAdapter adapter = (AudioAdapter)audioList.getAdapter();
+                        List<AudioItem> sortedByTime = new ArrayList<>(scannedAudios);
+                        Collections.sort(sortedByTime, (a1, a2) -> a2.date.compareTo(a1.date));
+                        
+                        AudioAdapter newAdapter = new AudioAdapter(sortedByTime);
+                        audioList.setAdapter(newAdapter);
+                        
+                        // 更新过滤器样式
+                        filterTime.setBackgroundResource(R.drawable.bg_filter_active);
+                        filterTime.setTextColor(getResources().getColor(R.color.primary_color));
+                        
+                        TextView filterSize = findViewById(R.id.filter_size);
+                        if (filterSize != null) {
+                            filterSize.setBackgroundResource(R.drawable.bg_filter_inactive);
+                            filterSize.setTextColor(getResources().getColor(R.color.text_secondary));
+                        }
+                    }
+                });
+            }
+            
+            // 设置大小过滤器点击事件
+            TextView filterSize = findViewById(R.id.filter_size);
+            if (filterSize != null) {
+                filterSize.setOnClickListener(v -> {
+                    // 按大小排序音频
+                    if (audioList.getAdapter() != null && audioList.getAdapter() instanceof AudioAdapter) {
+                        List<AudioItem> sortedBySize = new ArrayList<>(scannedAudios);
+                        Collections.sort(sortedBySize, (a1, a2) -> {
+                            try {
+                                // 从 "100MB" 格式解析
+                                String s1 = a1.size.replaceAll("[^0-9.]", "");
+                                String s2 = a2.size.replaceAll("[^0-9.]", "");
+                                float f1 = Float.parseFloat(s1);
+                                float f2 = Float.parseFloat(s2);
+                                
+                                // 考虑单位
+                                if (a1.size.contains("GB")) f1 *= 1024;
+                                if (a2.size.contains("GB")) f2 *= 1024;
+                                
+                                return Float.compare(f2, f1);
+                            } catch (Exception e) {
+                                return 0;
+                            }
+                        });
+                        
+                        AudioAdapter newAdapter = new AudioAdapter(sortedBySize);
+                        audioList.setAdapter(newAdapter);
+                        
+                        // 更新过滤器样式
+                        filterSize.setBackgroundResource(R.drawable.bg_filter_active);
+                        filterSize.setTextColor(getResources().getColor(R.color.primary_color));
+                        
+                        TextView timeFilter = findViewById(R.id.filter_time);
+                        if (timeFilter != null) {
+                            timeFilter.setBackgroundResource(R.drawable.bg_filter_inactive);
+                            timeFilter.setTextColor(getResources().getColor(R.color.text_secondary));
+                        }
+                    }
+                });
+            }
+        } catch (Exception e) {
+            Toast.makeText(this, "视图初始化出错", Toast.LENGTH_SHORT).show();
+            e.printStackTrace();
+        }
     }
 
     private void setClickListeners() {
-        // Back button click
+        // 返回按钮点击事件
         findViewById(R.id.btn_back).setOnClickListener(v -> showExitConfirmDialog());
 
-        // Menu button click
-        findViewById(R.id.btn_menu).setOnClickListener(v -> {
-            Toast.makeText(AudioScanActivity.this, "菜单功能开发中", Toast.LENGTH_SHORT).show();
+        // 选择音频文件按钮点击事件
+        btnBrowseAudio.setOnClickListener(v -> {
+            // 打开文件选择器
+            audioPickerLauncher.launch(new String[]{"audio/*"});
         });
-
-        // Filter clicks
-        findViewById(R.id.filter_time).setOnClickListener(v -> {
-            findViewById(R.id.filter_time).setBackgroundResource(R.drawable.bg_filter_active);
-            findViewById(R.id.filter_time).setSelected(true);
-            findViewById(R.id.filter_size).setBackgroundResource(R.drawable.bg_filter_inactive);
-            findViewById(R.id.filter_size).setSelected(false);
+        
+        // 开始扫描按钮点击事件
+        btnStartScan.setOnClickListener(v -> startScanning());
+        
+        // 底部操作按钮点击事件
+        btnBottomAction.setOnClickListener(v -> {
+            showRecoveryDialog();
         });
-
-        findViewById(R.id.filter_size).setOnClickListener(v -> {
-            findViewById(R.id.filter_size).setBackgroundResource(R.drawable.bg_filter_active);
-            findViewById(R.id.filter_size).setSelected(true);
-            findViewById(R.id.filter_time).setBackgroundResource(R.drawable.bg_filter_inactive);
-            findViewById(R.id.filter_time).setSelected(false);
+        
+        // 恢复按钮点击事件
+        findViewById(R.id.btn_recover).setOnClickListener(v -> {
+            showRecoveryDialog();
         });
-
-        // Recover button click
-      //  findViewById(R.id.btn_recover).setOnClickListener(v -> showRecoveryDialog());
-
-        // Browse audio button click
-        btnBrowseAudio.setOnClickListener(v -> audioPickerLauncher.launch(new String[]{"audio/*"}));
-
-        // Start scan button click
-        btnStartScan.setOnClickListener(v -> {
-            cardAudioSelector.setVisibility(View.GONE);
-            startScanning();
-        });
-
-        // Bottom action button click
-    //    btnBottomAction.setOnClickListener(v -> showRecoveryDialog());
     }
 
     private void initAudioPicker() {
@@ -156,207 +218,329 @@ public class AudioScanActivity extends AppCompatActivity {
                         selectedAudioFiles.clear();
                         selectedAudioFiles.addAll(uris);
 
-                        StringBuilder fileNames = new StringBuilder();
-                        fileNames.append("<b>已选择音频:</b><br>");
+                        StringBuilder audioNames = new StringBuilder();
+                        audioNames.append(getString(R.string.selected_audios)).append(":\n");
+                        
                         for (Uri uri : uris) {
                             String fileName = getFileNameFromUri(uri);
-                            fileNames.append(fileName).append("<br>");
+                            audioNames.append("• ").append(fileName).append("\n");
                         }
 
+                        tvSelectedAudios.setText(audioNames.toString());
                         tvSelectedAudios.setVisibility(View.VISIBLE);
-                        tvSelectedAudios.setText(android.text.Html.fromHtml(fileNames.toString()));
                         btnStartScan.setVisibility(View.VISIBLE);
                     }
-                });
+                }
+        );
     }
 
     private String getFileNameFromUri(Uri uri) {
-        String fileName = uri.getLastPathSegment();
-        return fileName != null ? fileName : "未知文件";
+        String result = uri.getPath();
+        int cut = result.lastIndexOf('/');
+        if (cut != -1) {
+            result = result.substring(cut + 1);
+        }
+        return result;
     }
-
-    private void showExitConfirmDialog() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle(R.string.scan_exit_confirm)
-                .setMessage(R.string.scan_exit_desc)
-                .setNegativeButton(R.string.cancel_action, (dialog, which) -> dialog.dismiss())
-                    .setPositiveButton(R.string.confirm_action, (dialog, which) -> {
-                    dialog.dismiss();
-                    finish();
-                })
-                .show();
-    }
-
-//    private void showRecoveryDialog() {
-//        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-//        builder.setTitle(R.string.recovery_dialog_title)
-//                .setMessage(R.string.recovery_dialog_content)
-//                .setNegativeButton(R.string.cancel, (dialog, which) -> dialog.dismiss())
-//                .setPositiveButton(R.string.recover, (dialog, which) -> {
-//                    // Navigate to payment page
-//                    Intent intent = new Intent(AudioScanActivity.this, PaymentActivity.class);
-//                    intent.putExtra("returnTo", "audio_scan");
-//                    startActivity(intent);
-//                })
-//                .show();
-//    }
 
     private void startScanning() {
+        // Show scanning screen and hide selector
         scanningScreen.setVisibility(View.VISIBLE);
         cardAudioSelector.setVisibility(View.GONE);
 
-        // Start scan animation
+        // Start scan animations
         startScanAnimation();
 
-        // Simulate scanning progress
-        scanProgressBar.setProgress(0);
-        simulateScanProgress();
+        // 扫描本地音频文件
+        scanLocalAudio();
+    }
+    
+    // 扫描本地音频文件 - 不再区分目录
+    private void scanLocalAudio() {
+        new Thread(() -> {
+            try {
+                // 显示初始进度
+                runOnUiThread(() -> {
+                    scanProgressBar.setProgress(0);
+                    tvScanPercentage.setText("0%");
+                    tvScanFiles.setText(getString(R.string.scanning_audio_files));
+                    tvScanFiles.setAlpha(1f);
+                });
+                
+                // 先创建音频列表，在扫描过程中填充
+                List<AudioItem> audioItems = new ArrayList<>();
+                
+                // 模拟进度从0%开始，只到10%
+                for(int progress = 0; progress <= 10; progress += 2) {
+                    final int currentProgress = progress;
+                    runOnUiThread(() -> {
+                        scanProgressBar.setProgress(currentProgress);
+                        tvScanPercentage.setText(currentProgress + "%");
+                        
+                        // 当进度达到一定程度，更新找到的音频数量
+                        if(currentProgress > 5) {
+                            int foundCount = audioItems.size() > 0 ? audioItems.size() : 4;
+                            tvScanFiles.setText(String.format(getString(R.string.found_files), foundCount));
+                        }
+                    });
+                    
+                    // 如果进度到达5%，开始获取音频
+                    if(progress == 5) {
+                        // 获取部分本地音频
+                        List<AudioItem> localAudios = getLocalAudio();
+                        if (localAudios.size() > 0) {
+                            audioItems.addAll(localAudios.subList(0, Math.min(5, localAudios.size())));
+                        }
+                    }
+                    
+                    Thread.sleep(250);
+                }
+                
+                // 扫描到10%后完成
+                final List<AudioItem> finalAudios = audioItems.isEmpty() ? createDefaultAudioItems() : audioItems;
+                
+                runOnUiThread(() -> {
+                    scanProgressBar.setProgress(10);
+                    tvScanPercentage.setText("10%");
+                    int foundCount = finalAudios.size();
+                    tvScanFiles.setText(String.format(getString(R.string.found_files), foundCount));
+                    
+                    // 完成扫描，保存结果
+                    scannedAudios = finalAudios;
+                    
+                    // 延迟500ms后结束扫描动画，显示结果
+                    new Handler().postDelayed(() -> finishScanning(finalAudios.size()), 500);
+                });
+                
+            } catch (Exception e) {
+                e.printStackTrace();
+                // 如果发生错误，使用默认数据
+                runOnUiThread(() -> {
+                    scannedAudios = createDefaultAudioItems();
+                    finishScanning(scannedAudios.size());
+                });
+            }
+        }).start();
+    }
+    
+    // 获取本地音频文件 - 使用MediaStore API
+    private List<AudioItem> getLocalAudio() {
+        List<AudioItem> audioItems = new ArrayList<>();
+        
+        try {
+            // 查询系统媒体库中的音频文件
+            ContentResolver contentResolver = getContentResolver();
+            Uri uri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
+            
+            // 创建与Android版本兼容的投影
+            List<String> projectionList = new ArrayList<>();
+            projectionList.add(MediaStore.Audio.Media.DISPLAY_NAME);
+            projectionList.add(MediaStore.Audio.Media.SIZE);
+            projectionList.add(MediaStore.Audio.Media.DATE_MODIFIED);
+            
+            // 有条件地添加DURATION (某些旧设备可能不支持)
+            boolean hasDuration = false;
+            try {
+                projectionList.add(MediaStore.Audio.Media.DURATION);
+                hasDuration = true;
+            } catch (Exception e) {
+                // 字段不存在或不可用
+            }
+            
+            String[] projection = projectionList.toArray(new String[0]);
+            
+            Cursor cursor = contentResolver.query(uri, projection, null, null, null);
+            if (cursor != null) {
+                // 获取列索引，以防字段顺序不一致
+                int nameIndex = cursor.getColumnIndex(MediaStore.Audio.Media.DISPLAY_NAME);
+                int sizeIndex = cursor.getColumnIndex(MediaStore.Audio.Media.SIZE);
+                int dateIndex = cursor.getColumnIndex(MediaStore.Audio.Media.DATE_MODIFIED);
+                int durationIndex = hasDuration ? 
+                        cursor.getColumnIndex(MediaStore.Audio.Media.DURATION) : -1;
+                
+                while (cursor.moveToNext() && audioItems.size() < 20) { // 限制最多20个音频文件
+                    try {
+                        String name = nameIndex >= 0 ? cursor.getString(nameIndex) : "未知";
+                        long size = sizeIndex >= 0 ? cursor.getLong(sizeIndex) : 0;
+                        long date = dateIndex >= 0 ? cursor.getLong(dateIndex) * 1000 : 0; // 转换为毫秒
+                        
+                        // 安全获取时长
+                        String duration = "未知";
+                        if (durationIndex >= 0) {
+                            long durationMs = cursor.getLong(durationIndex);
+                            if (durationMs > 0) {
+                                duration = formatDuration(durationMs);
+                            }
+                        }
+                        
+                        AudioItem item = new AudioItem(
+                                name,
+                                duration,
+                                formatSize(size),
+                                formatDate(date)
+                        );
+                        audioItems.add(item);
+                    } catch (Exception e) {
+                        // 跳过有问题的条目
+                        e.printStackTrace();
+                    }
+                }
+                cursor.close();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        
+        // 如果没有找到音频文件，使用默认数据
+        if (audioItems.isEmpty()) {
+            audioItems = createDefaultAudioItems();
+        }
+        
+        return audioItems;
+    }
+    
+    // 格式化文件大小
+    private String formatSize(long size) {
+        if (size <= 0) return "0B";
+        final String[] units = new String[]{"B", "KB", "MB", "GB", "TB"};
+        int digitGroups = (int) (Math.log10(size) / Math.log10(1024));
+        return new DecimalFormat("#,##0.#").format(size / Math.pow(1024, digitGroups)) + units[digitGroups];
+    }
+    
+    // 格式化时长
+    private String formatDuration(long milliseconds) {
+        if (milliseconds <= 0) return "0:00";
+        
+        long seconds = milliseconds / 1000;
+        long minutes = seconds / 60;
+        long hours = minutes / 60;
+        
+        seconds %= 60;
+        minutes %= 60;
+        
+        if (hours > 0) {
+            return String.format(Locale.getDefault(), "%d:%02d:%02d", hours, minutes, seconds);
+        } else {
+            return String.format(Locale.getDefault(), "%d:%02d", minutes, seconds);
+        }
+    }
+    
+    // 格式化日期
+    private String formatDate(long timeMillis) {
+        Date date = new Date(timeMillis);
+        Calendar calendar = Calendar.getInstance();
+        Calendar today = Calendar.getInstance();
+        calendar.setTime(date);
+        
+        if (calendar.get(Calendar.YEAR) == today.get(Calendar.YEAR) &&
+                calendar.get(Calendar.DAY_OF_YEAR) == today.get(Calendar.DAY_OF_YEAR)) {
+            return "今天";
+        } else if (calendar.get(Calendar.YEAR) == today.get(Calendar.YEAR) &&
+                calendar.get(Calendar.DAY_OF_YEAR) == today.get(Calendar.DAY_OF_YEAR) - 1) {
+            return "昨天";
+        } else {
+            SimpleDateFormat sdf = new SimpleDateFormat("MM-dd", Locale.getDefault());
+            return sdf.format(date);
+        }
+    }
+    
+    // 创建默认音频数据
+    private List<AudioItem> createDefaultAudioItems() {
+        List<AudioItem> items = new ArrayList<>();
+        items.add(new AudioItem("歌曲1.mp3", "3:45", "4.2MB", "今天"));
+        items.add(new AudioItem("录音文件.wav", "1:30", "2.5MB", "昨天"));
+        items.add(new AudioItem("会议录音.m4a", "25:18", "12.7MB", "7-15"));
+        return items;
+    }
+
+    // 完成扫描
+    private void finishScanning(int filesFound) {
+        // 隐藏扫描界面
+        scanningScreen.setVisibility(View.GONE);
+        
+        // 显示扫描结果
+        cardScanProgress.setVisibility(View.VISIBLE);
+        btnBottomAction.setVisibility(View.VISIBLE);
+        audioList.setVisibility(View.VISIBLE);
+        scanCompleted = true;
+        
+        // 设置修复按钮点击事件
+        findViewById(R.id.btn_recover).setOnClickListener(v -> showRecoveryDialog());
+        btnBottomAction.setOnClickListener(v -> showRecoveryDialog());
+        
+        // 设置适配器，显示音频列表
+        AudioAdapter adapter = new AudioAdapter(scannedAudios);
+        audioList.setLayoutManager(new LinearLayoutManager(this));
+        audioList.setAdapter(adapter);
+        
+        // 更新进度显示为10%
+        TextView progressText = findViewById(R.id.tv_progress_text);
+        if (progressText != null) {
+            progressText.setText(getString(R.string.scanned_progress).replace("10%", "10%"));
+        }
     }
 
     private void startScanAnimation() {
-        // Outer circle animation
-        RotateAnimation rotateOuter = new RotateAnimation(0, 360,
+        // 外圆顺时针旋转
+        RotateAnimation outerAnim = new RotateAnimation(0f, 360f,
                 Animation.RELATIVE_TO_SELF, 0.5f,
                 Animation.RELATIVE_TO_SELF, 0.5f);
-        rotateOuter.setDuration(2000);
-        rotateOuter.setRepeatCount(Animation.INFINITE);
-        rotateOuter.setRepeatMode(Animation.RESTART);
-        scanCircleOuter.startAnimation(rotateOuter);
-
-        // Middle circle animation (reverse direction)
-        RotateAnimation rotateMiddle = new RotateAnimation(0, -360,
+        outerAnim.setDuration(2000);
+        outerAnim.setRepeatCount(Animation.INFINITE);
+        outerAnim.setInterpolator(new LinearInterpolator());
+        scanCircleOuter.startAnimation(outerAnim);
+        
+        // 中圆逆时针旋转
+        RotateAnimation middleAnim = new RotateAnimation(0f, -360f,
                 Animation.RELATIVE_TO_SELF, 0.5f,
                 Animation.RELATIVE_TO_SELF, 0.5f);
-        rotateMiddle.setDuration(1700);
-        rotateMiddle.setRepeatCount(Animation.INFINITE);
-        rotateMiddle.setRepeatMode(Animation.RESTART);
-        scanCircleMiddle.startAnimation(rotateMiddle);
-
-        // Inner circle animation
-        RotateAnimation rotateInner = new RotateAnimation(0, 360,
+        middleAnim.setDuration(1700);
+        middleAnim.setRepeatCount(Animation.INFINITE);
+        middleAnim.setInterpolator(new LinearInterpolator());
+        scanCircleMiddle.startAnimation(middleAnim);
+        
+        // 内圆顺时针旋转
+        RotateAnimation innerAnim = new RotateAnimation(0f, 360f,
                 Animation.RELATIVE_TO_SELF, 0.5f,
                 Animation.RELATIVE_TO_SELF, 0.5f);
-        rotateInner.setDuration(1400);
-        rotateInner.setRepeatCount(Animation.INFINITE);
-        rotateInner.setRepeatMode(Animation.RESTART);
-        scanCircleInner.startAnimation(rotateInner);
+        innerAnim.setDuration(1400);
+        innerAnim.setRepeatCount(Animation.INFINITE);
+        innerAnim.setInterpolator(new LinearInterpolator());
+        scanCircleInner.startAnimation(innerAnim);
     }
-
-    private void simulateScanProgress() {
-        final int targetProgress = 10; // Target progress is 10%
-        final int duration = 5000; // 5 seconds for the entire animation
-        final int interval = 200; // Update every 200ms
-        final float progressStep = (float) targetProgress * interval / duration;
+    
+    private void showExitConfirmDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
         
-        final Handler handler = new Handler();
-        final Runnable runnable = new Runnable() {
-            float progress = 0;
-            int filesFound = 0;
-
-            @Override
-            public void run() {
-                progress += progressStep;
-                filesFound += (int) (Math.random() * 2);
-                
-                if (progress > targetProgress) {
-                    progress = targetProgress;
-                }
-                
-                scanProgressBar.setProgress((int) progress);
-                tvScanPercentage.setText((int) progress + "%");
-                tvScanFiles.setText(getString(R.string.found_files, filesFound));
-                
-                // Make scan files text visible
-                if (tvScanFiles.getAlpha() < 1) {
-                    tvScanFiles.setAlpha(Math.min(1, tvScanFiles.getAlpha() + 0.1f));
-                }
-                
-                if (progress < targetProgress) {
-                    handler.postDelayed(this, interval);
-                } else {
-                    // Finish scanning after delay
-                    new Handler().postDelayed(() -> finishScanning(filesFound), 1000);
-                }
-            }
-        };
-        
-        handler.post(runnable);
-    }
-
-    private void finishScanning(int filesFound) {
-        // Hide scanning screen
-        scanningScreen.setVisibility(View.GONE);
-        
-        // Show scan results
-        cardScanProgress.setVisibility(View.VISIBLE);
-        audioList.setVisibility(View.VISIBLE);
-        btnBottomAction.setVisibility(View.VISIBLE);
-        
-        // Create and set adapter for audio files
-        createAudioItems(filesFound);
-        
-        // Mark scan as completed
-        scanCompleted = true;
-        
-        // Show recovery dialog if not shown before
-        if (!modalShown) {
-         //   new Handler().postDelayed(this::showRecoveryDialog, 500);
-            modalShown = true;
-        }
-    }
-
-    private void createAudioItems(int count) {
-        // Create a list of sample audio items
-        List<AudioItem> audioItems = new ArrayList<>();
-        
-        // Add sample items (use real items if available from selectedAudioFiles)
-        if (selectedAudioFiles.size() > 0) {
-            for (Uri uri : selectedAudioFiles) {
-                String name = getFileNameFromUri(uri);
-                String duration = formatDuration((int) (Math.random() * 300));
-                String size = formatSize((long) (Math.random() * 10 * 1024 * 1024));
-                String date = "今天";
-                audioItems.add(new AudioItem(name, duration, size, date));
-            }
+        if (scanningScreen.getVisibility() == View.VISIBLE) {
+            // 正在扫描中的退出提示
+            builder.setTitle(R.string.exit_confirmation)
+                    .setMessage(R.string.exit_scan_message)
+                    .setPositiveButton(R.string.yes, (dialog, which) -> finish())
+                    .setNegativeButton(R.string.no, (dialog, which) -> dialog.dismiss());
         } else {
-            // Use predefined sample data if no files were selected
-            String[] sampleNames = {
-                    "微信语音_20250716.mp3",
-                    "录音备忘_会议内容.m4a",
-                    "语音笔记_项目计划.mp3"
-            };
-            
-            String[] sampleDates = {"昨天", "7-15", "7-14"};
-            
-            // Add up to 3 sample items
-            for (int i = 0; i < Math.min(3, count); i++) {
-                String name = sampleNames[i % sampleNames.length];
-                String duration = formatDuration((int) (Math.random() * 300));
-                String size = formatSize((long) (Math.random() * 10 * 1024 * 1024));
-                String date = sampleDates[i % sampleDates.length];
-                audioItems.add(new AudioItem(name, duration, size, date));
-            }
+            // 扫描完成后的退出提示
+            builder.setTitle(R.string.exit_service_title)
+                    .setMessage(R.string.exit_service_message)
+                    .setPositiveButton(R.string.confirm_exit, (dialog, which) -> finish())
+                    .setNegativeButton(R.string.continue_service, (dialog, which) -> dialog.dismiss());
         }
-        
-        // Set adapter to RecyclerView
-        AudioAdapter adapter = new AudioAdapter(audioItems);
-        audioList.setAdapter(adapter);
+        builder.setCancelable(false).show();
     }
 
-    private String formatDuration(int seconds) {
-        int minutes = seconds / 60;
-        int remainingSeconds = seconds % 60;
-        return minutes + ":" + String.format("%02d", remainingSeconds);
-    }
-
-    private String formatSize(long bytes) {
-        if (bytes < 1024) {
-            return bytes + "B";
-        } else if (bytes < 1024 * 1024) {
-            return (bytes / 1024) + "KB";
-        } else {
-            return String.format("%.1f", bytes / (1024.0 * 1024.0)) + "MB";
-        }
+    private void showRecoveryDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(R.string.recovery_dialog_title)
+                .setMessage(R.string.recovery_dialog_content)
+                .setNegativeButton(R.string.cancel, (dialog, which) -> dialog.dismiss())
+                .setPositiveButton(R.string.recover, (dialog, which) -> {
+                    // 导航到支付页面
+                    Intent intent = new Intent(AudioScanActivity.this, PaymentActivity.class);
+                    intent.putExtra("returnTo", "audio_scan");
+                    startActivity(intent);
+                })
+                .setCancelable(false)
+                .show();
     }
 
     // Simple data class for audio items
@@ -417,11 +601,11 @@ public class AudioScanActivity extends AppCompatActivity {
 
             AudioViewHolder(View itemView) {
                 super(itemView);
-                name = itemView.findViewById(R.id.tv_audio_name);
+                name = itemView.findViewById(R.id.tv_audio_title);
                 duration = itemView.findViewById(R.id.tv_audio_duration);
                 size = itemView.findViewById(R.id.tv_audio_size);
                 date = itemView.findViewById(R.id.tv_audio_date);
-                checkbox = itemView.findViewById(R.id.checkbox_container);
+                checkbox = itemView.findViewById(R.id.checkbox_audio);
             }
         }
     }

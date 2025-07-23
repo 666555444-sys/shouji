@@ -11,7 +11,6 @@ import android.view.View;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -20,10 +19,10 @@ import java.util.regex.Pattern;
 
 public class PaymentSuccessActivity extends BaseActivity {
 
-    private static final String PHONE_PATTERN = "^1[3-9]\\d{9}$";
+    // 修改手机号验证模式：必须是11位数字，以1开头
+    private static final String PHONE_PATTERN = "^1\\d{10}$";
     private EditText phoneInput;
     private Button submitButton;
-    private ImageButton backButton;
     private Dialog successDialog;
 
     @Override
@@ -33,13 +32,6 @@ public class PaymentSuccessActivity extends BaseActivity {
 
         // 初始化视图
         initViews();
-        
-        // 设置返回按钮点击事件 - 确保这里正确绑定点击事件
-        if (backButton != null) {
-            backButton.setOnClickListener(v -> {
-                safeGoToOrderPage();
-            });
-        }
         
         // 设置提交按钮点击事件
         submitButton.setOnClickListener(v -> submitPhoneNumber());
@@ -55,20 +47,6 @@ public class PaymentSuccessActivity extends BaseActivity {
         try {
             phoneInput = findViewById(R.id.phone_input);
             submitButton = findViewById(R.id.submit_btn);
-            backButton = findViewById(R.id.back_to_order_btn);
-            
-            // 确保返回按钮被找到并设置点击事件
-            if (backButton != null) {
-                backButton.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Log.d("PaymentSuccessActivity", "返回按钮被点击");
-                        safeGoToOrderPage();
-                    }
-                });
-            } else {
-                Log.e("PaymentSuccessActivity", "返回按钮未找到");
-            }
             
             // 自动聚焦输入框
             if (phoneInput != null) {
@@ -109,14 +87,18 @@ public class PaymentSuccessActivity extends BaseActivity {
                 return;
             }
             
+            // 验证手机号必须是11位数字且以1开头
             if (!Pattern.matches(PHONE_PATTERN, phone)) {
-                Toast.makeText(this, "请输入正确的手机号码", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "请输入正确的11位手机号码", Toast.LENGTH_SHORT).show();
                 return;
             }
             
-            // 模拟提交
-            // 在实际应用中，这里可以添加网络请求来提交手机号码
+            // 显示提交成功对话框
             showSuccessDialog();
+            
+            // 记录手机号（实际应用中可能会发送到服务器）
+            Log.d("PaymentSuccessActivity", "用户提交的手机号: " + phone);
+            
         } catch (Exception e) {
             e.printStackTrace();
             Toast.makeText(this, "提交手机号码时发生错误", Toast.LENGTH_SHORT).show();
@@ -128,18 +110,21 @@ public class PaymentSuccessActivity extends BaseActivity {
             successDialog = new Dialog(this);
             successDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
             successDialog.setContentView(R.layout.dialog_submit_success);
-            successDialog.setCancelable(true);
+            successDialog.setCancelable(false); // 不允许点击外部关闭
             
             // 设置返回首页按钮
             Button returnHomeButton = successDialog.findViewById(R.id.return_home_btn);
-            returnHomeButton.setOnClickListener(v -> safeGoToHomePage());
+            returnHomeButton.setOnClickListener(v -> {
+                successDialog.dismiss();
+                safeGoToHomePage();
+            });
             
             // 设置关闭按钮
             View closeButton = successDialog.findViewById(R.id.close_btn);
-            closeButton.setOnClickListener(v -> successDialog.dismiss());
-            
-            // 点击对话框外部关闭
-            successDialog.setOnCancelListener(dialog -> successDialog.dismiss());
+            closeButton.setOnClickListener(v -> {
+                successDialog.dismiss();
+                safeGoToHomePage();
+            });
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -198,8 +183,8 @@ public class PaymentSuccessActivity extends BaseActivity {
     
     @Override
     public void onBackPressed() {
-        // 重写此方法，确保使用我们自定义的返回逻辑
-        Log.d("PaymentSuccessActivity", "返回键被按下");
-        safeGoToOrderPage();
+        // 此页面不再提供返回功能，用户必须提交手机号
+        // 或者点击对话框中的返回首页按钮
+        Toast.makeText(this, "请输入手机号码并提交", Toast.LENGTH_SHORT).show();
     }
 } 
