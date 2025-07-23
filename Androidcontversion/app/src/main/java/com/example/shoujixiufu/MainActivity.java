@@ -30,6 +30,10 @@ import com.example.shoujixiufu.VideoScanActivity;
 import com.example.shoujixiufu.AudioScanActivity;
 import com.example.shoujixiufu.ScanActivity;
 
+import android.util.Log;
+import android.os.Handler;
+import android.view.animation.AnimationUtils;
+
 public class MainActivity extends BaseActivity implements FeatureAdapter.OnFeatureClickListener, ServiceAdapter.OnServiceClickListener {
 
     private RecyclerView featuresRecyclerView;
@@ -164,7 +168,7 @@ public class MainActivity extends BaseActivity implements FeatureAdapter.OnFeatu
             navigateToFeatureActivity(feature);
         } else {
             // 其他功能仍需开通会员
-            showPremiumDialog();
+            showPremiumOrPaymentDialog(feature);
         }
     }
 
@@ -214,19 +218,29 @@ public class MainActivity extends BaseActivity implements FeatureAdapter.OnFeatu
             } else {
                 // Paid features - show premium dialog
                 if (premiumDialog != null && !premiumDialog.isShowing()) {
+                    // 设置动画效果
+                    if (premiumDialog.getWindow() != null) {
+                        premiumDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+                        premiumDialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
+                    }
+                    
                     premiumDialog.show();
                     
-                    // Add "Pay Now" button to premium dialog
+                    // 设置按钮点击事件
                     Button activateButton = premiumDialog.findViewById(R.id.btn_activate);
                     if (activateButton != null) {
                         activateButton.setOnClickListener(v -> {
                             premiumDialog.dismiss();
-                            navigateToPayment(feature.getTitle(), "¥39.99");
+                            // 添加点击动画效果
+                            v.startAnimation(AnimationUtils.loadAnimation(this, R.anim.button_click));
+                            // 延迟一点时间再跳转，让动画效果显示出来
+                            new Handler().postDelayed(() -> navigateToVipMembership(), 100);
                         });
                     }
                 }
             }
         } catch (Exception e) {
+            Log.e("MainActivity", "显示会员弹窗失败", e);
             Toast.makeText(this, "显示支付选项失败，请稍后重试", Toast.LENGTH_SHORT).show();
         }
     }

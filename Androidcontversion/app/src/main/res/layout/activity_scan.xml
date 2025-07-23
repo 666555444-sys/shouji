@@ -10,8 +10,8 @@
     <!-- Header -->
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
         android:background="@color/background_color"
         android:elevation="4dp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -64,7 +64,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:gravity="center"
-            android:orientation="vertical">
+                android:orientation="vertical">
 
             <FrameLayout
                 android:layout_width="140dp"
@@ -79,44 +79,44 @@
 
                 <View
                     android:id="@+id/scan_circle_middle"
-                    android:layout_width="match_parent"
+                        android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_margin="15dp"
                     android:background="@drawable/bg_scan_circle_middle" />
 
                 <View
                     android:id="@+id/scan_circle_inner"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
                     android:layout_margin="30dp"
                     android:background="@drawable/bg_scan_circle_inner" />
 
-                <TextView
+                            <TextView
                     android:id="@+id/scan_icon"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
                     android:text="📄"
                     android:textColor="@color/primary_color"
                     android:textSize="40sp" />
-            </FrameLayout>
+                        </FrameLayout>
 
-            <TextView
+                        <TextView
                 android:id="@+id/scanning_title"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="15dp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="15dp"
                 android:text="@string/scanning_files"
                 android:textColor="@color/text_color"
                 android:textSize="22sp"
-                android:textStyle="bold" />
+                            android:textStyle="bold" />
 
-            <TextView
+                        <TextView
                 android:id="@+id/scanning_desc"
                 android:layout_width="280dp"
-                android:layout_height="wrap_content"
+                            android:layout_height="wrap_content"
                 android:layout_marginBottom="30dp"
-                android:gravity="center"
+                                    android:gravity="center"
                 android:lineSpacingExtra="3dp"
                 android:text="@string/scanning_files_desc"
                 android:textColor="@color/text_secondary"
@@ -127,28 +127,28 @@
                 style="@style/Widget.AppCompat.ProgressBar.Horizontal"
                 android:layout_width="300dp"
                 android:layout_height="8dp"
-                android:layout_marginBottom="10dp"
+                            android:layout_marginBottom="10dp"
                 android:max="100"
                 android:progress="0"
                 android:progressDrawable="@drawable/progress_bar_gradient" />
 
-            <TextView
+                        <TextView
                 android:id="@+id/tv_scan_percentage"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
                 android:layout_marginBottom="30dp"
                 android:text="0%"
-                android:textColor="@color/text_secondary"
-                android:textSize="14sp" />
+                            android:textColor="@color/text_secondary"
+                            android:textSize="14sp" />
 
             <TextView
                 android:id="@+id/tv_scan_files"
-                android:layout_width="wrap_content"
+                            android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:alpha="0"
                 android:text="@string/found_files"
                 android:textColor="@color/text_muted"
-                android:textSize="14sp" />
-        </LinearLayout>
+                    android:textSize="14sp" />
+            </LinearLayout>
     </FrameLayout>
 </androidx.constraintlayout.widget.ConstraintLayout> 

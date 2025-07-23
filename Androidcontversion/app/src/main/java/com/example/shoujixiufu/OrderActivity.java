@@ -72,8 +72,8 @@ public class OrderActivity extends AppCompatActivity implements OrderAdapter.Ord
                 for (int i = 0; i < orderList.size(); i++) {
                     Order order = orderList.get(i);
                     if ("待支付".equals(order.getStatus())) {
-                        // 找到第一个待支付订单，更新为处理中
-                        order.setStatus("处理中");
+                        // 找到第一个待支付订单，更新为已完成
+                        order.setStatus("已完成");
                         orderAdapter.notifyItemChanged(i);
                         Toast.makeText(this, "订单支付成功", Toast.LENGTH_SHORT).show();
                         break;
@@ -183,10 +183,8 @@ public class OrderActivity extends AppCompatActivity implements OrderAdapter.Ord
     private List<Order> getOrderList() {
         List<Order> orders = new ArrayList<>();
         
-        // 添加一些测试数据
-        orders.add(new Order("1", "手机数据恢复服务", "处理中", "SJ20230615001", "2023-06-15 14:30", 299.00, "数据恢复", "iPhone 13"));
-        orders.add(new Order("2", "手机屏幕维修", "已完成", "SJ20230610002", "2023-06-10 09:15", 499.00, "硬件维修", "华为 P40"));
-        orders.add(new Order("3", "系统故障排查", "待支付", "SJ20230605003", "2023-06-05 16:45", 199.00, "系统维护", "小米 12"));
+        // 只保留第一个订单
+        orders.add(new Order("1", "手机数据恢复服务", "待支付", "SJ20230615001", "2023-06-15 14:30", 299.00, "数据恢复", "iPhone 13"));
         
         return orders;
     }

@@ -50,7 +50,7 @@ public class ScanActivity extends AppCompatActivity {
         updateUIBasedOnScanType();
         startScanning();
     }
-
+    
     private void initViews() {
         btnBack = findViewById(R.id.btn_back);
         scanningScreen = findViewById(R.id.scanning_screen);
@@ -221,7 +221,7 @@ public class ScanActivity extends AppCompatActivity {
                .setCancelable(false)
                .show();
     }
-
+    
     @Override
     public void onBackPressed() {
         showExitConfirmDialog();

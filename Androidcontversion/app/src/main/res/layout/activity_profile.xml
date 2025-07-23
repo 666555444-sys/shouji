@@ -79,7 +79,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center_horizontal"
-                    android:orientation="vertical"
+            android:orientation="vertical"
                     android:padding="20dp">
 
                     <androidx.cardview.widget.CardView
@@ -98,16 +98,16 @@
                             android:src="@drawable/ic_profile" />
                     </androidx.cardview.widget.CardView>
 
-                    <TextView
+            <TextView
                         android:id="@+id/tv_username"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                         android:text="@string/default_username"
                         android:textColor="@color/text_color"
-                        android:textSize="18sp"
-                        android:textStyle="bold" />
+                android:textSize="18sp"
+                android:textStyle="bold" />
 
-                    <TextView
+            <TextView
                         android:id="@+id/tv_user_id"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -119,7 +119,7 @@
                     <!-- 移除编辑资料按钮
                     <Button
                         android:id="@+id/btn_edit_profile"
-                        android:layout_width="wrap_content"
+                android:layout_width="wrap_content"
                         android:layout_height="36dp"
                         android:layout_marginTop="16dp"
                         android:background="@drawable/bg_contact_action"
@@ -164,9 +164,9 @@
                         android:gravity="center_vertical"
                         android:orientation="horizontal">
 
-                        <ImageView
-                            android:layout_width="24dp"
-                            android:layout_height="24dp"
+        <ImageView
+            android:layout_width="24dp"
+            android:layout_height="24dp"
                             android:layout_marginEnd="12dp"
                             android:contentDescription="@string/phone"
                             android:src="@drawable/ic_phone"
@@ -224,10 +224,10 @@
                             android:textColor="@color/text_color"
                             android:textSize="14sp" />
 
-                    </LinearLayout>
+    </LinearLayout>
 
                     <!-- Location -->
-                    <LinearLayout
+    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="center_vertical"
@@ -264,10 +264,10 @@
 
             <!-- Account Settings Section -->
             <androidx.cardview.widget.CardView
-                android:layout_width="match_parent"
+        android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginEnd="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
                 android:layout_marginBottom="16dp"
                 app:cardCornerRadius="12dp"
                 app:cardElevation="4dp">
@@ -288,78 +288,78 @@
                         android:textStyle="bold" />
 
                     <!-- 隐私政策 -->
-                    <LinearLayout
+        <LinearLayout
                         android:id="@+id/layout_privacy_policy"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
                         android:layout_marginBottom="12dp"
                         android:background="?attr/selectableItemBackground"
                         android:clickable="true"
                         android:focusable="true"
                         android:gravity="center_vertical"
-                        android:orientation="horizontal"
+            android:orientation="horizontal"
                         android:paddingVertical="8dp">
 
-                        <ImageView
-                            android:layout_width="24dp"
-                            android:layout_height="24dp"
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
                             android:layout_marginEnd="12dp"
                             android:contentDescription="@string/privacy_policy"
                             android:src="@drawable/ic_shield"
                             app:tint="@color/text_secondary" />
 
-                        <TextView
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
                             android:text="@string/privacy_policy"
                             android:textColor="@color/text_color"
                             android:textSize="14sp" />
 
-                        <ImageView
-                            android:layout_width="16dp"
-                            android:layout_height="16dp"
+            <ImageView
+                android:layout_width="16dp"
+                android:layout_height="16dp"
                             android:contentDescription="@string/arrow_right"
                             android:src="@drawable/ic_right"
                             app:tint="@color/text_secondary" />
-                    </LinearLayout>
+        </LinearLayout>
 
                     <!-- 服务协议 -->
-                    <LinearLayout
+        <LinearLayout
                         android:id="@+id/layout_service_agreement"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
                         android:background="?attr/selectableItemBackground"
                         android:clickable="true"
                         android:focusable="true"
                         android:gravity="center_vertical"
-                        android:orientation="horizontal"
+            android:orientation="horizontal"
                         android:paddingVertical="8dp">
 
-                        <ImageView
-                            android:layout_width="24dp"
-                            android:layout_height="24dp"
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
                             android:layout_marginEnd="12dp"
                             android:contentDescription="@string/service_agreement_description"
                             android:src="@drawable/ic_info"
                             app:tint="@color/text_secondary" />
 
-                        <TextView
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
                             android:text="@string/service_agreement_description"
                             android:textColor="@color/text_color"
                             android:textSize="14sp" />
 
-                        <ImageView
-                            android:layout_width="16dp"
-                            android:layout_height="16dp"
+            <ImageView
+                android:layout_width="16dp"
+                android:layout_height="16dp"
                             android:contentDescription="@string/arrow_right"
                             android:src="@drawable/ic_right"
                             app:tint="@color/text_secondary" />
                     </LinearLayout>
-                </LinearLayout>
+        </LinearLayout>
             </androidx.cardview.widget.CardView>
 
             <!-- App Settings Section -->
@@ -379,7 +379,7 @@
                     android:padding="16dp">
 
                     <TextView
-                        android:layout_width="match_parent"
+            android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="12dp"
                         android:text="@string/app_settings"
@@ -388,30 +388,30 @@
                         android:textStyle="bold" />
 
                     <!-- Language -->
-                    <LinearLayout
+        <LinearLayout
                         android:id="@+id/layout_language"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
                         android:layout_marginBottom="12dp"
                         android:background="?attr/selectableItemBackground"
                         android:clickable="true"
                         android:focusable="true"
                         android:gravity="center_vertical"
-                        android:orientation="horizontal"
+            android:orientation="horizontal"
                         android:paddingVertical="8dp">
 
-                        <ImageView
-                            android:layout_width="24dp"
-                            android:layout_height="24dp"
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
                             android:layout_marginEnd="12dp"
                             android:contentDescription="@string/language"
                             android:src="@drawable/ic_language"
                             app:tint="@color/text_secondary" />
 
-                        <TextView
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
                             android:text="@string/language"
                             android:textColor="@color/text_color"
                             android:textSize="14sp" />
@@ -425,119 +425,119 @@
                             android:textColor="@color/text_secondary"
                             android:textSize="14sp" />
 
-                        <ImageView
-                            android:layout_width="16dp"
-                            android:layout_height="16dp"
+            <ImageView
+                android:layout_width="16dp"
+                android:layout_height="16dp"
                             android:contentDescription="@string/arrow_right"
                             android:src="@drawable/ic_right"
                             app:tint="@color/text_secondary" />
-                    </LinearLayout>
+        </LinearLayout>
 
                     <!-- Feedback -->
-                    <LinearLayout
+        <LinearLayout
                         android:id="@+id/layout_feedback"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
                         android:layout_marginBottom="12dp"
                         android:background="?attr/selectableItemBackground"
                         android:clickable="true"
                         android:focusable="true"
                         android:gravity="center_vertical"
-                        android:orientation="horizontal"
+            android:orientation="horizontal"
                         android:paddingVertical="8dp">
 
-                        <ImageView
-                            android:layout_width="24dp"
-                            android:layout_height="24dp"
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
                             android:layout_marginEnd="12dp"
                             android:contentDescription="@string/feedback"
                             android:src="@drawable/ic_feedback"
                             app:tint="@color/text_secondary" />
 
-                        <TextView
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
                             android:text="@string/feedback"
                             android:textColor="@color/text_color"
                             android:textSize="14sp" />
 
-                        <ImageView
-                            android:layout_width="16dp"
-                            android:layout_height="16dp"
+            <ImageView
+                android:layout_width="16dp"
+                android:layout_height="16dp"
                             android:contentDescription="@string/arrow_right"
                             android:src="@drawable/ic_right"
                             app:tint="@color/text_secondary" />
-                    </LinearLayout>
+        </LinearLayout>
 
                     <!-- Contact Service -->
-                    <LinearLayout
+        <LinearLayout
                         android:id="@+id/layout_contact_service"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
                         android:layout_marginBottom="12dp"
                         android:background="?attr/selectableItemBackground"
                         android:clickable="true"
                         android:focusable="true"
                         android:gravity="center_vertical"
-                        android:orientation="horizontal"
+            android:orientation="horizontal"
                         android:paddingVertical="8dp">
 
-                        <ImageView
-                            android:layout_width="24dp"
-                            android:layout_height="24dp"
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
                             android:layout_marginEnd="12dp"
                             android:contentDescription="@string/contact_us"
                             android:src="@drawable/ic_headset"
                             app:tint="@color/text_secondary" />
 
-                        <TextView
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
                             android:text="@string/contact_us"
                             android:textColor="@color/text_color"
                             android:textSize="14sp" />
 
-                        <ImageView
-                            android:layout_width="16dp"
-                            android:layout_height="16dp"
+            <ImageView
+                android:layout_width="16dp"
+                android:layout_height="16dp"
                             android:contentDescription="@string/arrow_right"
                             android:src="@drawable/ic_right"
                             app:tint="@color/text_secondary" />
-                    </LinearLayout>
+        </LinearLayout>
 
                     <!-- About Us -->
-                    <LinearLayout
+        <LinearLayout
                         android:id="@+id/layout_about_us"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
                         android:background="?attr/selectableItemBackground"
                         android:clickable="true"
                         android:focusable="true"
                         android:gravity="center_vertical"
-                        android:orientation="horizontal"
+            android:orientation="horizontal"
                         android:paddingVertical="8dp">
 
-                        <ImageView
-                            android:layout_width="24dp"
-                            android:layout_height="24dp"
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
                             android:layout_marginEnd="12dp"
                             android:contentDescription="@string/about_us"
                             android:src="@drawable/ic_info"
                             app:tint="@color/text_secondary" />
 
-                        <TextView
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
                             android:text="@string/about_us"
                             android:textColor="@color/text_color"
                             android:textSize="14sp" />
 
-                        <ImageView
-                            android:layout_width="16dp"
-                            android:layout_height="16dp"
+            <ImageView
+                android:layout_width="16dp"
+                android:layout_height="16dp"
                             android:contentDescription="@string/arrow_right"
                             android:src="@drawable/ic_right"
                             app:tint="@color/text_secondary" />

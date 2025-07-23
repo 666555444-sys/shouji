@@ -101,42 +101,42 @@
                         android:layout_height="wrap_content"
                         android:layout_centerInParent="true"
                         android:orientation="vertical"
-                        android:gravity="center"
-                        android:translationY="-5dp">
+                        android:gravity="center">
 
                         <!-- 手机图标 -->
                         <ImageView
-                            android:layout_width="40dp"
-                            android:layout_height="40dp"
-                            android:layout_marginBottom="5dp"
+                            android:layout_width="44dp"
+                            android:layout_height="44dp"
                             android:src="@drawable/ic_mobile"
                             app:tint="@color/white" />
 
-                        <!-- 数据图标 -->
-                        <ImageView
-                            android:layout_width="24dp"
-                            android:layout_height="24dp"
-                            android:layout_marginEnd="-20dp"
-                            android:layout_marginBottom="-10dp"
-                            android:rotation="10"
-                            android:src="@drawable/ic_database"
-                            app:tint="@color/white" />
-
-                        <!-- 上箭头图标 -->
-                        <ImageView
-                            android:id="@+id/arrowIcon"
-                            android:layout_width="22dp"
-                            android:layout_height="22dp"
-                            android:layout_marginStart="30dp"
-                            android:layout_marginTop="-35dp"
-                            android:src="@drawable/ic_arrow_up"
-                            app:tint="@color/white" />
+                        <!-- 数据图标和箭头放在一行 -->
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:layout_marginTop="-10dp">
+                            
+                            <ImageView
+                                android:layout_width="24dp"
+                                android:layout_height="24dp"
+                                android:src="@drawable/ic_database"
+                                app:tint="@color/white" />
+                                
+                            <ImageView
+                                android:id="@+id/arrowIcon"
+                                android:layout_width="24dp"
+                                android:layout_height="24dp"
+                                android:layout_marginStart="10dp"
+                                android:src="@drawable/ic_arrow_up"
+                                app:tint="@color/white" />
+                        </LinearLayout>
 
                         <!-- 盾牌图标 -->
                         <ImageView
-                            android:layout_width="18dp"
-                            android:layout_height="18dp"
-                            android:layout_marginTop="25dp"
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:layout_marginTop="8dp"
                             android:alpha="0.8"
                             android:src="@drawable/ic_shield"
                             app:tint="@color/white" />
@@ -168,37 +168,7 @@
             android:alpha="0.9"
             android:textSize="14sp" />
 
-        <!-- 加载动画 -->
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/logoContainer"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="120dp">
-
-            <View
-                android:id="@+id/loadingDot1"
-                android:layout_width="8dp"
-                android:layout_height="8dp"
-                android:layout_marginEnd="12dp"
-                android:background="@drawable/bg_loading_dot"
-                android:backgroundTint="@color/white" />
-
-            <View
-                android:id="@+id/loadingDot2"
-                android:layout_width="8dp"
-                android:layout_height="8dp"
-                android:layout_marginEnd="12dp"
-                android:background="@drawable/bg_loading_dot"
-                android:backgroundTint="@color/white" />
-
-            <View
-                android:id="@+id/loadingDot3"
-                android:layout_width="8dp"
-                android:layout_height="8dp"
-                android:background="@drawable/bg_loading_dot"
-                android:backgroundTint="@color/white" />
-        </LinearLayout>
+        <!-- 加载动画已删除 -->
 
         <!-- 底部公司信息 -->
         <TextView

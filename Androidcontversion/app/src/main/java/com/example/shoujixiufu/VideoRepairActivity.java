@@ -45,12 +45,12 @@ public class VideoRepairActivity extends AppCompatActivity {
     private int scanPercentage = 10;
     private int filesFound = 5;
     private Handler handler = new Handler(Looper.getMainLooper());
-
+    
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_video_repair);
-
+        
         // 获取从ScanActivity传递过来的数据
         if (getIntent().hasExtra("scan_percentage")) {
             scanPercentage = getIntent().getIntExtra("scan_percentage", 10);
@@ -63,7 +63,7 @@ public class VideoRepairActivity extends AppCompatActivity {
         setupListeners();
         loadVideos();
     }
-
+    
     private void initViews() {
         // 工具栏
         btnBack = findViewById(R.id.btn_back);
@@ -321,7 +321,7 @@ public class VideoRepairActivity extends AppCompatActivity {
         
         return items;
     }
-
+    
     private void showExitConfirmDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle(R.string.exit_service_title)
@@ -337,7 +337,7 @@ public class VideoRepairActivity extends AppCompatActivity {
         intent.putExtra("returnTo", "video_repair");
         startActivity(intent);
     }
-
+    
     @Override
     public void onBackPressed() {
         showExitConfirmDialog();

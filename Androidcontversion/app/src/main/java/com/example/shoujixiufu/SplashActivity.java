@@ -19,7 +19,6 @@ public class SplashActivity extends AppCompatActivity {
 
     private View bubble1, bubble2, bubble3, bubble4, bubble5;
     private View logoContainer;
-    private View loadingDot1, loadingDot2, loadingDot3;
     private View arrowIcon;
     
     @Override
@@ -52,11 +51,6 @@ public class SplashActivity extends AppCompatActivity {
         bubble5 = findViewById(R.id.bubble5);
         
         logoContainer = findViewById(R.id.logoContainer);
-        
-        loadingDot1 = findViewById(R.id.loadingDot1);
-        loadingDot2 = findViewById(R.id.loadingDot2);
-        loadingDot3 = findViewById(R.id.loadingDot3);
-        
         arrowIcon = findViewById(R.id.arrowIcon);
     }
     
@@ -80,11 +74,6 @@ public class SplashActivity extends AppCompatActivity {
         logoAnimator.setInterpolator(new AccelerateDecelerateInterpolator());
         logoAnimator.start();
         
-        // Animate loading dots
-        animateLoadingDot(loadingDot1, 0);
-        animateLoadingDot(loadingDot2, 200);
-        animateLoadingDot(loadingDot3, 400);
-        
         // Animate arrow icon
         ObjectAnimator arrowAnimator = ObjectAnimator.ofFloat(arrowIcon, "translationY", 0, -5);
         arrowAnimator.setDuration(1500);
@@ -105,28 +94,6 @@ public class SplashActivity extends AppCompatActivity {
         animator.setRepeatCount(ValueAnimator.INFINITE);
         animator.setInterpolator(new AccelerateDecelerateInterpolator());
         animator.start();
-    }
-    
-    private void animateLoadingDot(View dot, long delay) {
-        ObjectAnimator scaleX = ObjectAnimator.ofFloat(dot, "scaleX", 0.6f, 1f, 0.6f);
-        ObjectAnimator scaleY = ObjectAnimator.ofFloat(dot, "scaleY", 0.6f, 1f, 0.6f);
-        ObjectAnimator alpha = ObjectAnimator.ofFloat(dot, "alpha", 0.6f, 1f, 0.6f);
-        
-        scaleX.setDuration(1400);
-        scaleY.setDuration(1400);
-        alpha.setDuration(1400);
-        
-        scaleX.setStartDelay(delay);
-        scaleY.setStartDelay(delay);
-        alpha.setStartDelay(delay);
-        
-        scaleX.setRepeatCount(ValueAnimator.INFINITE);
-        scaleY.setRepeatCount(ValueAnimator.INFINITE);
-        alpha.setRepeatCount(ValueAnimator.INFINITE);
-        
-        scaleX.start();
-        scaleY.start();
-        alpha.start();
     }
     
     private void navigateToMainActivity() {
