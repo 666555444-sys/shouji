@@ -127,8 +127,10 @@
     <color name="light_gray">#f8f9fa</color>
     <color name="divider">#f0f0f0</color>
     <color name="brown_text">#6b4423</color>
-    <color name="orange_gradient_light">#ffecd2</color>
+    <color name="orange_gradient_light">#FFA726</color>
     <color name="white_50">#80FFFFFF</color>
+    <color name="rating_color">#FFC107</color>
+    <color name="orange">#FF9800</color>
 
     <!-- 启动页面颜色 -->
     <color name="splash_background_start">#4facfe</color>

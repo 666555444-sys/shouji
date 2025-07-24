@@ -14,6 +14,7 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.ViewFlipper;
 
 import androidx.cardview.widget.CardView;
 import android.widget.FrameLayout;
@@ -23,6 +24,7 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.view.Window;
 import android.view.ViewGroup;
+import android.content.SharedPreferences;
 
 public class PaymentActivity extends BaseActivity {
 
@@ -37,8 +39,8 @@ public class PaymentActivity extends BaseActivity {
     private ImageView checkAnnual;
     private TextView priceText;
     private TextView originalPriceText;
-    private TextView termsText;
-    private String selectedPackage = "permanent"; // 默认选择永久套餐
+    private NewsTicker newsTicker;
+    private String selectedPackage = "premium"; // 默认选择高级套餐
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,32 +50,39 @@ public class PaymentActivity extends BaseActivity {
         // 初始化视图
         initViews();
         
-        // 设置返回按钮
+        // 初始化资讯栏
+        View newsTickerView = findViewById(R.id.payment_news_ticker);
+        if (newsTickerView != null) {
+            newsTicker = new NewsTicker(newsTickerView);
+            newsTicker.setupNewsContent();
+        }
+        
+        // 设置返回按钮，点击时显示挽留页面
         ImageButton backButton = findViewById(R.id.back_btn);
-        backButton.setOnClickListener(v -> goToOrderPage());
+        backButton.setOnClickListener(v -> showRecoveryReminder());
         
         // 设置套餐点击事件
         setupPackageSelection();
         
         // 设置支付按钮
         payButton.setOnClickListener(v -> showPaymentConfirmation());
-        
-        // 设置服务条款点击事件
-        termsText.setOnClickListener(v -> showServiceAgreement());
     }
     
     private void initViews() {
         try {
-        payButton = findViewById(R.id.pay_button);
-        processingLayout = findViewById(R.id.processing_layout);
-        progressBar = findViewById(R.id.progress_bar);
+            payButton = findViewById(R.id.pay_button);
+            processingLayout = findViewById(R.id.processing_layout);
+            progressBar = findViewById(R.id.progress_bar);
             permanentPackage = findViewById(R.id.permanent_package);
             annualPackage = findViewById(R.id.annual_package);
             checkPermanent = findViewById(R.id.check_permanent);
             checkAnnual = findViewById(R.id.check_annual);
             priceText = findViewById(R.id.price_permanent);
             originalPriceText = findViewById(R.id.original_price_permanent);
-            termsText = findViewById(R.id.terms_text);
+            
+            // 设置服务说明点击事件
+            TextView serviceTermsLink = findViewById(R.id.service_terms_link);
+            serviceTermsLink.setOnClickListener(v -> showServiceAgreement());
             
             // Add strikethrough to original prices
             TextView originalPricePermanent = findViewById(R.id.original_price_permanent);
@@ -81,7 +90,7 @@ public class PaymentActivity extends BaseActivity {
             originalPricePermanent.setPaintFlags(originalPricePermanent.getPaintFlags() | android.graphics.Paint.STRIKE_THRU_TEXT_FLAG);
             originalPriceAnnual.setPaintFlags(originalPriceAnnual.getPaintFlags() | android.graphics.Paint.STRIKE_THRU_TEXT_FLAG);
             
-            // 初始状态为永久套餐选中
+            // 初始状态为高级套餐选中
             checkPermanent.setVisibility(View.VISIBLE);
             checkAnnual.setVisibility(View.GONE);
             permanentPackage.setCardElevation(8f);
@@ -121,7 +130,7 @@ public class PaymentActivity extends BaseActivity {
     }
     
     private void setupPackageSelection() {
-        // 设置永久套餐点击事件
+        // 设置高级套餐点击事件
         permanentPackage.setOnClickListener(v -> selectPackage("permanent"));
         
         // 设置年度套餐点击事件
@@ -207,7 +216,7 @@ public class PaymentActivity extends BaseActivity {
     }
     
     private void showPaymentConfirmation() {
-        String packageTitle = selectedPackage.equals("permanent") ? "图片清除(永久)" : "图片清除(一年)";
+        String packageTitle = selectedPackage.equals("permanent") ? "图片清除(高级版)" : "图片清除(一年)";
         String packagePrice = selectedPackage.equals("permanent") ? "¥158" : "¥78";
         
         new AlertDialog.Builder(this)
@@ -227,10 +236,14 @@ public class PaymentActivity extends BaseActivity {
             // 模拟支付处理
             new Handler(Looper.getMainLooper()).postDelayed(() -> {
                 try {
+                    // Set payment success flag in shared preferences
+                    SharedPreferences prefs = getSharedPreferences("payment_prefs", MODE_PRIVATE);
+                    prefs.edit().putBoolean("payment_success", true).apply();
+                    
                     // 支付成功后跳转到支付成功页面
                     Intent successIntent = new Intent(PaymentActivity.this, PaymentSuccessActivity.class);
                     
-                    String packageTitle = selectedPackage.equals("permanent") ? "图片清除(永久)" : "图片清除(一年)";
+                    String packageTitle = selectedPackage.equals("permanent") ? "图片清除(高级版)" : "图片清除(一年)";
                     String packagePrice = selectedPackage.equals("permanent") ? "¥158" : "¥78";
                     
                     successIntent.putExtra("service_type", packageTitle);
@@ -257,11 +270,13 @@ public class PaymentActivity extends BaseActivity {
     private void showServiceAgreement() {
         try {
             Intent intent = new Intent(this, ServiceAgreementActivity.class);
-                    startActivity(intent);
+            startActivity(intent);
         } catch (Exception e) {
             Toast.makeText(this, "无法打开服务协议", Toast.LENGTH_SHORT).show();
         }
     }
+    
+
     
     // 添加新方法：导航到订单页面
     private void goToOrderPage() {
@@ -281,29 +296,8 @@ public class PaymentActivity extends BaseActivity {
     // 重写返回按钮行为
     @Override
     public void onBackPressed() {
-        // 如果正在处理支付，显示确认对话框
-        if (processingLayout.getVisibility() == View.VISIBLE) {
-            new AlertDialog.Builder(this)
-                    .setTitle("取消支付")
-                    .setMessage("确定要取消本次支付吗？")
-                    .setPositiveButton("确定", (dialog, which) -> {
-                        processingLayout.setVisibility(View.GONE);
-                        payButton.setEnabled(true);
-                        goToOrderPage();
-                    })
-                    .setNegativeButton("继续支付", null)
-                    .show();
-        } else {
-            // 获取returnTo参数，判断来源
-            String returnTo = getIntent().getStringExtra("returnTo");
-            if (returnTo != null) {
-                // 来自修复页面或服务详情页面，显示挽留页面
-                showRecoveryReminder();
-            } else {
-                // 其他来源，显示普通的挽留对话框
-                showExitConfirmDialog();
-            }
-        }
+        // 无论是否处理支付，都显示"越早修复，几率越高"的提示对话框
+        showRecoveryReminder();
     }
     
     // 添加新的退出确认对话框
@@ -385,14 +379,15 @@ public class PaymentActivity extends BaseActivity {
                 reminderDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
                 reminderDialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, 
                         ViewGroup.LayoutParams.MATCH_PARENT);
+                reminderDialog.getWindow().setGravity(android.view.Gravity.CENTER);
             }
 
-            // 设置关闭按钮
+            // 设置关闭按钮 - 点击返回订单页面
             ImageButton closeButton = reminderDialog.findViewById(R.id.close_button);
             if (closeButton != null) {
                 closeButton.setOnClickListener(v -> {
                     reminderDialog.dismiss();
-                    navigateBack();
+                    goToOrderPage();
                 });
             }
 

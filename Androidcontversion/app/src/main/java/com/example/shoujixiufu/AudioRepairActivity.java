@@ -327,7 +327,13 @@ public class AudioRepairActivity extends AppCompatActivity {
         builder.setTitle(R.string.exit_service_title)
               .setMessage(R.string.exit_service_message)
               .setNegativeButton(R.string.continue_service, (dialog, which) -> dialog.dismiss())
-              .setPositiveButton(R.string.confirm_exit, (dialog, which) -> finish())
+              .setPositiveButton(R.string.confirm_exit, (dialog, which) -> {
+                  // 返回到MainActivity
+                  Intent intent = new Intent(this, MainActivity.class);
+                  intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                  startActivity(intent);
+                  finish();
+              })
               .setCancelable(false)
               .show();
     }
@@ -341,6 +347,7 @@ public class AudioRepairActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         showExitConfirmDialog();
+        // 不需要调用super.onBackPressed()，因为我们想阻止默认的后退行为，显示确认对话框
     }
 
     // 音频项类

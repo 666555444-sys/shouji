@@ -10,6 +10,7 @@ import android.os.Looper;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.animation.AccelerateDecelerateInterpolator;
+import android.view.animation.LinearInterpolator;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -19,7 +20,8 @@ public class SplashActivity extends AppCompatActivity {
 
     private View bubble1, bubble2, bubble3, bubble4, bubble5;
     private View logoContainer;
-    private View arrowIcon;
+    private View dataIcon;
+    private View scanLine;
     
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,7 +53,8 @@ public class SplashActivity extends AppCompatActivity {
         bubble5 = findViewById(R.id.bubble5);
         
         logoContainer = findViewById(R.id.logoContainer);
-        arrowIcon = findViewById(R.id.arrowIcon);
+        dataIcon = findViewById(R.id.dataIcon);
+        scanLine = findViewById(R.id.scanLine);
     }
     
     private void startAnimations() {
@@ -62,7 +65,7 @@ public class SplashActivity extends AppCompatActivity {
         animateBubble(bubble4, 3000, 18000);
         animateBubble(bubble5, 500, 12000);
         
-        // Animate logo with pulse effect
+        // Animate logo container with pulse effect
         ObjectAnimator logoAnimator = ObjectAnimator.ofPropertyValuesHolder(
             logoContainer,
             PropertyValuesHolder.ofFloat("scaleX", 0.98f, 1.02f),
@@ -74,13 +77,28 @@ public class SplashActivity extends AppCompatActivity {
         logoAnimator.setInterpolator(new AccelerateDecelerateInterpolator());
         logoAnimator.start();
         
-        // Animate arrow icon
-        ObjectAnimator arrowAnimator = ObjectAnimator.ofFloat(arrowIcon, "translationY", 0, -5);
-        arrowAnimator.setDuration(1500);
-        arrowAnimator.setRepeatCount(ValueAnimator.INFINITE);
-        arrowAnimator.setRepeatMode(ValueAnimator.REVERSE);
-        arrowAnimator.setInterpolator(new AccelerateDecelerateInterpolator());
-        arrowAnimator.start();
+        // Animate data icon with floating up and down motion
+        ObjectAnimator iconAnimator = ObjectAnimator.ofPropertyValuesHolder(
+            dataIcon,
+            PropertyValuesHolder.ofFloat("translationY", -10f, 10f)
+        );
+        iconAnimator.setDuration(2000);
+        iconAnimator.setRepeatCount(ValueAnimator.INFINITE);
+        iconAnimator.setRepeatMode(ValueAnimator.REVERSE);
+        iconAnimator.setInterpolator(new AccelerateDecelerateInterpolator());
+        iconAnimator.start();
+        
+        // Animate scan line with fade effect
+        ObjectAnimator scanAnimator = ObjectAnimator.ofPropertyValuesHolder(
+            scanLine,
+            PropertyValuesHolder.ofFloat("alpha", 0.2f, 1.0f),
+            PropertyValuesHolder.ofFloat("scaleX", 0.8f, 1.2f)
+        );
+        scanAnimator.setDuration(1500);
+        scanAnimator.setRepeatCount(ValueAnimator.INFINITE);
+        scanAnimator.setRepeatMode(ValueAnimator.REVERSE);
+        scanAnimator.setInterpolator(new AccelerateDecelerateInterpolator());
+        scanAnimator.start();
     }
     
     private void animateBubble(View view, long delay, long duration) {
@@ -95,6 +113,7 @@ public class SplashActivity extends AppCompatActivity {
         animator.setInterpolator(new AccelerateDecelerateInterpolator());
         animator.start();
     }
+
     
     private void navigateToMainActivity() {
         Intent intent = new Intent(this, MainActivity.class);

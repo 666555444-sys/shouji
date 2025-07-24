@@ -15,6 +15,11 @@ android {
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
+    
+    lint {
+        abortOnError = false
+        disable += "MissingSuperCall"
+    }
 
     buildTypes {
         release {

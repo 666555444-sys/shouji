@@ -150,7 +150,7 @@
     <string name="payment_success">支付成功</string>
     <string name="payment_success_desc">您已成功购买深层扫描服务，可立即查看更多数据</string>
     <string name="order_detail">订单详情</string>
-    <string name="service_activated">服务已激活，有效期永久</string>
+    <string name="service_activated">服务已激活，长期有效</string>
     <string name="view_results">查看扫描结果</string>
     <string name="back_to_main">返回首页</string>
     <string name="video_recovery_service">视频深层扫描服务</string>
@@ -269,10 +269,25 @@
     <string name="others">其他</string>
     
     <!-- Recovery Reminder Screen -->
-    <string name="permanent_valid">永久有效</string>
+    <string name="permanent_valid">优质服务</string>
     <string name="reminder">温馨提示</string>
     <string name="repair_asap_message">越早修复，几率越高！！</string>
     <string name="repair_now">立即修复</string>
+    <string name="view_tutorial">查看教程</string>
+
+    <!-- Permission Strings -->
+    <string name="permission_required">需要权限</string>
+    <string name="storage_permission_rationale">为了访问和恢复您的文件，我们需要访问您设备存储的权限。</string>
+    <string name="permission_denied">权限被拒绝，无法访问文件</string>
+    <string name="permission_media_images_rationale">需要访问图片的权限来恢复您的照片</string>
+    <string name="permission_media_video_rationale">需要访问视频的权限来恢复您的视频文件</string>
+    <string name="permission_media_audio_rationale">需要访问音频的权限来恢复您的音频文件</string>
+    <string name="permission_storage_rationale">需要存储权限来访问和恢复您的文件</string>
+    <string name="permission_granted">权限已授予，可以继续操作</string>
+    <string name="grant">授权</string>
+    <string name="settings">设置</string>
+    <string name="go_to_settings">前往设置</string>
+    <string name="settings_permission_message">您需要在应用设置中手动授予权限才能继续使用此功能</string>
     
     <!-- Scan Screen -->
     <string name="all_photos">全部图片</string>
@@ -300,7 +315,7 @@
     <string name="sms_recovery">短信修复</string>
     <string name="image_resize_crop">图片缩放裁剪</string>
     <string name="service_terms">服务条款</string>
-    <string name="service_period_highlight"><![CDATA[<b>服务期限：</b>根据您购买的套餐不同，服务期限分为一年期和永久期两种。一年期服务自购买之日起一年内有效；永久期服务不设使用期限。]]></string>
+    <string name="service_period_highlight"><![CDATA[<b>服务期限：</b>根据您购买的套餐不同，服务期限分为一年期和长期两种。一年期服务自购买之日起一年内有效；长期服务不设使用期限。]]></string>
     <string name="usage_limit_highlight"><![CDATA[<b>使用限制：</b>每个账号仅限本人使用，不可转让或分享给他人使用。]]></string>
     <string name="recovery_success_rate_highlight"><![CDATA[<b>修复成功率：</b>数据修复成功率受多种因素影响，包括但不限于数据丢失时间、设备状态、覆盖情况等。我们会尽最大努力提供修复服务，但不能保证100%修复所有数据。]]></string>
     <string name="refund_policy_highlight"><![CDATA[<b>退款政策：</b>由于数据修复服务的特殊性，一旦服务开始，将不予退款。购买前请慎重考虑。]]></string>
@@ -335,7 +350,6 @@
     <string name="scanned_percent">已扫描%1$d%%</string>
     
     <!-- Settings Screen -->
-    <string name="settings">设置</string>
     <string name="general_settings">通用设置</string>
     <string name="notification">通知</string>
     <string name="notification_alerts">通知提醒</string>

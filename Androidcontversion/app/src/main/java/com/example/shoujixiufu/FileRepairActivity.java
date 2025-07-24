@@ -325,7 +325,13 @@ public class FileRepairActivity extends AppCompatActivity {
         builder.setTitle(R.string.exit_service_title)
               .setMessage(R.string.exit_service_message)
               .setNegativeButton(R.string.continue_service, (dialog, which) -> dialog.dismiss())
-              .setPositiveButton(R.string.confirm_exit, (dialog, which) -> finish())
+              .setPositiveButton(R.string.confirm_exit, (dialog, which) -> {
+                  // 返回到MainActivity
+                  Intent intent = new Intent(this, MainActivity.class);
+                  intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                  startActivity(intent);
+                  finish();
+              })
               .setCancelable(false)
               .show();
     }

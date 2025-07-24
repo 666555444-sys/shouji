@@ -184,6 +184,9 @@ public class ScanActivity extends AppCompatActivity {
         // 传递扫描完成的百分比和找到的文件数量
         intent.putExtra("files_found", filesFound);
         
+        // 清除任务栈上的所有Activity，然后启动新Activity
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+        
         startActivity(intent);
         finish(); // 结束当前扫描页面
     }

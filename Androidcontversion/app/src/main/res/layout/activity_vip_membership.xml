@@ -112,7 +112,7 @@
                 android:textSize="16sp"
                 android:textStyle="bold" />
 
-            <!-- 永久套餐 -->
+            <!-- 高级套餐 -->
             <androidx.cardview.widget.CardView
                 android:id="@+id/permanent_package"
                 android:layout_width="match_parent"
@@ -130,7 +130,7 @@
                         android:id="@+id/permanent_title"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="永久会员"
+                        android:text="高级会员"
                         android:textColor="@color/text_color"
                         android:textSize="16sp"
                         android:textStyle="bold"
@@ -141,7 +141,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="4dp"
-                        android:text="一次付费，永久享受全部功能"
+                        android:text="一次付费，长期享受全部功能"
                         android:textColor="@color/text_secondary"
                         android:textSize="12sp"
                         app:layout_constraintStart_toStartOf="parent"

@@ -16,6 +16,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.regex.Pattern;
+import android.content.SharedPreferences;
 
 public class PaymentSuccessActivity extends BaseActivity {
 
@@ -112,18 +113,18 @@ public class PaymentSuccessActivity extends BaseActivity {
             successDialog.setContentView(R.layout.dialog_submit_success);
             successDialog.setCancelable(false); // 不允许点击外部关闭
             
-            // 设置返回首页按钮
-            Button returnHomeButton = successDialog.findViewById(R.id.return_home_btn);
-            returnHomeButton.setOnClickListener(v -> {
+            // 设置返回订单按钮
+            Button returnOrderButton = successDialog.findViewById(R.id.return_order_btn);
+            returnOrderButton.setOnClickListener(v -> {
                 successDialog.dismiss();
-                safeGoToHomePage();
+                safeGoToOrderPage();
             });
             
             // 设置关闭按钮
             View closeButton = successDialog.findViewById(R.id.close_btn);
             closeButton.setOnClickListener(v -> {
                 successDialog.dismiss();
-                safeGoToHomePage();
+                safeGoToOrderPage();
             });
         } catch (Exception e) {
             e.printStackTrace();
@@ -144,6 +145,10 @@ public class PaymentSuccessActivity extends BaseActivity {
     private void safeGoToOrderPage() {
         try {
             Log.d("PaymentSuccessActivity", "准备返回订单页面，previousActivity=" + previousActivity);
+            
+            // Set payment success flag in shared preferences
+            SharedPreferences prefs = getSharedPreferences("payment_prefs", MODE_PRIVATE);
+            prefs.edit().putBoolean("payment_success", true).apply();
             
             // 不再依赖previousActivity，直接跳转到OrderActivity
             Intent intent = new Intent(this, OrderActivity.class);

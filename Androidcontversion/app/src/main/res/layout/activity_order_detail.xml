@@ -105,7 +105,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_weight="2"
                                 android:gravity="end"
-                                android:text="图片清除(永久)"
+                                android:text="图片清除(高级版)"
                                 android:textColor="@color/text_primary"
                                 android:textSize="14sp" />
                         </LinearLayout>
@@ -199,10 +199,12 @@
                             android:textSize="22sp"
                             android:textStyle="bold" />
 
+                        <!-- 操作按钮 -->
                         <LinearLayout
                             android:id="@+id/action_buttons"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:layout_marginTop="16dp"
                             android:gravity="end"
                             android:orientation="horizontal">
 
@@ -210,12 +212,12 @@
                                 android:id="@+id/cancel_order_btn"
                                 android:layout_width="wrap_content"
                                 android:layout_height="40dp"
-                                android:layout_marginEnd="12dp"
+                                android:layout_marginEnd="16dp"
                                 android:background="@drawable/bg_button_outline"
                                 android:paddingStart="16dp"
                                 android:paddingEnd="16dp"
                                 android:text="@string/cancel_order"
-                                android:textColor="@color/text_secondary" />
+                                android:textColor="@color/text_primary" />
 
                             <Button
                                 android:id="@+id/pay_btn"
@@ -227,6 +229,20 @@
                                 android:text="@string/go_to_pay"
                                 android:textColor="@color/white" />
                         </LinearLayout>
+
+                        <!-- 查看教程按钮（初始隐藏） -->
+                        <Button
+                            android:id="@+id/view_tutorial_btn"
+                            android:layout_width="wrap_content"
+                            android:layout_height="40dp"
+                            android:layout_marginTop="16dp"
+                            android:layout_gravity="end"
+                            android:background="@drawable/bg_button_success"
+                            android:paddingStart="16dp"
+                            android:paddingEnd="16dp"
+                            android:text="查看教程"
+                            android:textColor="@color/white"
+                            android:visibility="gone" />
 
                         <!-- 支付成功状态（初始隐藏） -->
                         <TextView

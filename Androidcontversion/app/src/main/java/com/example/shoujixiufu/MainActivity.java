@@ -4,18 +4,24 @@ import android.Manifest;
 import android.app.Dialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.view.View;
 import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.ViewFlipper;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -41,6 +47,7 @@ public class MainActivity extends BaseActivity implements FeatureAdapter.OnFeatu
     private FeatureAdapter featureAdapter;
     private ServiceAdapter serviceAdapter;
     private Dialog premiumDialog;
+    private NewsTicker newsTicker;
     
     // 用于存储待启动的意图，在权限被授予后使用
     private Intent pendingIntent;
@@ -59,6 +66,13 @@ public class MainActivity extends BaseActivity implements FeatureAdapter.OnFeatu
             
             // 请求必要的存储权限
             requestStoragePermissions();
+            
+            // 初始化资讯栏
+            View newsTickerView = findViewById(R.id.news_ticker);
+            if (newsTickerView != null) {
+                newsTicker = new NewsTicker(newsTickerView);
+                newsTicker.setupNewsContent();
+            }
             
             // Setup features RecyclerView
             featuresRecyclerView = findViewById(R.id.features_grid);
@@ -110,12 +124,14 @@ public class MainActivity extends BaseActivity implements FeatureAdapter.OnFeatu
                     
                     if (allGranted) {
                         // 如果所有权限都被授予，并且有等待执行的Intent，则启动它
+                        Toast.makeText(this, R.string.permission_granted, Toast.LENGTH_SHORT).show();
                         if (pendingIntent != null) {
                             startActivity(pendingIntent);
                             pendingIntent = null;
                         }
                     } else {
-                        Toast.makeText(this, "没有足够的权限，无法访问文件", Toast.LENGTH_SHORT).show();
+                        // 显示权限被拒绝的对话框
+                        showPermissionDeniedDialog();
                     }
                 });
     }
@@ -144,10 +160,59 @@ public class MainActivity extends BaseActivity implements FeatureAdapter.OnFeatu
             }
         }
         
-        // 请求需要的权限
+        // 请求需要的权限，先显示权限说明
         if (!permissionsToRequest.isEmpty()) {
-            requestPermissionLauncher.launch(permissionsToRequest.toArray(new String[0]));
+            showPermissionRationaleDialog(permissionsToRequest);
         }
+    }
+    
+    // 显示权限说明对话框
+    private void showPermissionRationaleDialog(List<String> permissions) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(R.string.permission_required);
+        
+        // 根据需要的权限，显示相应的说明
+        StringBuilder message = new StringBuilder();
+        message.append(getString(R.string.storage_permission_rationale)).append("\n\n");
+        
+        // 对于每种权限类型添加具体说明
+        if (permissions.contains(Manifest.permission.READ_MEDIA_IMAGES)) {
+            message.append("• ").append(getString(R.string.permission_media_images_rationale)).append("\n");
+        }
+        if (permissions.contains(Manifest.permission.READ_MEDIA_VIDEO)) {
+            message.append("• ").append(getString(R.string.permission_media_video_rationale)).append("\n");
+        }
+        if (permissions.contains(Manifest.permission.READ_MEDIA_AUDIO)) {
+            message.append("• ").append(getString(R.string.permission_media_audio_rationale)).append("\n");
+        }
+        if (permissions.contains(Manifest.permission.READ_EXTERNAL_STORAGE) || 
+            permissions.contains(Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+            message.append("• ").append(getString(R.string.permission_storage_rationale)).append("\n");
+        }
+        
+        builder.setMessage(message.toString());
+        builder.setPositiveButton(R.string.grant, (dialog, which) -> {
+            // 请求权限
+            requestPermissionLauncher.launch(permissions.toArray(new String[0]));
+        });
+        builder.setNegativeButton(R.string.cancel, null);
+        builder.setCancelable(false);
+        builder.show();
+    }
+    
+    // 显示权限被拒绝的对话框
+    private void showPermissionDeniedDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(R.string.permission_denied);
+        builder.setMessage(R.string.settings_permission_message);
+        builder.setPositiveButton(R.string.go_to_settings, (dialog, which) -> {
+            // 打开应用设置页面
+            Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+            intent.setData(Uri.fromParts("package", getPackageName(), null));
+            startActivity(intent);
+        });
+        builder.setNegativeButton(R.string.cancel, null);
+        builder.show();
     }
     
     // 检查是否有必要的文件访问权限
@@ -163,12 +228,32 @@ public class MainActivity extends BaseActivity implements FeatureAdapter.OnFeatu
 
     @Override
     public void onFeatureClick(FeatureModel feature) {
-        // 针对图片裁剪和缩放功能，直接打开相应Activity
-        if (feature.getTitle().equals("图片缩放") || feature.getTitle().equals("图片裁剪")) {
-            navigateToFeatureActivity(feature);
+        // 图片缩放和图片裁剪功能直接使用，其他功能需要会员
+        String title = feature.getTitle();
+        if (title.equals(getString(R.string.image_scale)) || title.equals(getString(R.string.image_crop))) {
+            // 先检查存储权限
+            if (hasFileAccessPermissions()) {
+                // 已经有权限，直接启动Activity
+                if (title.equals(getString(R.string.image_scale))) {
+                    Intent intent = new Intent(this, ImageScaleActivity.class);
+                    startActivity(intent);
+                } else if (title.equals(getString(R.string.image_crop))) {
+                    Intent intent = new Intent(this, ImageCropActivity.class);
+                    startActivity(intent);
+                }
+            } else {
+                // 保存要启动的Activity信息，并请求权限
+                if (title.equals(getString(R.string.image_scale))) {
+                    pendingIntent = new Intent(this, ImageScaleActivity.class);
+                } else {
+                    pendingIntent = new Intent(this, ImageCropActivity.class);
+                }
+                // 请求存储权限
+                requestStoragePermissions();
+            }
         } else {
-            // 其他功能仍需开通会员
-            showPremiumOrPaymentDialog(feature);
+            // 其他功能需要会员
+            showPremiumDialog();
         }
     }
 
@@ -176,132 +261,65 @@ public class MainActivity extends BaseActivity implements FeatureAdapter.OnFeatu
     public void onServiceClick(ServiceModel service) {
         try {
             String serviceTitle = service.getTitle();
-            Intent intent = null;
             
-            // 根据不同的服务类型，准备相应的Intent
-            if (serviceTitle.equals(getString(R.string.file_repair))) {
-                intent = new Intent(this, ScanActivity.class);
-                intent.putExtra(ScanActivity.EXTRA_SCAN_TYPE, ScanActivity.SCAN_TYPE_FILE);
-            } else if (serviceTitle.equals(getString(R.string.video_repair))) {
-                intent = new Intent(this, ScanActivity.class);
-                intent.putExtra(ScanActivity.EXTRA_SCAN_TYPE, ScanActivity.SCAN_TYPE_VIDEO);
-            } else if (serviceTitle.equals(getString(R.string.audio_repair))) {
-                intent = new Intent(this, ScanActivity.class);
-                intent.putExtra(ScanActivity.EXTRA_SCAN_TYPE, ScanActivity.SCAN_TYPE_AUDIO);
-            } else {
-                // 其他服务仍需要开通会员
-        showPremiumDialog();
-                return;
-            }
-            
-            // 检查权限，如有必要则请求权限
-            if (intent != null) {
+            // 文件、视频、音频修复功能可直接使用，其他服务需要会员
+            if (serviceTitle.equals(getString(R.string.file_repair)) || 
+                serviceTitle.equals(getString(R.string.video_repair)) || 
+                serviceTitle.equals(getString(R.string.audio_repair))) {
+                
+                // 先检查存储权限
                 if (hasFileAccessPermissions()) {
-                    // 有权限，直接启动Activity
+                    // 已经有权限，直接启动Activity
+                    Intent intent = new Intent(this, ScanActivity.class);
+                    
+                    if (serviceTitle.equals(getString(R.string.file_repair))) {
+                        intent.putExtra(ScanActivity.EXTRA_SCAN_TYPE, ScanActivity.SCAN_TYPE_FILE);
+                    } else if (serviceTitle.equals(getString(R.string.video_repair))) {
+                        intent.putExtra(ScanActivity.EXTRA_SCAN_TYPE, ScanActivity.SCAN_TYPE_VIDEO);
+                    } else if (serviceTitle.equals(getString(R.string.audio_repair))) {
+                        intent.putExtra(ScanActivity.EXTRA_SCAN_TYPE, ScanActivity.SCAN_TYPE_AUDIO);
+                    }
+                    
                     startActivity(intent);
                 } else {
-                    // 没有权限，保存Intent并请求权限
-                    pendingIntent = intent;
+                    // 保存要启动的Activity信息，并请求权限
+                    pendingIntent = new Intent(this, ScanActivity.class);
+                    
+                    if (serviceTitle.equals(getString(R.string.file_repair))) {
+                        pendingIntent.putExtra(ScanActivity.EXTRA_SCAN_TYPE, ScanActivity.SCAN_TYPE_FILE);
+                    } else if (serviceTitle.equals(getString(R.string.video_repair))) {
+                        pendingIntent.putExtra(ScanActivity.EXTRA_SCAN_TYPE, ScanActivity.SCAN_TYPE_VIDEO);
+                    } else if (serviceTitle.equals(getString(R.string.audio_repair))) {
+                        pendingIntent.putExtra(ScanActivity.EXTRA_SCAN_TYPE, ScanActivity.SCAN_TYPE_AUDIO);
+                    }
+                    
+                    // 请求存储权限
                     requestStoragePermissions();
                 }
+            } else {
+                // 其他服务需要会员
+                showPremiumDialog();
             }
         } catch (Exception e) {
             Toast.makeText(this, "页面跳转失败，请稍后重试", Toast.LENGTH_SHORT).show();
         }
     }
 
-    private void showPremiumOrPaymentDialog(FeatureModel feature) {
-        try {
-            if (feature.getBadgeText().equals(getString(R.string.trial))) {
-                // Trial features - show payment options
-                navigateToPayment(feature.getTitle(), "¥29.99");
-            } else {
-                // Paid features - show premium dialog
-                if (premiumDialog != null && !premiumDialog.isShowing()) {
-                    // 设置动画效果
-                    if (premiumDialog.getWindow() != null) {
-                        premiumDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
-                        premiumDialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
-                    }
-                    
-                    premiumDialog.show();
-                    
-                    // 设置按钮点击事件
-                    Button activateButton = premiumDialog.findViewById(R.id.btn_activate);
-                    if (activateButton != null) {
-                        activateButton.setOnClickListener(v -> {
-                            premiumDialog.dismiss();
-                            // 添加点击动画效果
-                            v.startAnimation(AnimationUtils.loadAnimation(this, R.anim.button_click));
-                            // 延迟一点时间再跳转，让动画效果显示出来
-                            new Handler().postDelayed(() -> navigateToVipMembership(), 100);
-                        });
-                    }
-                }
-            }
-        } catch (Exception e) {
-            Log.e("MainActivity", "显示会员弹窗失败", e);
-            Toast.makeText(this, "显示支付选项失败，请稍后重试", Toast.LENGTH_SHORT).show();
-        }
-    }
 
+
+    // 此方法已不再使用，所有功能都通过showPremiumDialog统一处理
     private void navigateToFeatureActivity(FeatureModel feature) {
-        try {
-            Intent intent = null;
-            
-            switch (feature.getTitle()) {
-                case "图片缩放":
-                    intent = new Intent(this, ImageScaleActivity.class);
-                    break;
-                case "图片裁剪":
-                    intent = new Intent(this, ImageCropActivity.class);
-                    break;
-                default:
-                    Toast.makeText(this, "功能即将推出", Toast.LENGTH_SHORT).show();
-                    return;
-            }
-            
-            if (intent != null) {
-                startActivity(intent);
-            }
-        } catch (Exception e) {
-            Toast.makeText(this, "打开功能失败，请稍后重试", Toast.LENGTH_SHORT).show();
-        }
+        showPremiumDialog();
     }
 
+    // 此方法已不再使用，所有服务都通过showPremiumDialog统一处理
     private void navigateToPaymentForService(ServiceModel service) {
-        try {
-            String serviceTitle = service.getTitle();
-            String servicePrice = "¥49.99"; // Default price
-            
-            // Different services can have different prices
-            if (serviceTitle.equals(getString(R.string.engineer_remote_help))) {
-                servicePrice = "¥99.99";
-            } else if (serviceTitle.equals(getString(R.string.file_repair)) ||
-                       serviceTitle.equals(getString(R.string.video_repair)) ||
-                       serviceTitle.equals(getString(R.string.audio_repair))) {
-                servicePrice = "¥39.90";
-            }
-            
-            navigateToPayment(serviceTitle, servicePrice);
-        } catch (Exception e) {
-            Toast.makeText(this, "打开支付页面失败，请稍后重试", Toast.LENGTH_SHORT).show();
-        }
+        showPremiumDialog();
     }
     
+    // 此方法已不再使用，所有服务都通过showPremiumDialog统一处理
     private void navigateToPayment(String serviceTitle, String servicePrice) {
-        try {
-            Intent intent = new Intent(MainActivity.this, PaymentActivity.class);
-            intent.putExtra("service_title", serviceTitle);
-            intent.putExtra("service_price", servicePrice);
-            
-            // 添加前一个页面信息
-            intent = addPreviousActivityInfo(intent, MainActivity.this.getClass().getName());
-            
-            startActivity(intent);
-        } catch (Exception e) {
-            Toast.makeText(this, "页面跳转失败，请稍后再试", Toast.LENGTH_SHORT).show();
-        }
+        showPremiumDialog();
     }
 
     private void setupBottomNavigation() {
@@ -321,35 +339,85 @@ public class MainActivity extends BaseActivity implements FeatureAdapter.OnFeatu
     private void initPremiumDialog() {
         premiumDialog = new Dialog(this);
         premiumDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        premiumDialog.setContentView(R.layout.dialog_premium);
+        premiumDialog.setContentView(R.layout.dialog_premium_new);
         premiumDialog.setCancelable(true);
+        
+        // 设置对话框宽度为屏幕宽度的90%
+        if (premiumDialog.getWindow() != null) {
+            WindowManager.LayoutParams layoutParams = premiumDialog.getWindow().getAttributes();
+            layoutParams.width = (int)(getResources().getDisplayMetrics().widthPixels * 0.9);
+            premiumDialog.getWindow().setAttributes(layoutParams);
+            premiumDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+        }
 
+        // 设置关闭按钮点击事件
         ImageButton closeButton = premiumDialog.findViewById(R.id.btn_close);
-        closeButton.setOnClickListener(v -> premiumDialog.dismiss());
+        if (closeButton != null) {
+            closeButton.setOnClickListener(v -> {
+                v.startAnimation(AnimationUtils.loadAnimation(this, R.anim.button_click));
+                premiumDialog.dismiss();
+            });
+        }
         
         // 设置"立即开通"按钮点击事件
         Button activateButton = premiumDialog.findViewById(R.id.btn_activate);
         if (activateButton != null) {
             activateButton.setOnClickListener(v -> {
+                v.startAnimation(AnimationUtils.loadAnimation(this, R.anim.button_click));
                 premiumDialog.dismiss();
-                // 跳转到会员中心页面
-                navigateToVipMembership();
+                // 直接跳转到服务详情页面
+                navigateToServiceDetail();
+            });
+        }
+        
+        // 设置"暂不开通"按钮点击事件
+        TextView cancelButton = premiumDialog.findViewById(R.id.btn_cancel);
+        if (cancelButton != null) {
+            cancelButton.setOnClickListener(v -> {
+                v.startAnimation(AnimationUtils.loadAnimation(this, R.anim.button_click));
+                premiumDialog.dismiss();
             });
         }
     }
     
-    // 新增跳转到会员中心的方法
+    // 新增跳转到会员中心的方法 - 已不再使用
     private void navigateToVipMembership() {
         try {
-            Intent intent = new Intent(this, VipMembershipActivity.class);
+            Intent intent = new Intent(this, VipMembershipActivityNew.class);
             startActivity(intent);
         } catch (Exception e) {
             Toast.makeText(this, "打开会员中心失败，请稍后重试", Toast.LENGTH_SHORT).show();
         }
     }
+    
+    // 新增跳转到服务详情页面的方法
+    private void navigateToServiceDetail() {
+        try {
+            // 默认服务标题和价格
+            String serviceTitle = "手机数据恢复服务";
+            String servicePrice = "¥159";
+            
+            Intent intent = new Intent(this, PaymentActivity.class);
+            intent.putExtra("service_title", serviceTitle);
+            intent.putExtra("service_price", servicePrice);
+            
+            // 添加前一个页面信息（如果需要）
+            if (this instanceof BaseActivity) {
+                intent = ((BaseActivity)this).addPreviousActivityInfo(intent, this.getClass().getName());
+            }
+            
+            startActivity(intent);
+        } catch (Exception e) {
+            Toast.makeText(this, "打开服务详情页面失败，请稍后重试", Toast.LENGTH_SHORT).show();
+        }
+    }
 
     private void showPremiumDialog() {
         if (premiumDialog != null && !premiumDialog.isShowing()) {
+            // 设置动画效果
+            if (premiumDialog.getWindow() != null) {
+                premiumDialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
+            }
             premiumDialog.show();
         }
     }
@@ -367,12 +435,12 @@ public class MainActivity extends BaseActivity implements FeatureAdapter.OnFeatu
         features.add(new FeatureModel(R.drawable.ic_image_repair, getString(R.string.image_repair), 
                 getString(R.string.image_repair_desc), true, getString(R.string.trial)));
         
-        // Free features - 现在也需要会员
+        // 免费功能
         features.add(new FeatureModel(R.drawable.ic_image_scale, getString(R.string.image_scale), 
-                getString(R.string.image_scale_desc), true, getString(R.string.paid)));
+                getString(R.string.image_scale_desc), false, getString(R.string.free)));
         
         features.add(new FeatureModel(R.drawable.ic_image_crop, getString(R.string.image_crop), 
-                getString(R.string.image_crop_desc), true, getString(R.string.paid)));
+                getString(R.string.image_crop_desc), false, getString(R.string.free)));
         
         // More premium features
         features.add(new FeatureModel(R.drawable.ic_file_transfer, getString(R.string.file_transfer), 

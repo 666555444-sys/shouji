@@ -23,7 +23,7 @@ public class VipMembershipActivity extends AppCompatActivity {
     private TextView annualPrice;
     private TextView termsText;
     private Button activateButton;
-    private String selectedPackage = "permanent"; // 默认选择永久套餐
+    private String selectedPackage = "premium"; // 默认选择高级套餐
     
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,7 +53,7 @@ public class VipMembershipActivity extends AppCompatActivity {
         termsText = findViewById(R.id.terms_text);
         activateButton = findViewById(R.id.btn_activate_vip);
         
-        // 默认选中永久套餐
+        // 默认选中高级套餐
         selectPackage("permanent");
     }
     
@@ -61,7 +61,7 @@ public class VipMembershipActivity extends AppCompatActivity {
         // 返回按钮点击事件
         findViewById(R.id.backBtn).setOnClickListener(v -> onBackPressed());
         
-        // 永久套餐点击事件
+        // 高级套餐点击事件
         permanentPackage.setOnClickListener(v -> selectPackage("permanent"));
         
         // 年度套餐点击事件
@@ -109,7 +109,7 @@ public class VipMembershipActivity extends AppCompatActivity {
     }
     
     private void showPaymentConfirmation() {
-        String packageTitle = selectedPackage.equals("permanent") ? "永久会员" : "年度会员";
+        String packageTitle = selectedPackage.equals("permanent") ? "高级会员" : "年度会员";
         String packagePrice = selectedPackage.equals("permanent") ? "¥158" : "¥78";
         
         new AlertDialog.Builder(this)
@@ -126,7 +126,7 @@ public class VipMembershipActivity extends AppCompatActivity {
             Intent intent = new Intent(this, PaymentActivity.class);
             
             // 传递套餐信息
-            String packageTitle = selectedPackage.equals("permanent") ? "永久会员" : "年度会员";
+            String packageTitle = selectedPackage.equals("permanent") ? "高级会员" : "年度会员";
             String packagePrice = selectedPackage.equals("permanent") ? "¥158" : "¥78";
             
             intent.putExtra("service_title", packageTitle);

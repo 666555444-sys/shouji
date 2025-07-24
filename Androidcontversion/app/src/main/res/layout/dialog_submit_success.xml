@@ -49,10 +49,10 @@
             android:layout_marginBottom="30dp" />
 
         <Button
-            android:id="@+id/return_home_btn"
+            android:id="@+id/return_order_btn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="返回首页"
+            android:text="返回订单"
             android:textColor="@color/white"
             android:textSize="16sp"
             android:background="@drawable/green_gradient_button_bg"

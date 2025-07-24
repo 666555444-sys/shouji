@@ -20,7 +20,7 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <!-- 永久有效标签 -->
+            <!-- 优质服务标签 -->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

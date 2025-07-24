@@ -74,76 +74,49 @@
             android:textColor="@color/white"
             android:textSize="14sp" />
 
-        <!-- Logo设计 -->
-        <RelativeLayout
+        <!-- 新的设计：数据修复动态图标 -->
+        <FrameLayout
             android:id="@+id/logoContainer"
-            android:layout_width="150dp"
-            android:layout_height="150dp"
+            android:layout_width="180dp"
+            android:layout_height="180dp"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="160dp">
+            android:layout_marginTop="150dp">
+            
+            <!-- 背景圆形 -->
+            <View
+                android:layout_width="180dp"
+                android:layout_height="180dp"
+                android:background="@drawable/bg_splash_circle"
+                android:alpha="0.15" />
+                
+            <!-- 数据流动画图形 -->
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:orientation="vertical"
+                android:gravity="center">
+                
+                <!-- 数据恢复符号 -->
+                <ImageView
+                    android:id="@+id/dataIcon"
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
+                    android:src="@drawable/ic_data_recovery"
+                    app:tint="@color/white" />
+                
+                <!-- 动态扫描线 -->
+                <View
+                    android:id="@+id/scanLine"
+                    android:layout_width="100dp"
+                    android:layout_height="2dp"
+                    android:layout_marginTop="10dp"
+                    android:background="@color/white"
+                    android:alpha="0.7" />
+                    
 
-            <RelativeLayout
-                android:id="@+id/logoOuter"
-                android:layout_width="130dp"
-                android:layout_height="130dp"
-                android:layout_centerInParent="true"
-                android:background="@drawable/bg_logo_outer">
-
-                <RelativeLayout
-                    android:id="@+id/logoInner"
-                    android:layout_width="110dp"
-                    android:layout_height="110dp"
-                    android:layout_centerInParent="true"
-                    android:background="@drawable/bg_logo_inner">
-
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_centerInParent="true"
-                        android:orientation="vertical"
-                        android:gravity="center">
-
-                        <!-- 手机图标 -->
-                        <ImageView
-                            android:layout_width="44dp"
-                            android:layout_height="44dp"
-                            android:src="@drawable/ic_mobile"
-                            app:tint="@color/white" />
-
-                        <!-- 数据图标和箭头放在一行 -->
-                        <LinearLayout
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:orientation="horizontal"
-                            android:layout_marginTop="-10dp">
-                            
-                            <ImageView
-                                android:layout_width="24dp"
-                                android:layout_height="24dp"
-                                android:src="@drawable/ic_database"
-                                app:tint="@color/white" />
-                                
-                            <ImageView
-                                android:id="@+id/arrowIcon"
-                                android:layout_width="24dp"
-                                android:layout_height="24dp"
-                                android:layout_marginStart="10dp"
-                                android:src="@drawable/ic_arrow_up"
-                                app:tint="@color/white" />
-                        </LinearLayout>
-
-                        <!-- 盾牌图标 -->
-                        <ImageView
-                            android:layout_width="20dp"
-                            android:layout_height="20dp"
-                            android:layout_marginTop="8dp"
-                            android:alpha="0.8"
-                            android:src="@drawable/ic_shield"
-                            app:tint="@color/white" />
-                    </LinearLayout>
-                </RelativeLayout>
-            </RelativeLayout>
-        </RelativeLayout>
+            </LinearLayout>
+        </FrameLayout>
 
         <!-- 应用名称和口号 -->
         <TextView

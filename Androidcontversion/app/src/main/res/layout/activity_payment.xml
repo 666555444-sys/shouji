@@ -42,26 +42,16 @@
             android:layout_height="24dp" />
     </LinearLayout>
 
-    <!-- 最近购买通知 -->
-    <TextView
+    <!-- 最近购买通知替换为滚动资讯 -->
+    <include
+        android:id="@+id/payment_news_ticker"
+        layout="@layout/news_ticker_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="20dp"
         android:layout_marginTop="60dp"
-        android:background="#33FFFFFF"
-        android:padding="8dp"
-        android:textSize="12sp"
-        android:text="👤 150****346 购买了图片清除(永久) 3分钟前"
-        android:textColor="@color/white"
-        android:gravity="center_vertical"
-        android:paddingHorizontal="12dp"
-        android:paddingVertical="8dp"
         android:layout_gravity="top"
-        android:elevation="1dp"
-        android:layout_marginBottom="10dp"
-        android:ellipsize="end"
-        android:singleLine="true"
-        android:alpha="0.9" />
+        android:elevation="1dp" />
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
@@ -107,7 +97,7 @@
                         android:textStyle="bold" />
                 </LinearLayout>
 
-                <!-- 永久图片清除套餐 -->
+                <!-- 高级图片清除套餐 -->
                 <androidx.cardview.widget.CardView
                     android:id="@+id/permanent_package"
                     android:layout_width="match_parent"
@@ -127,7 +117,7 @@
                             android:id="@+id/title_permanent"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="图片清除(永久)"
+                            android:text="图片清除(高级版)"
                             android:textColor="#3a4db1"
                             android:textSize="18sp"
                             android:textStyle="bold"
@@ -137,7 +127,7 @@
                             android:id="@+id/desc_permanent"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="该服务可永久无上限清除相册、微信、QQ图片清除"
+                            android:text="该服务可长期无上限清除相册、微信、QQ图片清除"
                             android:textColor="@color/text_secondary"
                             android:textSize="14sp"
                             android:layout_below="@id/title_permanent"
@@ -160,7 +150,7 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="永久有效"
+                                android:text="优质服务"
                                 android:textColor="#ff3b30"
                                 android:textSize="14sp"
                                 android:textStyle="bold"
@@ -608,15 +598,30 @@
             android:textStyle="bold"
             android:padding="15dp" />
 
-        <TextView
-            android:id="@+id/terms_text"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="支付即代表您已阅读并同意《服务说明》"
-            android:textColor="@color/text_secondary"
-            android:textSize="12sp"
+            android:orientation="horizontal"
             android:gravity="center"
-            android:layout_marginTop="10dp" />
+            android:layout_marginTop="10dp">
+            
+            <TextView
+                android:id="@+id/terms_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="支付即代表您已阅读并同意"
+                android:textColor="@color/text_secondary"
+                android:textSize="12sp" />
+                
+            <TextView
+                android:id="@+id/service_terms_link"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="《服务说明》"
+                android:textColor="#5367e4"
+                android:textSize="12sp"
+                android:textStyle="bold" />
+        </LinearLayout>
     </LinearLayout>
 
     <!-- 支付处理中布局（默认隐藏） -->

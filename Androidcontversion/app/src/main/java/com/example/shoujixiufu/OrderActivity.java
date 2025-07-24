@@ -184,7 +184,7 @@ public class OrderActivity extends AppCompatActivity implements OrderAdapter.Ord
         List<Order> orders = new ArrayList<>();
         
         // 只保留第一个订单
-        orders.add(new Order("1", "手机数据恢复服务", "待支付", "SJ20230615001", "2023-06-15 14:30", 299.00, "数据恢复", "iPhone 13"));
+        orders.add(new Order("1", "手机数据恢复服务", "待支付", "SJ20230615001", "2023-06-15 14:30", 159.00, "数据恢复", "iPhone 13"));
         
         return orders;
     }
