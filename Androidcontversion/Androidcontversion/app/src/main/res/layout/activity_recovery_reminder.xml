@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#80000000"
+    tools:context=".RecoveryReminderActivity">
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        app:cardBackgroundColor="#FFFBEE"
+        app:cardCornerRadius="15dp"
+        app:cardElevation="10dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <!-- 优质服务标签 -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="15dp"
+                android:layout_marginTop="15dp"
+                android:background="@drawable/bg_badge_red"
+                android:paddingHorizontal="8dp"
+                android:paddingVertical="3dp"
+                android:text="@string/permanent_valid"
+                android:textColor="@color/white"
+                android:textSize="12sp"
+                android:textStyle="bold" />
+
+            <!-- 弹窗头部 -->
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="120dp"
+                android:layout_marginTop="15dp"
+                android:gravity="center">
+
+                <!-- 文件夹图标 -->
+                <FrameLayout
+                    android:layout_width="100dp"
+                    android:layout_height="80dp"
+                    android:layout_gravity="center">
+
+                    <!-- 文件夹底部 -->
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="56dp"
+                        android:layout_gravity="bottom"
+                        android:background="@drawable/bg_folder_base" />
+
+                    <!-- 文件夹顶部 -->
+                    <View
+                        android:layout_width="50dp"
+                        android:layout_height="20dp"
+                        android:background="@drawable/bg_folder_top" />
+
+                    <!-- 背面文档 -->
+                    <View
+                        android:layout_width="60dp"
+                        android:layout_height="56dp"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginTop="6dp"
+                        android:background="@drawable/bg_document_back"
+                        android:rotation="3" />
+
+                    <!-- 前面文档 -->
+                    <RelativeLayout
+                        android:layout_width="65dp"
+                        android:layout_height="60dp"
+                        android:layout_gravity="center"
+                        android:layout_marginBottom="3dp"
+                        android:background="@drawable/bg_document_front"
+                        android:rotation="-5">
+
+                        <!-- 文档中的线条 -->
+                        <View
+                            android:layout_width="46dp"
+                            android:layout_height="4dp"
+                            android:layout_marginStart="10dp"
+                            android:layout_marginTop="9dp"
+                            android:background="@drawable/bg_document_line" />
+
+                        <View
+                            android:layout_width="33dp"
+                            android:layout_height="4dp"
+                            android:layout_marginStart="10dp"
+                            android:layout_marginTop="21dp"
+                            android:background="@drawable/bg_document_line" />
+                    </RelativeLayout>
+
+                </FrameLayout>
+
+                <!-- 装饰星星 -->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="40dp"
+                    android:layout_marginTop="20dp"
+                    android:text="✦"
+                    android:textColor="@color/yellow"
+                    android:textSize="16sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="end"
+                    android:layout_marginTop="35dp"
+                    android:layout_marginEnd="50dp"
+                    android:text="✦"
+                    android:textColor="@color/yellow"
+                    android:textSize="16sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom|start"
+                    android:layout_marginStart="50dp"
+                    android:layout_marginBottom="25dp"
+                    android:text="✦"
+                    android:textColor="@color/yellow"
+                    android:textSize="16sp" />
+
+                <!-- 关闭按钮 -->
+                <TextView
+                    android:id="@+id/closeBtn"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_gravity="end|top"
+                    android:layout_marginTop="15dp"
+                    android:layout_marginEnd="15dp"
+                    android:gravity="center"
+                    android:text="×"
+                    android:textColor="@color/text_tertiary"
+                    android:textSize="24sp"
+                    android:textStyle="bold" />
+
+            </FrameLayout>
+
+            <!-- 弹窗内容 -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:padding="20dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="15dp"
+                    android:text="@string/reminder"
+                    android:textColor="@color/brown_text"
+                    android:textSize="16sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="30dp"
+                    android:text="@string/repair_asap_message"
+                    android:textColor="@color/brown_text"
+                    android:textSize="24sp"
+                    android:textStyle="bold" />
+
+                <Button
+                    android:id="@+id/repairNowBtn"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/bg_button_orange_gradient"
+                    android:padding="15dp"
+                    android:text="@string/repair_now"
+                    android:textColor="@color/white"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+</RelativeLayout> 

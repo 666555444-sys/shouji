@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>盾牌安全风格Logo</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f8f9fa;
+        }
+        
+        .logo-container {
+            position: relative;
+            width: 200px;
+            height: 200px;
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+        
+        .shield {
+            position: relative;
+            width: 120px;
+            height: 140px;
+            background: white;
+            border-radius: 60px 60px 10px 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 2;
+        }
+        
+        .shield:before {
+            content: '';
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            right: 15px;
+            bottom: 15px;
+            border-radius: 50px 50px 5px 5px;
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+        }
+        
+        .phone {
+            position: absolute;
+            width: 40px;
+            height: 70px;
+            background: white;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            z-index: 3;
+        }
+        
+        .phone:before {
+            content: '';
+            position: absolute;
+            top: 5px;
+            left: 5px;
+            width: 30px;
+            height: 50px;
+            background: #333;
+            border-radius: 2px;
+        }
+        
+        .phone:after {
+            content: '';
+            position: absolute;
+            bottom: 5px;
+            left: 15px;
+            width: 10px;
+            height: 10px;
+            background: #ddd;
+            border-radius: 50%;
+        }
+        
+        .data-circle {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            border: 3px solid rgba(255,255,255,0.7);
+            border-top-color: transparent;
+            animation: rotate 2s linear infinite;
+        }
+        
+        @keyframes rotate {
+            0% {
+                transform: rotate(0deg);
+            }
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+        
+        .lock {
+            position: absolute;
+            bottom: 25px;
+            width: 24px;
+            height: 24px;
+            background: #ffeb3b;
+            border-radius: 4px;
+            z-index: 3;
+        }
+        
+        .lock:before {
+            content: '';
+            position: absolute;
+            top: -12px;
+            left: 4px;
+            width: 16px;
+            height: 12px;
+            border: 3px solid #ffeb3b;
+            border-bottom: none;
+            border-radius: 10px 10px 0 0;
+        }
+        
+        .sparkle {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background: rgba(255,255,255,0.8);
+            transform: rotate(45deg);
+            animation: sparkle 3s ease-in-out infinite;
+        }
+        
+        .sparkle1 {
+            top: 20px;
+            right: 30px;
+        }
+        
+        .sparkle2 {
+            bottom: 20px;
+            left: 30px;
+            animation-delay: 1.5s;
+        }
+        
+        @keyframes sparkle {
+            0%, 100% {
+                opacity: 0;
+                transform: rotate(45deg) scale(0.5);
+            }
+            50% {
+                opacity: 1;
+                transform: rotate(45deg) scale(1);
+            }
+        }
+        
+        .app-name {
+            position: absolute;
+            bottom: -40px;
+            width: 100%;
+            text-align: center;
+            font-family: Arial, sans-serif;
+            font-size: 18px;
+            font-weight: bold;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <div class="logo-container">
+        <div class="shield">
+            <div class="data-circle"></div>
+            <div class="phone"></div>
+            <div class="lock"></div>
+        </div>
+        <div class="sparkle sparkle1"></div>
+        <div class="sparkle sparkle2"></div>
+        <div class="app-name">手机数据帮手</div>
+    </div>
+</body>
+</html> 

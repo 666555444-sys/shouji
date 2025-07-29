@@ -1,0 +1,515 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">手机修复</string>
+    <string name="data_recovery">数据修复</string>
+    <string name="recover_early">越早修复</string>
+    <string name="higher_chance">几率越高！！！</string>
+    <string name="safe_efficient">安全高效</string>
+    <string name="privacy_assured">隐私无忧</string>
+    <string name="news">资讯</string>
+    <string name="notification_example">193****347 购买了微信消息修复</string>
+    <string name="popular_features">热门功能</string>
+    <string name="other_services">其他服务</string>
+    <string name="tab_home">首页</string>
+    <string name="cases">案例</string>
+    <string name="order">订单</string>
+    <string name="profile">我的</string>
+    
+    <!-- 订单页面相关字符串 -->
+    <string name="my_orders">我的订单</string>
+    <string name="no_orders">暂无订单</string>
+    <string name="no_order_records">您还没有任何订单记录</string>
+    <string name="order_number">订单编号：</string>
+    <string name="order_time">下单时间：</string>
+    <string name="order_amount">金额：</string>
+    <string name="order_status_processing">处理中</string>
+    <string name="order_status_completed">已完成</string>
+    <string name="order_status_cancelled">已取消</string>
+    <string name="order_status_pending">待支付</string>
+    <string name="view_order_detail">立即付款</string>
+    <string name="contact_service">联系客服</string>
+    <string name="cancel_order">取消订单</string>
+    
+    <!-- Feature card strings -->
+    <string name="wechat_message_repair">微信消息修复</string>
+    <string name="wechat_message_repair_desc">微信聊天记录修复</string>
+    <string name="wechat_friend_repair">微信好友修复</string>
+    <string name="wechat_friend_repair_desc">微信好友误删修复</string>
+    <string name="image_repair">图片修复</string>
+    <string name="image_repair_desc">手机丢失图片修复</string>
+    <string name="image_scale">图片缩放</string>
+    <string name="image_scale_desc">图片放大缩小工具</string>
+    <string name="image_crop">图片裁剪</string>
+    <string name="image_crop_desc">图片剪裁编辑工具</string>
+    <string name="file_transfer">文件传输</string>
+    <string name="file_transfer_desc">设备间文件传输</string>
+    <string name="call_log_repair">通话记录修复</string>
+    <string name="call_log_repair_desc">手机通话记录修复</string>
+    <string name="sms_repair">短信修复</string>
+    <string name="sms_repair_desc">手机短信记录修复</string>
+    
+    <!-- Service card strings -->
+    <string name="file_repair">文件修复</string>
+    <string name="video_repair">视频修复</string>
+    <string name="audio_repair">音频修复</string>
+    <string name="image_clear">图片清除</string>
+    <string name="qq_data_repair">QQ数据修复</string>
+    <string name="wechat_bill_repair">微信账单修复</string>
+    <string name="tiktok_data_repair">抖音数据修复</string>
+    <string name="engineer_remote_help">工程师远程协助</string>
+    
+    <!-- Badge strings -->
+    <string name="trial">付费</string>
+    <string name="free">免费</string>
+    <string name="paid">付费</string>
+    
+    <!-- Modal strings -->
+    <string name="unlock_member_feature">开启会员功能</string>
+    <string name="member_feature_description">此功能需要开通会员才能使用</string>
+    <string name="activate_now">立即开通</string>
+    <string name="view_logo_designs">查看Logo设计</string>
+    
+    <!-- About Us Screen -->
+    <string name="about_us">关于我们</string>
+    <string name="back">返回</string>
+    <string name="company_logo">公司标志</string>
+    <string name="company_info">企业信息</string>
+    <string name="company_name">企业名称</string>
+    <string name="company_name_value">苏州沐决网络科技有限公司</string>
+    <string name="founded_year">成立时间</string>
+    <string name="founded_year_value">2018年</string>
+    <string name="established_year">成立年份</string>
+    <string name="established_year_value">2018年</string>
+    <string name="product_name">产品名称</string>
+    <string name="product_name_value">手机修复备份</string>
+    <string name="current_version">当前版本</string>
+    <string name="current_version_value">V7.3</string>
+    <string name="company_intro">企业简介</string>
+    <string name="company_desc_1">苏州沐决网络科技有限公司是一家专注于移动数据修复技术的高科技企业。我们致力于为用户提供专业、高效、安全的数据修复解决方案，帮助用户找回珍贵的数字回忆。</string>
+    <string name="company_desc_2">我们的团队由一群热爱技术、充满创新精神的工程师组成，拥有多年数据修复行业经验，擅长移动设备数据修复和修复。</string>
+    <string name="product_features">产品特点</string>
+    <string name="feature_1">专业的微信数据修复能力，支持聊天记录、图片、视频等多种数据修复</string>
+    <string name="feature_2">快速扫描识别，精准定位丢失数据</string>
+    <string name="feature_3">安全保障，修复过程中不会泄露用户隐私</string>
+    <string name="feature_4">操作简单，无需复杂步骤即可完成数据修复</string>
+    <string name="feature_5">专业的技术支持，为用户提供全方位服务</string>
+    <string name="contact_us">联系客服</string>
+    <string name="phone">电话</string>
+    <string name="customer_phone">客服电话：400-888-8888</string>
+    <string name="customer_service_phone">客服电话：400-888-8888</string>
+    <string name="qq_item">QQ</string>
+    <string name="customer_qq">客服QQ：37115958</string>
+    <string name="customer_service_qq">客服QQ：37115958</string>
+    <string name="email">邮箱</string>
+    <string name="customer_email">邮箱：service@example.com</string>
+    <string name="customer_service_email">邮箱：service@example.com</string>
+    <string name="location">位置</string>
+    <string name="address">地址</string>
+    <string name="customer_address">地址：江苏省苏州市高新区科技创新大厦</string>
+    <string name="company_address">江苏省苏州市高新区科技创新大厦</string>
+    <string name="wechat_item">微信</string>
+    <string name="tiktok">抖音</string>
+    <string name="website">网站</string>
+    <string name="weibo">微博</string>
+    <string name="copyright">© 2024 苏州沐决网络科技有限公司 版权所有</string>
+    <string name="return_to_profile">返回个人中心</string>
+    <string name="back_to_profile">返回个人中心</string>
+    
+    <!-- Audio Scan Screen -->
+    <string name="all_audio">全部音频</string>
+    <string name="menu">菜单</string>
+    <string name="time">时间</string>
+    <string name="size">大小</string>
+    <string name="scanned_progress">已扫描 10%</string>
+    <string name="scan_deeper_desc">开启「深层扫描」可查看更多音频</string>
+    <string name="recover">去修复</string>
+    <string name="select_local_audio">选择本地音频文件进行扫描</string>
+    <string name="select_audio_desc">请选择您想要扫描的音频文件</string>
+    <string name="select_audio">选择音频</string>
+    <string name="start_scan">开始扫描</string>
+    <string name="recover_and_scan_deep">去修复 开放深层扫描查找全部数据</string>
+    <string name="scanning_audio_files">正在扫描音频文件</string>
+    <string name="scanning_audio_desc">系统正在分析您的设备以查找可修复的音频文件，请稍候...</string>
+    <string name="found_files">已找到 %1$d 个文件</string>
+    
+    <!-- 支付页面 -->
+    <string name="payment">支付中心</string>
+    <string name="deep_scan_service">深层扫描服务</string>
+    <string name="service_price">¥39.90</string>
+    <string name="service_description">开启深层扫描服务，可以彻底扫描设备存储空间，修复更多被删除的数据</string>
+    <string name="service_features">服务特点</string>
+    <string name="payment_method">支付方式</string>
+    <string name="wechat_pay">微信支付</string>
+    <string name="alipay">支付宝</string>
+    <string name="pay_now">立即支付</string>
+    <string name="payment_terms">支付即表示您同意《服务条款》和《隐私政策》</string>
+    <string name="payment_processing">支付处理中</string>
+    <string name="wait_for_payment">请稍候，我们正在处理您的付款...</string>
+    
+    <!-- 支付成功页面 -->
+    <string name="payment_success">支付成功</string>
+    <string name="payment_success_desc">您已成功购买深层扫描服务，可立即查看更多数据</string>
+    <string name="order_detail">订单详情</string>
+    <string name="service_activated">服务已激活，长期有效</string>
+    <string name="view_results">查看扫描结果</string>
+    <string name="back_to_main">返回首页</string>
+    <string name="video_recovery_service">视频深层扫描服务</string>
+    <string name="audio_recovery_service">音频深层扫描服务</string>
+    <string name="file_recovery_service">文件深层扫描服务</string>
+    <string name="video_recovery_desc">您的视频深度扫描服务已开通</string>
+    <string name="audio_recovery_desc">您的音频深度扫描服务已开通</string>
+    <string name="file_recovery_desc">您的文件深度扫描服务已开通</string>
+    <string name="video_recovery_success_desc">视频深度扫描服务已开通，立即查看完整扫描结果</string>
+    <string name="audio_recovery_success_desc">音频深度扫描服务已开通，立即查看完整扫描结果</string>
+    <string name="file_recovery_success_desc">文件深度扫描服务已开通，立即查看完整扫描结果</string>
+    
+    <!-- New payment success strings -->
+    <string name="congrats_payment_success">+恭喜支付成功+</string>
+    <string name="phone_form_title">手机号码：方便工程师好与您联系</string>
+    <string name="phone_form_subtitle">仅差最后一步，请您填写正确的手机号码，\n以便工程师为您服务</string>
+    <string name="phone_input_hint">请输入您的手机号码</string>
+    <string name="submit">提交</string>
+    <string name="tips_title">温馨提示</string>
+    <string name="tip_1">预留手机号码是为了方便与您对接</string>
+    <string name="tip_2">可根据教程或在线客服协助服务</string>
+    <string name="tip_3">可联系在线客服开具增值税发票(支持电子发票)</string>
+    <string name="service_info_text">⚠️ 数据网络开启可能会消耗流量，请手动关闭。</string>
+    <string name="submit_success">提交成功！</string>
+    <string name="phone_submit_success_desc">您的手机号码已成功提交，工程师会尽快与您联系。</string>
+    <string name="return_to_home">返回首页</string>
+    
+    <!-- 隐私政策页面 -->
+    <string name="privacy_policy">隐私政策</string>
+    <string name="privacy_policy_content">尊敬的用户：\n\n欢迎使用「手机修复」应用程序（以下简称"本应用"）。本隐私政策旨在帮助您了解我们如何收集、使用、存储和共享您的个人信息，以及您享有的相关权利。请您在使用我们的服务前，仔细阅读并了解本隐私政策的全部内容。\n\n一、我们收集的信息\n\n1.1 您提供的信息：当您注册账户、使用本应用功能或联系客服时，我们会收集您主动提供的信息，如姓名、电话号码、电子邮箱等。\n\n1.2 设备信息：我们会自动收集您使用本应用的设备信息，如设备型号、操作系统版本、设备标识符、IP地址等。\n\n1.3 应用使用数据：为了提供更好的服务，我们会记录您如何使用本应用的数据，包括您访问的页面、使用的功能以及操作行为。\n\n二、信息使用\n\n2.1 提供服务：我们使用收集到的信息来提供、维护和改进我们的服务，如数据修复、文件传输等功能。\n\n2.2 安全保障：我们使用您的信息来验证身份、防止欺诈等不法行为，保障您的账户和数据安全。\n\n2.3 改进服务：我们会分析用户行为数据，以便了解用户需求，改进产品体验。\n\n三、信息共享\n\n除非获得您的明确同意，或法律法规要求，我们不会与任何第三方分享您的个人信息。我们可能在以下情况下共享您的个人信息：\n\n3.1 征得您的明确同意；\n\n3.2 应法律法规要求、强制性的行政执法或司法要求；\n\n3.3 在涉及合并、收购或资产转让时，我们会要求新的持有方继续受本隐私政策的约束。\n\n四、信息安全\n\n我们非常重视您个人信息的安全，采取各种物理、电子和管理措施来保护您的个人信息不被未经授权的访问、使用或泄露。\n\n五、您的权利\n\n您对自己的个人信息拥有以下权利：\n\n5.1 访问权：您有权访问我们持有的关于您的个人信息。\n\n5.2 更正权：如果您认为我们持有的关于您的个人信息不准确，您有权要求我们更正。\n\n5.3 删除权：在某些情况下，您有权要求删除我们持有的关于您的个人信息。\n\n六、隐私政策的更新\n\n我们可能会不时更新本隐私政策。当我们更新隐私政策时，会在本应用中发布最新版本，并在生效前通知您。请定期查看本隐私政策以了解任何变更。\n\n七、联系我们\n\n如果您对本隐私政策有任何疑问、意见或建议，请通过以下方式与我们联系：\n\n电子邮件：privacy@example.com\n客服电话：400-888-8888\n\n苏州沐决网络科技有限公司\n最近更新日期：2024年5月15日</string>
+    
+    <!-- 图片裁剪页面 -->
+    <string name="image_preview">图片预览</string>
+    <string name="rotate">旋转</string>
+    <string name="crop">裁剪</string>
+    <string name="save">保存</string>
+    <string name="cropping">裁剪中</string>
+    <string name="cropping_in_progress">正在裁剪图片，请稍候...</string>
+    <string name="crop_success">裁剪成功</string>
+    <string name="image_saved">图片已保存</string>
+    <string name="discard_changes">放弃修改？</string>
+    <string name="discard_changes_message">您有未保存的修改，确定要退出吗？</string>
+    <string name="yes">是</string>
+    <string name="no">否</string>
+    
+    <!-- 图片缩放页面 -->
+    <string name="scale">缩放</string>
+    <string name="scale_percent">%1$d%%</string>
+    <string name="apply">应用</string>
+    <string name="processing">处理中</string>
+    <string name="processing_image">正在处理图片，请稍候...</string>
+    <string name="scale_applied">缩放已应用</string>
+    
+    <!-- 文件发送页面 -->
+    <string name="file_send">文件发送</string>
+    <string name="add_file">添加文件</string>
+    <string name="sending_progress">已发送 %1$d%%</string>
+    <string name="send_file">发送文件</string>
+    <string name="file_icon">文件图标</string>
+    <string name="please_select_files">请选择要发送的文件</string>
+    <string name="send_complete">发送完成</string>
+    <string name="files_sent_success">文件已成功发送</string>
+    <string name="ok">确定</string>
+    <string name="cancel">取消</string>
+    <string name="feature_coming_soon">功能即将推出</string>
+    <string name="file_photos">照片</string>
+    <string name="file_videos">视频</string>
+    <string name="file_docs">文档</string>
+    <string name="file_music">音乐</string>
+    
+    <!-- Contact Service -->
+    <string name="service_hours">客服服务时间：9:00-21:00（工作日及周末）</string>
+    <string name="contact_methods">联系方式</string>
+    <string name="online_support">在线客服</string>
+    <string name="online_support_desc">工作时间内快速回复，解决您的问题</string>
+    <string name="consult">咨询</string>
+    <string name="hotline">客服热线</string>
+    <string name="hotline_number">400-888-XXXX</string>
+    <string name="call">拨打</string>
+    <string name="support_email">support@datarecovery.com</string>
+    <string name="send">发送</string>
+    <string name="submit_question">提交问题</string>
+    <string name="question_type">问题类型</string>
+    <string name="contact_info">联系方式</string>
+    <string name="contact_info_hint">请输入您的手机号码</string>
+    <string name="question_description">问题描述</string>
+    <string name="question_description_hint">请详细描述您遇到的问题，以便我们更好地为您服务</string>
+    <string name="faq">常见问题</string>
+    <string name="faq_recovery_time_question">数据修复需要多长时间？</string>
+    <string name="faq_recovery_time_answer">数据修复时间取决于数据量大小和损坏程度。一般情况下，小型数据修复可能需要几小时，而大型或复杂的数据修复可能需要1-3天。我们会尽最大努力在最短时间内完成修复。</string>
+    <string name="faq_success_rate_question">如何提高数据修复成功率？</string>
+    <string name="faq_success_rate_answer">数据丢失后应立即停止使用设备，避免新数据覆盖丢失数据。越早进行修复，成功率越高。同时，保持设备电量充足，确保修复过程不会因断电而中断。</string>
+    <string name="faq_payment_question">支付后多久可以使用服务？</string>
+    <string name="faq_payment_answer">支付成功后，您可以立即使用我们的服务。系统会自动为您的账号开通相应的功能权限，无需等待人工审核。</string>
+    <string name="faq_cancel_question">如何取消订阅服务？</string>
+    <string name="faq_cancel_answer">您可以在"我的"-"订单管理"中找到相应的订阅服务，点击"取消订阅"即可。请注意，已支付的费用根据使用情况可能无法全额退款，具体以退款政策为准。</string>
+    
+    <!-- Feedback Screen -->
+    <string name="feedback_title">反馈问题</string>
+    <string name="feedback_contact_hint">可输入手机号、微信号、QQ号</string>
+    <string name="issue_description">问题描述</string>
+    <string name="feedback_issue_hint">请输入您反馈的问题内容</string>
+    <string name="submit_feedback">提交反馈</string>
+    
+    <!-- File Scan Screen -->
+    <string name="all_files">全部文件</string>
+    <string name="select_local_files">选择本地文件进行扫描</string>
+    <string name="select_files_desc">请选择您想要扫描的文件</string>
+    <string name="select_files">选择文件</string>
+    <string name="scanning_files">正在扫描文件</string>
+    <string name="scanning_files_desc">系统正在分析您的设备以查找可修复的文档文件，请稍候...</string>
+    <string name="word">Word</string>
+    <string name="excel">Excel</string>
+    <string name="ppt">PPT</string>
+    <string name="pdf">PDF</string>
+    <string name="others">其他</string>
+    
+    <!-- Recovery Reminder Screen -->
+    <string name="permanent_valid">优质服务</string>
+    <string name="reminder">温馨提示</string>
+    <string name="repair_asap_message">越早修复，几率越高！！</string>
+    <string name="repair_now">立即修复</string>
+    <string name="view_tutorial">查看教程</string>
+
+    <!-- Permission Strings -->
+    <string name="permission_required">需要权限</string>
+    <string name="storage_permission_rationale">为了访问和恢复您的文件，我们需要访问您设备存储的权限。</string>
+    <string name="permission_denied">权限被拒绝，无法访问文件</string>
+    <string name="permission_media_images_rationale">需要访问图片的权限来恢复您的照片</string>
+    <string name="permission_media_video_rationale">需要访问视频的权限来恢复您的视频文件</string>
+    <string name="permission_media_audio_rationale">需要访问音频的权限来恢复您的音频文件</string>
+    <string name="permission_storage_rationale">需要存储权限来访问和恢复您的文件</string>
+    <string name="permission_granted">权限已授予，可以继续操作</string>
+    <string name="grant">授权</string>
+    <string name="settings">设置</string>
+    <string name="go_to_settings">前往设置</string>
+    <string name="settings_permission_message">您需要在应用设置中手动授予权限才能继续使用此功能</string>
+    
+    <!-- Scan Screen -->
+    <string name="all_photos">全部图片</string>
+    <string name="album">相册</string>
+    <string name="wechat">微信</string>
+    <string name="qq">QQ</string>
+    <string name="other">其他</string>
+    <string name="scanned_13_percent">已扫描13%</string>
+    <string name="album_photo_count">相册（250张）</string>
+    <string name="cancel_scan">取消扫描</string>
+    <string name="cancel_scan_confirm">确定要取消扫描吗？</string>
+    <string name="open_deep_scan">开放深层扫描查找全部数据</string>
+    <string name="deep_scan_description">深层扫描可以找到更多已删除的数据</string>
+    <string name="recover_now">立即修复</string>
+    
+    <!-- Service Agreement Screen -->
+    <string name="service_agreement_description">服务说明</string>
+    <string name="service_overview">服务概述</string>
+    <string name="service_overview_content">本服务提供专业的数据修复解决方案，包括但不限于微信聊天记录修复、微信好友修复、图片修复、文件修复、视频修复等多种数据修复服务。我们致力于帮助用户找回丢失的重要数据，提供高效、安全、专业的技术支持。</string>
+    <string name="service_content">服务内容</string>
+    <string name="wechat_chat_recovery">微信聊天记录修复</string>
+    <string name="wechat_friends_recovery">微信好友修复</string>
+    <string name="photo_recovery">图片修复</string>
+    <string name="call_log_recovery">通话记录修复</string>
+    <string name="sms_recovery">短信修复</string>
+    <string name="image_resize_crop">图片缩放裁剪</string>
+    <string name="service_terms">服务条款</string>
+    <string name="service_period_highlight"><![CDATA[<b>服务期限：</b>根据您购买的套餐不同，服务期限分为一年期和长期两种。一年期服务自购买之日起一年内有效；长期服务不设使用期限。]]></string>
+    <string name="usage_limit_highlight"><![CDATA[<b>使用限制：</b>每个账号仅限本人使用，不可转让或分享给他人使用。]]></string>
+    <string name="recovery_success_rate_highlight"><![CDATA[<b>修复成功率：</b>数据修复成功率受多种因素影响，包括但不限于数据丢失时间、设备状态、覆盖情况等。我们会尽最大努力提供修复服务，但不能保证100%修复所有数据。]]></string>
+    <string name="refund_policy_highlight"><![CDATA[<b>退款政策：</b>由于数据修复服务的特殊性，一旦服务开始，将不予退款。购买前请慎重考虑。]]></string>
+    <string name="privacy_protection">隐私保护</string>
+    <string name="we_value_privacy">我们高度重视用户隐私保护，承诺：</string>
+    <string name="local_recovery_process">所有修复过程均在用户设备本地进行，不会上传用户数据到我们的服务器</string>
+    <string name="no_saving_viewing_data">不会保存、查看或使用用户的个人数据内容</string>
+    <string name="encryption_protection">采用先进的加密技术保护用户信息安全</string>
+    <string name="no_third_party_sharing">不会向任何第三方分享或出售用户信息</string>
+    <string name="usage_statistics_note">请注意：为提供更好的服务，我们可能会收集应用使用统计数据，但这些数据不包含任何可识别个人身份的信息。</string>
+    <string name="usage_suggestions">使用建议</string>
+    <string name="timely_recovery_highlight"><![CDATA[<b>及时修复：</b>数据丢失后应尽快进行修复操作，越早修复成功率越高]]></string>
+    <string name="stop_usage_highlight"><![CDATA[<b>停止使用：</b>发现数据丢失后，应立即停止使用该设备，避免新数据覆盖丢失数据]]></string>
+    <string name="stable_network_highlight"><![CDATA[<b>稳定网络：</b>在使用我们的服务时，请确保网络连接稳定]]></string>
+    <string name="sufficient_battery_highlight"><![CDATA[<b>充足电量：</b>操作前请确保设备电量充足，避免中途断电导致数据进一步损坏]]></string>
+    <string name="contact_us_intro">如您在使用过程中遇到任何问题，或对我们的服务有任何建议，欢迎通过以下方式联系我们：</string>
+    <string name="customer_service_hotline">客服热线：400-888-XXXX（工作时间：9:00-21:00）</string>
+    <string name="service_support_email">电子邮箱：support@datarecovery.com</string>
+    <string name="online_customer_service">在线客服：应用内"我的"-"联系客服"</string>
+    <string name="i_have_read_and_agree">我已阅读并同意</string>
+    <string name="copyright_text">© 2023-2025 数据修复服务 版权所有</string>
+    
+    <!-- 现有字符串 -->
+    <string name="scanning_video_files">正在扫描视频文件</string>
+    <string name="scanning_video_desc">系统正在分析您的设备以查找可修复的视频文件，请稍候...</string>
+    <string name="all_videos">全部视频</string>
+    <string name="are_you_sure_return">您确定返回吗？</string>
+    <string name="rescan_return_note">返回后，重新进入需要重新扫描数据</string>
+    <string name="confirm_action">确认</string>
+    <string name="cancel_action">取消</string>
+    <string name="files_found">已找到 %1$d 个文件</string>
+    <string name="scanned_percent">已扫描%1$d%%</string>
+    
+    <!-- Settings Screen -->
+    <string name="general_settings">通用设置</string>
+    <string name="notification">通知</string>
+    <string name="notification_alerts">通知提醒</string>
+    <string name="notification_desc">接收重要通知和消息提醒</string>
+    <string name="dark_mode">深色模式</string>
+    <string name="dark_mode_desc">切换应用界面显示模式</string>
+    <string name="language">语言</string>
+    <string name="language_desc">选择应用显示语言</string>
+    <string name="simplified_chinese">简体中文</string>
+    <string name="arrow">箭头</string>
+    <string name="account_and_security">账户与安全</string>
+    <string name="account_security">账户安全</string>
+    <string name="account_security_desc">修改密码、绑定手机</string>
+    <string name="privacy_settings">隐私设置</string>
+    <string name="privacy_settings_desc">隐私保护和数据安全</string>
+    <string name="fingerprint_unlock">指纹解锁</string>
+    <string name="fingerprint_unlock_desc">使用指纹快速登录应用</string>
+    <string name="data_management">数据管理</string>
+    <string name="storage_space">存储空间</string>
+    <string name="storage_space_desc">查看应用数据使用情况</string>
+    <string name="auto_backup">自动备份</string>
+    <string name="auto_backup_desc">自动备份修复记录和设置</string>
+    <string name="about">关于</string>
+    <string name="check_update">检查更新</string>
+    <string name="current_version_v1_1_31">当前版本 v1.1.31</string>
+    <string name="help_and_feedback">帮助与反馈</string>
+    <string name="help_and_feedback_desc">获取帮助或提交反馈</string>
+    <string name="clear_cache">清除缓存</string>
+    <string name="logout">退出登录</string>
+    <string name="only_support_simplified_chinese">目前仅支持简体中文</string>
+    <string name="account_security_developing">账户安全页面正在开发中</string>
+    <string name="storage_usage_info">存储空间：应用数据 42.5MB，缓存 14.3MB</string>
+    <string name="latest_version">已是最新版本 v1.1.31</string>
+    <string name="clear_cache_confirm_message">清除缓存将删除临时文件，但不会影响您的数据。确定要清除吗？</string>
+    <string name="cache_cleared">缓存已清除</string>
+    <string name="logout_confirm_message">确定要退出当前账号吗？</string>
+    <string name="logout_success">已退出登录</string>
+    
+    <!-- Splash Screen -->
+    <string name="data_recovery_expert">数据恢复专家</string>
+    <string name="safe_efficient_privacy_assured">安全高效 · 数据无忧</string>
+    <string name="copyright_info">© 2025 数据恢复专家 版权所有</string>
+    
+    <!-- 监督投诉页面 -->
+    <string name="supervision_complaint">监督投诉</string>
+    <string name="complaint_type">投诉类型</string>
+    <string name="select_complaint_type">请选择投诉类型</string>
+    <string name="service_issue">服务问题</string>
+    <string name="product_quality">产品质量</string>
+    <string name="fee_dispute">费用争议</string>
+    <string name="staff_attitude">人员态度</string>
+    <string name="other_issues">其他问题</string>
+    <string name="contact_method">联系方式</string>
+    <string name="enter_phone_number">请输入您的联系电话</string>
+    <string name="complaint_order_number">订单号</string>
+    <string name="enter_order_number">请输入相关订单号（选填）</string>
+    <string name="complaint_content">投诉内容</string>
+    <string name="describe_issue_detail">请详细描述问题...</string>
+    <string name="privacy_agreement">隐私协议</string>
+    <string name="processing_notice">我已知晓并同意贵公司对我提交的投诉进行处理</string>
+    <string name="submit_complaint">提交投诉</string>
+    <string name="complaint_submitted">投诉已提交</string>
+    <string name="please_select_type">请选择投诉类型</string>
+    <string name="please_enter_contact">请输入联系方式</string>
+    <string name="please_enter_content">请输入投诉内容</string>
+    <string name="please_agree_privacy">请同意隐私协议</string>
+
+    <!-- Transfer File Screen -->
+    <string name="transfer_file">传送文件</string>
+    <string name="refresh">刷新</string>
+    <string name="send_files">我要发送</string>
+    <string name="send_files_desc">发送文件到其他设备</string>
+    <string name="receive_files">我要接收</string>
+    <string name="receive_files_desc">从其他设备接收文件</string>
+    <string name="select_send_method">选择发送方式</string>
+    <string name="select_file_type">请选择您要发送的文件类型</string>
+    <string name="select_file">选择文件</string>
+    <string name="ready_receive_files">准备接收文件</string>
+    <string name="device_preparing">设备正在准备接收来自其他设备的文件...</string>
+    <string name="start_receiving">开始接收</string>
+    <string name="receiving_ready">设备已准备好接收文件...</string>
+    <string name="feature_info">功能说明</string>
+    <string name="feature_developing">此功能正在开发中，敬请期待...</string>
+    <string name="i_know">知道了</string>
+    <string name="task_management">任务管理功能</string>
+    <string name="refreshing">正在刷新...</string>
+    <string name="going_to_file_selection">正在跳转到文件选择页面...</string>
+    
+    <!-- Video Repair Screen -->
+    <string name="video_repair_title">视频修复</string>
+    <string name="professional_video_repair">专业视频修复</string>
+    <string name="video_repair_desc">我们的视频修复服务可以帮助您找回已删除的视频文件，修复损坏的视频，修复视频质量。无需专业知识，只需几步操作。</string>
+    <string name="deep_scan">深度扫描</string>
+    <string name="deep_scan_desc">全面扫描设备存储空间，找回删除的视频文件</string>
+    <string name="damaged_video_repair">损坏视频修复</string>
+    <string name="damaged_video_repair_desc">修复无法播放、卡顿、黑屏等问题视频</string>
+    <string name="fast_recovery">快速修复</string>
+    <string name="fast_recovery_desc">高效算法，快速找回重要的视频文件</string>
+    <string name="privacy_protection_feature">隐私保护</string>
+    <string name="privacy_protection_feature_desc">所有修复过程在本地进行，保护您的隐私安全</string>
+    <string name="start_repair_video">开始修复视频</string>
+    <string name="return_rescan_note">返回后，需要重新进入页面</string>
+    
+    <!-- Recovery Dialog -->
+    <string name="recovery_dialog_title">扫描提示</string>
+    
+    <!-- Scan Exit Dialog -->
+    <string name="scan_exit_confirm">确认退出扫描</string>
+    <string name="scan_exit_desc">扫描尚未完成，退出将丢失当前扫描进度。确定要退出吗？</string>
+    
+    <!-- 添加缺失的字符串资源 -->
+    <string name="scan_tip_message">目前只扫描到7%，您如需要开放「深层扫描」查看全部数据，请点击去「去修复」按钮。</string>
+    <string name="go_to_recover">去修复</string>
+    <string name="click_recover_deep_scan">点击去修复，开放深层扫描查找数据</string>
+    <string name="recover_immediately">去修复</string>
+    <string name="open_deep_scan_find_all">去修复 开放深层扫描查找全部数据</string>
+    <string name="recovery_dialog_content">需要开放「深层扫描」才能查看全部数据，是否立即修复？</string>
+    
+    <!-- 添加订单详情页需要的字符串 -->
+    <string name="order_pending_payment">订单待支付</string>
+    <string name="service_purchased">购买服务</string>
+    <string name="copy">复制</string>
+    <string name="purchase_time">购买时间</string>
+    <string name="go_to_pay">去支付</string>
+    <string name="all_orders_shown">— 已展示全部订单 —</string>
+    <string name="order_id_copied">订单号已复制到剪贴板</string>
+    <string name="order_cancelled">订单已取消</string>
+    <string name="select_image">选择图片</string>
+    
+    <!-- 个人信息页面相关字符串 -->
+    <string name="profile_avatar">头像</string>
+    <string name="default_username">用户昵称</string>
+    <string name="user_id_prefix">ID: 1001234567</string>
+    <string name="edit_profile">编辑资料</string>
+    <string name="personal_information">个人信息</string>
+    <string name="default_phone">138****8888</string>
+    <string name="default_email">user@example.com</string>
+    <string name="default_location">江苏省苏州市</string>
+    <string name="account_settings">账号设置</string>
+    <string name="change_password">修改密码</string>
+    <string name="notifications">消息通知</string>
+    <string name="privacy">隐私设置</string>
+    <string name="app_settings">应用设置</string>
+    <string name="default_language">简体中文</string>
+    <string name="feedback">意见反馈</string>
+    <string name="arrow_right">右箭头</string>
+    
+    <!-- 添加缺失的字符串资源 -->
+    <string name="selected_audios">已选择的音频</string>
+    <string name="exit_confirmation">退出确认</string>
+    <string name="exit_scan_message">确定要退出扫描吗？扫描进度将不会保存。</string>
+    <string name="cancel_scan_title">取消扫描</string>
+    <string name="cancel_scan_message">确定要取消扫描吗？当前进度将会丢失。</string>
+    <string name="exit_service_title">退出提示</string>
+    <string name="exit_service_message">确定退出吗？退出后需要重新扫描。</string>
+    <string name="continue_service">继续修复</string>
+    <string name="confirm_exit">确认退出</string>
+    
+    <!-- 扫描相关字符串 -->
+    <string name="scanning">扫描中</string>
+    <string name="scanning_videos">扫描视频中</string>
+    <string name="scanning_audio">扫描音频中</string>
+</resources>

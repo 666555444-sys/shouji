@@ -1,0 +1,280 @@
+/* Pet Trading App Home Page Styles */
+
+/* ----- Status Bar (handled by native, color documented here) ----- */
+/* status-bar: background-color #9b79f2; content style: light */
+
+/* ----- Top Bar ----- */
+.top-bar {
+  width: 100%;
+  height: 44px;
+  padding: 0 16px;
+  background-color: #9b79f2;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.top-bar .search-wrapper {
+  width: 60%;
+  height: 32px;
+  background-color: rgba(255, 255, 255, 0.3);
+  border-radius: 16px;
+  padding: 0 12px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.top-bar .search-icon {
+  width: 16px;
+  height: 16px;
+  margin-right: 8px;
+}
+
+.top-bar .search-placeholder {
+  font-size: 14px;
+  color: #ffffff;
+}
+
+.top-bar .search-btn {
+  margin-left: auto;
+  font-size: 14px;
+  color: #ffffff;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+/* ----- Navigation Tabs ----- */
+.nav-tabs {
+  width: 100%;
+  height: 36px;
+  background-color: #9b79f2;
+  padding: 0 12px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.nav-tabs .tab-item {
+  font-size: 14px;
+  color: #ffffff;
+  margin-right: 24px;
+  padding-bottom: 4px;
+  position: relative;
+  cursor: pointer;
+}
+
+.nav-tabs .tab-item.active::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background-color: #ffffff;
+}
+
+/* ----- Function Blocks (Cards) ----- */
+.function-blocks {
+  width: 100%;
+  padding: 16px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  background-color: #ffffff;
+}
+
+.function-blocks .card {
+  width: 31%;
+  height: 80px;
+  border-radius: 8px;
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  position: relative;
+  overflow: hidden;
+}
+
+.function-blocks .card-title {
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.function-blocks .card-desc {
+  font-size: 12px;
+  color: #666666;
+}
+
+.function-blocks .card-btn {
+  width: 60px;
+  height: 24px;
+  border-radius: 12px;
+  font-size: 12px;
+  color: #ffffff;
+  text-align: center;
+  line-height: 24px;
+  cursor: pointer;
+}
+
+.function-blocks .card-icon {
+  width: 24px;
+  height: 24px;
+  margin-bottom: 4px;
+}
+
+/* ----- Tag Group ----- */
+.tag-group {
+  width: 100%;
+  padding: 0 16px 16px;
+  display: flex;
+  flex-wrap: wrap;
+  background-color: #ffffff;
+}
+
+.tag-group .tag-item {
+  width: auto;
+  padding: 6px 12px;
+  margin-right: 8px;
+  margin-bottom: 8px;
+  background-color: #f5f5f5;
+  border-radius: 16px;
+  font-size: 12px;
+  color: #666666;
+}
+
+/* ----- Product Blocks ----- */
+.product-blocks {
+  width: 100%;
+  padding: 16px;
+  background-color: #f8f8f8;
+  display: flex;
+  flex-direction: column;
+}
+
+.product-blocks .title {
+  font-size: 16px;
+  color: #333333;
+  margin-bottom: 8px;
+}
+
+.product-blocks .product-list {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.product-blocks .product-item {
+  width: 48%;
+  background-color: #ffffff;
+  border-radius: 8px;
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+}
+
+.product-blocks .product-item .tag {
+  width: 50px;
+  height: 24px;
+  background-color: #ffe7d1;
+  border-radius: 12px;
+  font-size: 12px;
+  color: #ff9f40;
+  text-align: center;
+  line-height: 24px;
+  position: absolute;
+  top: 8px;
+  left: 8px;
+}
+
+.product-blocks .img-wrapper {
+  width: 100%;
+  height: 120px;
+  border-radius: 8px;
+  overflow: hidden;
+  margin-bottom: 8px;
+  position: relative;
+}
+
+.product-blocks .img-wrapper img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.product-blocks .product-title {
+  font-size: 14px;
+  color: #333333;
+  line-height: 1.4;
+  margin-bottom: 4px;
+  text-align: center;
+}
+
+.product-blocks .price {
+  font-size: 14px;
+  color: #ff5722;
+  margin-bottom: 4px;
+}
+
+.product-blocks .sold-out {
+  font-size: 12px;
+  color: #999999;
+  margin-bottom: 4px;
+  display: none;
+}
+
+.product-blocks .time {
+  font-size: 12px;
+  color: #999999;
+  margin-bottom: 4px;
+}
+
+.product-blocks .seller {
+  font-size: 12px;
+  color: #999999;
+}
+
+/* ----- Bottom Navigation ----- */
+.bottom-nav {
+  width: 100%;
+  height: 50px;
+  background-color: #ffffff;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  align-items: center;
+  border-top: 1px solid #f5f5f5;
+}
+
+.bottom-nav .tab-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  cursor: pointer;
+}
+
+.bottom-nav .tab-item .icon {
+  width: 24px;
+  height: 24px;
+  margin-bottom: 2px;
+}
+
+.bottom-nav .tab-item.center .icon {
+  width: 40px;
+  height: 40px;
+  margin-bottom: 0;
+}
+
+.bottom-nav .tab-item .text {
+  font-size: 12px;
+  color: #999999;
+}
+
+.bottom-nav .tab-item.active .text {
+  color: #9b79f2;
+} 

@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>文件风格Logo</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f8f9fa;
+        }
+        
+        .logo-container {
+            width: 200px;
+            height: 200px;
+            position: relative;
+            background: #4facfe;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .file {
+            width: 100px;
+            height: 120px;
+            background: white;
+            position: relative;
+            border-radius: 5px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+            transform: rotate(5deg);
+        }
+        
+        .file:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 30px;
+            height: 30px;
+            background: #f5f5f5;
+            clip-path: polygon(100% 0, 0 0, 100% 100%);
+        }
+        
+        .file:after {
+            content: '';
+            position: absolute;
+            top: 40px;
+            left: 20px;
+            right: 20px;
+            height: 3px;
+            background: #4facfe;
+        }
+        
+        .line1, .line2 {
+            position: absolute;
+            left: 20px;
+            right: 20px;
+            height: 2px;
+            background: #bbbbbb;
+        }
+        
+        .line1 {
+            top: 55px;
+        }
+        
+        .line2 {
+            top: 70px;
+            right: 40px;
+        }
+        
+        .star {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background: #ffeb3b;
+            clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
+        }
+        
+        .star1 {
+            top: 20px;
+            right: 20px;
+        }
+        
+        .star2 {
+            bottom: 20px;
+            left: 20px;
+        }
+        
+        .app-name {
+            position: absolute;
+            bottom: -40px;
+            width: 100%;
+            text-align: center;
+            font-family: Arial, sans-serif;
+            font-size: 18px;
+            font-weight: bold;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <div class="logo-container">
+        <div class="file">
+            <div class="line1"></div>
+            <div class="line2"></div>
+        </div>
+        <div class="star star1"></div>
+        <div class="star star2"></div>
+        <div class="app-name">手机数据帮手</div>
+    </div>
+</body>
+</html> 
